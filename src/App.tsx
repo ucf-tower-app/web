@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import { testConnection } from './xplat/api.js'
+import { testConnection } from './xplat/api'
 
 function App() {
   return (
