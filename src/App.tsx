@@ -1,28 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-import { testConnection } from './xplat/api'
+import BackendTesting from './pages/BackendTesting';
+import LandingPage from './pages/LandingPage';
+
+export enum Page {
+  LandingPage,
+  BackendTesting,
+}
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p onClick={ testConnection }>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [currentPage, setCurrentPage] = React.useState(Page.LandingPage)
+
+  switch (currentPage) {
+    default:
+    case Page.LandingPage:
+      return <div className='App'> <LandingPage setCurrentPage={setCurrentPage} /> </div>
+    case Page.BackendTesting:
+      return <div className='App'> <BackendTesting setCurrentPage={setCurrentPage} /> </div>
+  }
 }
 
 export default App;
