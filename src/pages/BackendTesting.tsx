@@ -6,8 +6,8 @@ import { Page } from '../App';
 import { createUser, getCurrentUser, getUrl, getUserById, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api'
 
 const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => void; }) => {
-  const [email, onChangeEmail] = React.useState("email");
-  const [username, onChangeUsername] = React.useState("username");
+  const [email, onChangeEmail] = React.useState("lkf53414@xcoxc.com");
+  const [username, onChangeUsername] = React.useState("BinLiftingSux");
   const [password, onChangePassword] = React.useState("password");
   const [imgSrc, setImgSrc] = React.useState(logo);
 
