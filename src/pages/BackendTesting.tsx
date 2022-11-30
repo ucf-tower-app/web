@@ -3,12 +3,13 @@ import logo from '../logo.svg';
 import '../App.css';
 import { Page } from '../App';
 
-import { createUser, getCurrentUser, getUserById, sendAuthEmail, signIn } from '../xplat/api'
+import { createUser, getCurrentUser, getUrl, getUserById, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api'
 
 const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => void; }) => {
   const [email, onChangeEmail] = React.useState("email");
   const [username, onChangeUsername] = React.useState("username");
   const [password, onChangePassword] = React.useState("password");
+  const [imgSrc, setImgSrc] = React.useState(logo);
 
   async function makeUser() {
     await createUser(email, password, username);
@@ -24,13 +25,22 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
   }
 
   async function testFollow() {
-    const other = await getUserById("mKFX0DOUHsXGilrc0FeTsI61O3s1");
+    const other = await getUserByUsername('CringePotato49')
     const cur = await getCurrentUser();
     
-    await cur.followUser(other);
+    await cur.followUser(other!);
     console.log(cur);
     console.log(other);
-    
+  }
+
+  async function testGet() {
+    const guy = await getUserByUsername('CringePotato49')
+    await guy?.getData();
+    console.log(guy)
+  }
+
+  async function getURL() {
+    setImgSrc(await getUrl('avatars/climber.png'))
   }
 
   const _onChangeEmail = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangeEmail(evt.target.value) }
@@ -40,7 +50,7 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <img src={imgSrc} className="App-logo" alt="logo" />
         <input type="text" value={email} onChange={_onChangeEmail} />
         <input type="text" value={username} onChange={_onChangeUsername} />
         <input type="text" value={password} onChange={_onChangePassword} />
@@ -48,6 +58,8 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
         <button onClick={signin}>Sign in </button>
         <button onClick={sendAuthEmail}>Send the email  </button>
         <button onClick={testFollow}>Follow that one guy </button>
+        <button onClick={testGet}>Get that one guy </button>
+        <button onClick={getURL}>Get the URL </button>
         <a
           className="App-link"
           href="https://reactjs.org"
