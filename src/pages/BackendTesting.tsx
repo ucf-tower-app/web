@@ -3,13 +3,18 @@ import logo from '../logo.svg';
 import '../App.css';
 import { Page } from '../App';
 
-import { createUser, getCurrentUser, getUrl, getUserById, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api'
+import { createUser, getCurrentUser, getRouteById, getUrl, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api'
+import RouteDisplay from '../components/RouteDisplay';
+
+const route = getRouteById("hF9CkVxiqytZ9BsaRGrW")
 
 const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => void; }) => {
+  console.log("Render backend test")
   const [email, onChangeEmail] = React.useState("lkf53414@xcoxc.com");
   const [username, onChangeUsername] = React.useState("BinLiftingSux");
   const [password, onChangePassword] = React.useState("password");
   const [imgSrc, setImgSrc] = React.useState(logo);
+  const [targUsername, setTargUsername] = React.useState("CringePotato49");
 
   async function makeUser() {
     await createUser(email, password, username);
@@ -25,8 +30,8 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
   }
 
   async function testFollow() {
-    const other = await getUserByUsername('CringePotato49')
     const cur = await getCurrentUser();
+    const other = await getUserByUsername(targUsername);
     
     await cur.followUser(other!);
     console.log(cur);
@@ -34,7 +39,7 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
   }
 
   async function testGet() {
-    const guy = await getUserByUsername('CringePotato49')
+    const guy = await getUserByUsername(targUsername)
     await guy?.getData();
     console.log(guy)
   }
@@ -47,6 +52,8 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
   const _onChangeUsername = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangeUsername(evt.target.value) }
   const _onChangePassword = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangePassword(evt.target.value) }
 
+  
+
   return (
     <div className="App">
       <header className="App-header">
@@ -54,12 +61,18 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
         <input type="text" value={email} onChange={_onChangeEmail} />
         <input type="text" value={username} onChange={_onChangeUsername} />
         <input type="text" value={password} onChange={_onChangePassword} />
-        <button onClick={makeUser}>Make a user  </button>
-        <button onClick={signin}>Sign in </button>
-        <button onClick={sendAuthEmail}>Send the email  </button>
-        <button onClick={testFollow}>Follow that one guy </button>
-        <button onClick={testGet}>Get that one guy </button>
+        <div className='hbox'>
+          <button onClick={makeUser}>Make new user  </button>
+          <button onClick={signin}>Sign in</button>
+          <button onClick={sendAuthEmail}>Send Verify Email  </button>
+          </div>
+        <div className='hbox'>
+          <input type="text" value={targUsername} onChange={(evt) => {setTargUsername(evt.target.value)}} />
+          <button onClick={testGet}>Get</button>
+          <button onClick={testFollow}>Follow</button>
+        </div>
         <button onClick={getURL}>Get the URL </button>
+        <RouteDisplay route={route}/>
         <a
           className="App-link"
           href="https://reactjs.org"

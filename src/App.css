@@ -7,6 +7,9 @@
   pointer-events: none;
 }
 
+.hbox {
+  display: flex;
+}
 
 .App-header {
   background-color: #282c34;
