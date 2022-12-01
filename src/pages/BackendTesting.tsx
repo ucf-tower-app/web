@@ -1,20 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from '../logo.svg';
 import '../App.css';
 import { Page } from '../App';
 
-import { createUser, getCurrentUser, getRouteById, getUrl, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api'
+import { createRoute, createUser, getCurrentUser, getRouteById, getUrl, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api'
 import RouteDisplay from '../components/RouteDisplay';
-
-const route = getRouteById("hF9CkVxiqytZ9BsaRGrW")
 
 const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => void; }) => {
   console.log("Render backend test")
-  const [email, onChangeEmail] = React.useState("lkf53414@xcoxc.com");
-  const [username, onChangeUsername] = React.useState("BinLiftingSux");
-  const [password, onChangePassword] = React.useState("password");
-  const [imgSrc, setImgSrc] = React.useState(logo);
-  const [targUsername, setTargUsername] = React.useState("CringePotato49");
+  const [email, onChangeEmail] = useState("lkf53414@xcoxc.com");
+  const [username, onChangeUsername] = useState("BinLiftingSux");
+  const [password, onChangePassword] = useState("password");
+  const [imgSrc, setImgSrc] = useState(logo);
+  const [targUsername, setTargUsername] = useState("CringePotato49");
+  const [route, setRoute] = useState(getRouteById("hF9CkVxiqytZ9BsaRGrW"))
+  const [routeName, setRouteName] = useState('New Route')
+  const [routeGrade, setRouteGrade] = useState('5.9')
+  const [routeSetterUsername, setRouteSetterUsername] = useState('No Setter')
 
   async function makeUser() {
     await createUser(email, password, username);
@@ -48,12 +50,17 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
     setImgSrc(await getUrl('avatars/climber.png'))
   }
 
+  async function testCreateRoute() {
+    if (routeSetterUsername === 'No Setter')
+      return setRoute(await createRoute(routeName, routeGrade))
+    else return setRoute(await createRoute(routeName, routeGrade, await getUserByUsername(routeSetterUsername)))
+  }
+
   const _onChangeEmail = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangeEmail(evt.target.value) }
   const _onChangeUsername = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangeUsername(evt.target.value) }
   const _onChangePassword = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangePassword(evt.target.value) }
 
   
-
   return (
     <div className="App">
       <header className="App-header">
@@ -72,6 +79,14 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
           <button onClick={testFollow}>Follow</button>
         </div>
         <button onClick={getURL}>Get the URL </button>
+        <div className='hbox'>
+          <input type="text" value={routeName} onChange={(evt) => {setRouteName(evt.target.value)}} />
+          <input type="text" value={routeGrade} onChange={(evt) => {setRouteGrade(evt.target.value)}} />
+          <input type="text" value={routeSetterUsername} onChange={(evt) => {setRouteSetterUsername(evt.target.value)}} />
+        
+          <button onClick={testCreateRoute}>Create route</button>
+
+        </div>
         <RouteDisplay route={route}/>
         <a
           className="App-link"
