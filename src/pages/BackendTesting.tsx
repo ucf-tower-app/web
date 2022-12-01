@@ -10,9 +10,10 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
   const [email, onChangeEmail] = React.useState("email");
   const [username, onChangeUsername] = React.useState("username");
   const [password, onChangePassword] = React.useState("password");
+  const [displayName, onChangeDisplayName] = React.useState("displayName");
 
   async function makeUser() {
-    await createUser(email, password, username);
+    await createUser(email, password, username, displayName);
     console.log("done")
     console.log(await getCurrentUser())
   }
@@ -27,6 +28,7 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
   const _onChangeEmail = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangeEmail(evt.target.value) }
   const _onChangeUsername = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangeUsername(evt.target.value) }
   const _onChangePassword = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangePassword(evt.target.value) }
+  const _onChangeDisplayName = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangeDisplayName(evt.target.value) }
 
   return (
     <div className="App">
@@ -35,6 +37,7 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
         <input type="text" value={email} onChange={_onChangeEmail} />
         <input type="text" value={username} onChange={_onChangeUsername} />
         <input type="text" value={password} onChange={_onChangePassword} />
+        <input type="text" value={displayName} onChange={_onChangeDisplayName} />
         <button onClick={makeUser}>Make a user  </button>
         <button onClick={signin}>Sign in </button>
         <button onClick={sendAuthEmail}>Send the email  </button>
