@@ -5,21 +5,23 @@ import { Page } from '../App';
 
 import { createRoute, createUser, getCurrentUser, getRouteById, getUrl, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api'
 import RouteDisplay from '../components/RouteDisplay';
+import { createPost } from '../xplat/api';
 
 const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => void; }) => {
-  console.log("Render backend test")
   const [email, onChangeEmail] = useState("lkf53414@xcoxc.com");
   const [username, onChangeUsername] = useState("BinLiftingSux");
   const [password, onChangePassword] = useState("password");
   const [imgSrc, setImgSrc] = useState(logo);
   const [targUsername, setTargUsername] = useState("CringePotato49");
-  const [route, setRoute] = useState(getRouteById("hF9CkVxiqytZ9BsaRGrW"))
+  const [route, setRoute] = useState(getRouteById("GQBdclAMmE2v4nDPphsc"))
   const [routeName, setRouteName] = useState('New Route')
   const [routeGrade, setRouteGrade] = useState('5.9')
   const [routeSetterUsername, setRouteSetterUsername] = useState('No Setter')
+  const [postText, setPostText] = useState('Hello there!')
+  const [postImage, setPostImage] = useState<Blob | undefined>()
 
   async function makeUser() {
-    await createUser(email, password, username);
+    await createUser(email, password, username, 'Display Name');
     console.log("done")
     console.log(await getCurrentUser())
   }
@@ -52,14 +54,30 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
 
   async function testCreateRoute() {
     if (routeSetterUsername === 'No Setter')
-      return setRoute(await createRoute(routeName, routeGrade))
-    else return setRoute(await createRoute(routeName, routeGrade, await getUserByUsername(routeSetterUsername)))
+      await setRoute(await createRoute(routeName, routeGrade))
+    else await setRoute(await createRoute(routeName, routeGrade, await getUserByUsername(routeSetterUsername)))
+    console.log(route);
+  }
+
+  async function testCreatePost() {
+    const post = await createPost(await getCurrentUser(), postText, await route.getForum()!, postImage);
+    await post.getData();
+    console.log(post)
+  }
+
+  const handleFileSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const files = Array.from(e.target.files!)
+    if(files.length > 0) {
+      console.log("Update postImage with ", files[0]);
+      setPostImage(files[0])
+    }
+    console.log("files:", files)
+    console.log(postImage);
   }
 
   const _onChangeEmail = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangeEmail(evt.target.value) }
   const _onChangeUsername = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangeUsername(evt.target.value) }
   const _onChangePassword = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangePassword(evt.target.value) }
-
   
   return (
     <div className="App">
@@ -88,6 +106,12 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
 
         </div>
         <RouteDisplay route={route}/>
+        <div className='hbox'>
+         <input onChange={handleFileSelected} type="file" />
+          <input type="text" value={postText} onChange={(evt) => {setPostText(evt.target.value)}} />
+          <button onClick={testCreatePost}>Create post to this route</button>
+
+        </div>
         <a
           className="App-link"
           href="https://reactjs.org"
