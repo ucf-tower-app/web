@@ -1,0 +1,46 @@
+import {extendTheme} from "native-base";
+
+const theme = extendTheme({
+    components: {
+        Button: {
+            baseStyle: {},
+            defaultProps: {
+                variant: 'default'
+            },
+            variants: {
+                popup: {
+                    bg: '#0891B2'
+                },
+                default: {
+                    bg: '#0891B2',
+                    textcolor: '#FAFAFA', 
+                    width: 'fit-content',
+                    flexDirection: 'row',
+                    marginRight: '1%',
+                    marginLeft: '1%',
+                    padRight: '.5%',
+                    padLeft: '.5%'
+                }
+            }
+        },
+        Text: {
+            baseStyle: {},
+            defaultProps: {
+                variant: 'default'
+            },
+            variants: {
+                header: {
+                    fontSize: 'large',
+                    color: 'black'
+                },
+                button: {
+                    color: 'white'
+                },
+                default: {
+                    color: 'inherit'
+                }
+            }
+        }
+    }
+})
+export default theme;
