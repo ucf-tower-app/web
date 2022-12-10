@@ -16,8 +16,8 @@ const theme = extendTheme({
                     textcolor: '#FAFAFA', 
                     width: 'fit-content',
                     flexDirection: 'row',
-                    marginRight: '1%',
-                    marginLeft: '1%',
+                    marginRight: '.5%',
+                    marginLeft: '.5%',
                     padRight: '.5%',
                     padLeft: '.5%'
                 }
@@ -34,7 +34,8 @@ const theme = extendTheme({
                     color: 'black'
                 },
                 button: {
-                    color: 'white'
+                    color: 'white',
+                    fontSize: 'medium'
                 },
                 default: {
                     color: 'inherit'
