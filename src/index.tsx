@@ -9,6 +9,7 @@ import LandingPage from './pages/LandingPage';
 import RoutesPage from './pages/Routes';
 import Signup from './pages/Signup';
 import PageNotFound from './pages/PageNotFound';
+import BackendTesting from './pages/BackendTesting';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -19,6 +20,7 @@ root.render(
       <Route path='/' element={<Login/>}/>
       <Route path='/signup' element={<Signup/>}/> 
       <Route path='/routes' element={<RoutesPage/>}/>
+      <Route path='/backendtesting' element={<BackendTesting/>}/>
       <Route path='*' element={<PageNotFound/>}/>
     </Routes>
   </BrowserRouter>
