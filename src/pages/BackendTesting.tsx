@@ -7,7 +7,7 @@ import { createRoute, createUser, getCurrentUser, getRouteById, getUrl, getUserB
 import RouteDisplay from '../components/RouteDisplay';
 import { createPost } from '../xplat/api';
 
-const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => void; }) => {
+const BackendTesting = () => {
   const [email, onChangeEmail] = useState("lkf53414@xcoxc.com");
   const [username, onChangeUsername] = useState("BinLiftingSux");
   const [password, onChangePassword] = useState("password");

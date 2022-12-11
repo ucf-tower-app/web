@@ -20,7 +20,7 @@ function App() {
     case Page.LandingPage:
       return <div className='App'> <LandingPage setCurrentPage={setCurrentPage} /> </div>
     case Page.BackendTesting:
-      return <div className='App'> <BackendTesting setCurrentPage={setCurrentPage} /> </div>
+      return <div className='App'> <BackendTesting /> </div>
     case Page.Login:
       return <div className='App'> <Login/></div>
     case Page.RoutesPage:
