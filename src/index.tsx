@@ -1,29 +1,33 @@
-import React from 'react';
+import React, {lazy, Suspense} from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Login from './pages/Login';
-import LandingPage from './pages/LandingPage';
-import RoutesPage from './pages/Routes';
-import Signup from './pages/Signup';
 import PageNotFound from './pages/PageNotFound';
-import BackendTesting from './pages/BackendTesting';
+
+const BackendTesting = lazy(() => import('./pages/BackendTesting'));
+const RoutesPage = lazy(() => import('./pages/Routes'));
+const Signup = lazy(() => import('./pages/Signup'));
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <BrowserRouter>
-    <Routes>
-      <Route path='/' element={<Login/>}/>
-      <Route path='/signup' element={<Signup/>}/> 
-      <Route path='/routes' element={<RoutesPage/>}/>
-      <Route path='/backendtesting' element={<BackendTesting/>}/>
-      <Route path='*' element={<PageNotFound/>}/>
-    </Routes>
-  </BrowserRouter>
+  <React.StrictMode>
+    <Suspense>
+      <BrowserRouter>
+        <Routes>
+            <Route path='/' element={<Login/>}/>
+            <Route path='/signup' element={<Signup/>}/>
+            <Route path='/routes' element={<RoutesPage/>}/>
+            <Route path='/backendtesting' element={<BackendTesting/>}/>
+            <Route path='*' element={<PageNotFound/>}/>
+        </Routes>
+      </BrowserRouter>
+    </Suspense>
+  </React.StrictMode>
 );
 
 

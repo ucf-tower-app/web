@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import logo from '../logo.svg';
 import '../App.css';
-import { Page } from '../App';
-
 import { createRoute, createUser, getCurrentUser, getRouteById, getUrl, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api'
 import RouteDisplay from '../components/RouteDisplay';
 import { createPost } from '../xplat/api';
+import { useNavigate } from 'react-router-dom';
 
 const BackendTesting = () => {
+  let navigate = useNavigate();
+  if (window.location.hostname !== 'localhost')
+    navigate('/');
+
   const [email, onChangeEmail] = useState("lkf53414@xcoxc.com");
   const [username, onChangeUsername] = useState("BinLiftingSux");
   const [password, onChangePassword] = useState("password");

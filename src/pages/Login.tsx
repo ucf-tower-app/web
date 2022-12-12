@@ -2,24 +2,52 @@ import { Text, Box, Input, NativeBaseProvider, Button, Link, FormControl} from "
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import theme from "../components/NativeBaseStyling";
-import { Page } from "../App";
-import { getCurrentUser, signIn } from "../xplat/api";
-import logo from '../logo.svg'
+import { signIn , isKnightsEmail} from "../xplat/api";
+import logo from '../logo.svg';
+
 const Login =  () => {
     let navigate = useNavigate();
     const [email, setEmail] = useState('');
+    const [emailError, setEmailError] = useState(false);
     const [password, setPassword] = useState('');
+    const [passwordError, setPasswordError] = useState(false);
+    const [loginFailure, setLoginFailure] = useState(false);
+
+    const validate = () => {
+        setEmailError(() => false);
+        setPasswordError(() => false);
+        var valid = true;
+        if (!isKnightsEmail(email))
+        {
+            setEmailError(true);
+            valid = false;
+        }
+        if (password.length < 5)
+        {
+            setPasswordError(true);
+            valid = false;
+        }
+        return valid;
+    }
 
     async function attemptLogin() {
+        console.log("running attemptLogin")
+        setLoginFailure(false);
+        if (!validate())
+            return;
         await signIn(email, password).then( (userCredential) => {
             // Signed in successfully
-            const user = userCredential.user;
-            //console.log(user);
             navigate('/routes');
 
         }).catch( (error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
+            const errorMessage: string = error.message;
+
+            // framework for error messages on login screen
+            if (errorMessage.includes("auth/invalid-email"))
+                setEmailError(true);
+            else
+                setLoginFailure(true);
+            
         });
     };
 
@@ -30,14 +58,17 @@ const Login =  () => {
                 <Text variant = {'header'}>
                     Welcome to the Climbing Tower at UCF!
                 </Text>
-                <FormControl alignItems={'center'} isRequired>
-                    <Input onChangeText={(e) => setEmail(e)} marginBottom='5px' placeholder="email" width={'60%'}/>
-                    <Input onChangeText={(e) => setPassword(e)} marginBottom='5px' type="password" placeholder="password" width={'60%'}/>
-                    <Button onPress={attemptLogin}>
-                        <Text variant={'button'}>
-                            Login
-                        </Text>
-                    </Button>
+                <FormControl isRequired isInvalid={emailError || passwordError || loginFailure} alignItems='center'>
+                        {emailError && <FormControl.ErrorMessage>Invalid email address</FormControl.ErrorMessage>}
+                        <Input onChangeText={(e) => setEmail(e)} marginBottom='5px' placeholder="email" width={'50%'}/>
+                        {passwordError && <FormControl.ErrorMessage>Password must be 6 characters or more</FormControl.ErrorMessage>}
+                        <Input onChangeText={(e) => setPassword(e)} type="password" placeholder="password" width={'50%'}/>
+                        {loginFailure && <FormControl.ErrorMessage marginBottom={'5px'}>Wrong email or password</FormControl.ErrorMessage>}
+                        <Button onPress={attemptLogin} marginTop='5px'>
+                            <Text variant={'button'}>
+                                Login
+                            </Text>
+                        </Button>
                 </FormControl>
                 <Text>
                     Don't have an account? Create one <Link href='/signup'>here</Link>
