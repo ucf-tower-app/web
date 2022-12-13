@@ -25,7 +25,6 @@ const Login =  () => {
             getCurrentUser().then((user) => {
                 // Check user status
                 user.getStatus().then((status: number) => {
-                    
                     if (status >= UserStatus.Employee)
                     {
                         navigate('/routes');
@@ -38,9 +37,6 @@ const Login =  () => {
                     }
                 });
             });
-            
-            
-
         }).catch( (error) => {
             const errorMessage: string = error.message;
 
@@ -49,7 +45,6 @@ const Login =  () => {
                 setEmailError(true);
             else
                 setLoginFailure(true);
-            
         });
     };
 
