@@ -2,42 +2,44 @@ import { Text, Box, Input, NativeBaseProvider, Button, Link, FormControl} from "
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import theme from "../components/NativeBaseStyling";
-import { signIn , isKnightsEmail} from "../xplat/api";
+import { signIn , getCurrentUser} from "../xplat/api";
+import { UserStatus } from "../xplat/types/common";
 import logo from '../logo.svg';
+import { auth } from "../xplat/Firebase";
 
 const Login =  () => {
     let navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState(false);
     const [password, setPassword] = useState('');
-    const [passwordError, setPasswordError] = useState(false);
     const [loginFailure, setLoginFailure] = useState(false);
-
-    const validate = () => {
-        setEmailError(() => false);
-        setPasswordError(() => false);
-        var valid = true;
-        if (!isKnightsEmail(email))
-        {
-            setEmailError(true);
-            valid = false;
-        }
-        if (password.length < 5)
-        {
-            setPasswordError(true);
-            valid = false;
-        }
-        return valid;
-    }
+    const [permissionError, setPermissionError] = useState(false);
 
     async function attemptLogin() {
         console.log("running attemptLogin")
         setLoginFailure(false);
-        if (!validate())
-            return;
+        setEmailError(false);
+        setPermissionError(false);
         await signIn(email, password).then( (userCredential) => {
             // Signed in successfully
-            navigate('/routes');
+            getCurrentUser().then((user) => {
+                // Check user status
+                user.getStatus().then((status: number) => {
+                    
+                    if (status >= UserStatus.Employee)
+                    {
+                        navigate('/routes');
+                        return;
+                    }  
+                    else
+                    {
+                        setPermissionError(true);
+                        auth.signOut();
+                    }
+                });
+            });
+            
+            
 
         }).catch( (error) => {
             const errorMessage: string = error.message;
@@ -58,17 +60,13 @@ const Login =  () => {
                 <Text variant = {'header'}>
                     Welcome to the Climbing Tower at UCF!
                 </Text>
-                <FormControl isRequired isInvalid={emailError || passwordError || loginFailure} alignItems='center'>
+                <FormControl isRequired isInvalid={emailError || loginFailure || permissionError} alignItems='center'>
                         {emailError && <FormControl.ErrorMessage>Invalid email address</FormControl.ErrorMessage>}
                         <Input onChangeText={(e) => setEmail(e)} marginBottom='5px' placeholder="email" width={'50%'}/>
-                        {passwordError && <FormControl.ErrorMessage>Password must be 6 characters or more</FormControl.ErrorMessage>}
                         <Input onChangeText={(e) => setPassword(e)} type="password" placeholder="password" width={'50%'}/>
                         {loginFailure && <FormControl.ErrorMessage marginBottom={'5px'}>Wrong email or password</FormControl.ErrorMessage>}
-                        <Button onPress={attemptLogin} marginTop='5px'>
-                            <Text variant={'button'}>
-                                Login
-                            </Text>
-                        </Button>
+                        {permissionError && <FormControl.ErrorMessage marginBottom={'5px'}>You do not have permission to access the Tower web app.</FormControl.ErrorMessage>}
+                        <Button onPress={attemptLogin} marginTop='5px'><Text variant={'button'}>Login</Text></Button>
                 </FormControl>
                 <Text>
                     Don't have an account? Create one <Link href='/signup'>here</Link>
