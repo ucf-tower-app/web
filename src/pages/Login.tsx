@@ -1,7 +1,6 @@
-import { Text, Box, Input, NativeBaseProvider, Button, Link, FormControl} from "native-base";
+import { Text, Box, Input, Button, Link, FormControl} from "native-base";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import theme from "../components/NativeBaseStyling";
 import { signIn , getCurrentUser} from "../xplat/api";
 import { UserStatus } from "../xplat/types/common";
 import logo from '../logo.svg';
@@ -49,25 +48,24 @@ const Login =  () => {
     };
 
     return (
-        <NativeBaseProvider theme={theme}>
-            <Box flex={1} alignSelf='center' alignItems={'center'} justifyContent='center' paddingTop= '100px'>
-                <img src={logo} className="App-logo" alt="logo" />
-                <Text variant = {'header'}>
-                    Welcome to the Climbing Tower at UCF!
-                </Text>
-                <FormControl isRequired isInvalid={emailError || loginFailure || permissionError} alignItems='center'>
-                        {emailError && <FormControl.ErrorMessage>Invalid email address</FormControl.ErrorMessage>}
-                        <Input onChangeText={(e) => setEmail(e)} marginBottom='5px' placeholder="email" width={'50%'}/>
-                        <Input onChangeText={(e) => setPassword(e)} type="password" placeholder="password" width={'50%'}/>
-                        {loginFailure && <FormControl.ErrorMessage marginBottom={'5px'}>Wrong email or password</FormControl.ErrorMessage>}
-                        {permissionError && <FormControl.ErrorMessage marginBottom={'5px'}>You do not have permission to access the Tower web app.</FormControl.ErrorMessage>}
-                        <Button onPress={attemptLogin} marginTop='5px'><Text variant={'button'}>Login</Text></Button>
-                </FormControl>
-                <Text>
-                    Don't have an account? Create one <Link href='/signup'>here</Link>
-                </Text>
-            </Box>
-        </NativeBaseProvider>
+        <Box flex={1} alignSelf='center' alignItems={'center'} justifyContent='center' paddingTop= '10vh'>
+            <img src={logo} className="App-logo" alt="logo" />
+            <Text variant = {'header'}>
+                Welcome to the Climbing Tower at UCF!
+            </Text>
+            <FormControl isRequired isInvalid={emailError || loginFailure || permissionError} alignItems='center'>
+                    {emailError && <FormControl.ErrorMessage>Invalid email address</FormControl.ErrorMessage>}
+                    <Input onChangeText={(e) => setEmail(e)} marginBottom='5px' placeholder="email" width={'50%'}/>
+                    <Input onChangeText={(e) => setPassword(e)} type="password" placeholder="password" width={'50%'}/>
+                    {loginFailure && <FormControl.ErrorMessage marginBottom={'5px'}>Wrong email or password</FormControl.ErrorMessage>}
+                    {permissionError && <FormControl.ErrorMessage marginBottom={'5px'}>You do not have permission to access the Tower web app.</FormControl.ErrorMessage>}
+                    <Button onPress={attemptLogin} marginTop='5px'><Text variant={'button'}>Login</Text></Button>
+            </FormControl>
+            <Text>
+                Don't have an account? Create one <Link href='/signup'>here</Link>
+            </Text>
+        </Box>
+        
     )
 }
 

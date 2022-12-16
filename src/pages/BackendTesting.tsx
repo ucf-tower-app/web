@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import logo from '../logo.svg';
 import '../App.css';
-import { createRoute, createUser, getCurrentUser, getRouteById, getUrl, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api'
+import { createRoute, createUser, getCurrentUser, getRouteById, getUrl, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api';
 import RouteDisplay from '../components/RouteDisplay';
 import { createPost } from '../xplat/api';
 import { useNavigate } from 'react-router-dom';
 
 const BackendTesting = () => {
-  let navigate = useNavigate();
-  if (window.location.hostname !== 'localhost')
-    navigate('/');
-
   const [email, onChangeEmail] = useState("lkf53414@xcoxc.com");
   const [username, onChangeUsername] = useState("BinLiftingSux");
   const [password, onChangePassword] = useState("password");
@@ -83,47 +79,45 @@ const BackendTesting = () => {
   const _onChangePassword = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangePassword(evt.target.value) }
   
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={imgSrc} className="App-logo" alt="logo" />
-        <input type="text" value={email} onChange={_onChangeEmail} />
-        <input type="text" value={username} onChange={_onChangeUsername} />
-        <input type="text" value={password} onChange={_onChangePassword} />
-        <div className='hbox'>
-          <button onClick={makeUser}>Make new user  </button>
-          <button onClick={signin}>Sign in</button>
-          <button onClick={sendAuthEmail}>Send Verify Email  </button>
+      <div className="App">
+        <header className="App-header">
+          <img src={imgSrc} className="App-logo" alt="logo" />
+          <input type="text" value={email} onChange={_onChangeEmail} />
+          <input type="text" value={username} onChange={_onChangeUsername} />
+          <input type="text" value={password} onChange={_onChangePassword} />
+          <div className='hbox'>
+            <button onClick={makeUser}>Make new user  </button>
+            <button onClick={signin}>Sign in</button>
+            <button onClick={sendAuthEmail}>Send Verify Email  </button>
+            </div>
+          <div className='hbox'>
+            <input type="text" value={targUsername} onChange={(evt) => {setTargUsername(evt.target.value)}} />
+            <button onClick={testGet}>Get</button>
+            <button onClick={testFollow}>Follow</button>
           </div>
-        <div className='hbox'>
-          <input type="text" value={targUsername} onChange={(evt) => {setTargUsername(evt.target.value)}} />
-          <button onClick={testGet}>Get</button>
-          <button onClick={testFollow}>Follow</button>
-        </div>
-        <button onClick={getURL}>Get the URL </button>
-        <div className='hbox'>
-          <input type="text" value={routeName} onChange={(evt) => {setRouteName(evt.target.value)}} />
-          <input type="text" value={routeGrade} onChange={(evt) => {setRouteGrade(evt.target.value)}} />
-          <input type="text" value={routeSetterUsername} onChange={(evt) => {setRouteSetterUsername(evt.target.value)}} />
-        
-          <button onClick={testCreateRoute}>Create route</button>
-
-        </div>
-        <RouteDisplay route={route}/>
-        <div className='hbox'>
-         <input onChange={handleFilesSelected} type="file" multiple accept="image/*" />
-          <input type="text" value={postText} onChange={(evt) => {setPostText(evt.target.value)}} />
-          <button onClick={testCreatePost}>Create post to this route</button>
-
-        </div>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-        </a>
-      </header>
-    </div>
+          <button onClick={getURL}>Get the URL </button>
+          <div className='hbox'>
+            <input type="text" value={routeName} onChange={(evt) => {setRouteName(evt.target.value)}} />
+            <input type="text" value={routeGrade} onChange={(evt) => {setRouteGrade(evt.target.value)}} />
+            <input type="text" value={routeSetterUsername} onChange={(evt) => {setRouteSetterUsername(evt.target.value)}} />
+      
+            <button onClick={testCreateRoute}>Create route</button>
+          </div>
+          <RouteDisplay route={route}/>
+          <div className='hbox'>
+           <input onChange={handleFilesSelected} type="file" />
+            <input type="text" value={postText} onChange={(evt) => {setPostText(evt.target.value)}} />
+            <button onClick={testCreatePost}>Create post to this route</button>
+          </div>
+          <a
+            className="App-link"
+            href="https://reactjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+          </a>
+        </header>
+      </div>
   );
 }
 
