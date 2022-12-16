@@ -1,7 +1,9 @@
 import React, {lazy, Suspense} from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import { NativeBaseProvider } from 'native-base';
 import './index.css';
+import theme from './components/NativeBaseStyling';
 import reportWebVitals from './reportWebVitals';
 import Login from './pages/Login';
 import PageNotFound from './pages/PageNotFound';
@@ -17,15 +19,17 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Suspense>
-      <BrowserRouter>
-        <Routes>
-            <Route path='/' element={<Login/>}/>
-            <Route path='/signup' element={<Signup/>}/>
-            <Route path='/routes' element={<RoutesPage/>}/>
-            <Route path='/backendtesting' element={<BackendTesting/>}/>
-            <Route path='*' element={<PageNotFound/>}/>
-        </Routes>
-      </BrowserRouter>
+      <NativeBaseProvider theme={theme}>
+        <BrowserRouter>
+          <Routes>
+              <Route path='/' element={<Login/>}/>
+              <Route path='/signup' element={<Signup/>}/>
+              <Route path='/routes' element={<RoutesPage/>}/>
+              {window.location.hostname === 'localhost' && <Route path='/backendtesting' element={<BackendTesting/>}/>}
+              <Route path='*' element={<PageNotFound/>}/>
+          </Routes>
+        </BrowserRouter>
+      </NativeBaseProvider>
     </Suspense>
   </React.StrictMode>
 );
