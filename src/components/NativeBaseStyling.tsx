@@ -15,6 +15,7 @@ const theme = extendTheme({
                     bg: '#0891B2',
                     textcolor: '#FAFAFA', 
                     width: 'fit-content',
+                    height: 'fit-content',
                     flexDirection: 'row',
                     marginRight: '.5%',
                     marginLeft: '.5%',
@@ -36,6 +37,13 @@ const theme = extendTheme({
                 button: {
                     color: 'white',
                     fontSize: 'medium'
+                },
+                handle: {
+                    color: 'gray.400',
+                    fontSize: 'sm',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    flex: 1
                 },
                 default: {
                     color: 'inherit'

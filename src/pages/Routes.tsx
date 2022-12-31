@@ -1,11 +1,28 @@
 import { NavBar } from "../components/NavigationBar";
+import { Box, Button, Text} from 'native-base'
+import { useNavigate, createSearchParams } from "react-router-dom";
 
 
 const Routes = () => {
-
+    let navigate = useNavigate();
+    const exampleSearchParams = {uid: 'GQBdclAMmE2v4nDPphsc'};
+    const navToRoute = () => {
+        navigate({
+            pathname: '/route',
+            search: `?${createSearchParams(exampleSearchParams)}`
+        })
+    }
 
     return (
-        <NavBar/>
+        <Box flexDir={'column'}>
+            <Box height={'8%'} marginBottom='3%'><NavBar/></Box>
+            <Box height={'8%'}>
+                <Button onPress={navToRoute}>
+                    <Text variant={'button'}> Go to Route</Text>
+                </Button>
+            </Box>
+        </Box>
+        
 
     );
 }
