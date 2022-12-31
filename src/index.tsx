@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import PageNotFound from './pages/PageNotFound';
 
 const BackendTesting = lazy(() => import('./pages/BackendTesting'));
+const RouteFeed = lazy(() => import('./pages/RouteFeed'));
 const RoutesPage = lazy(() => import('./pages/Routes'));
 const Signup = lazy(() => import('./pages/Signup'));
 
@@ -17,21 +18,20 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <Suspense>
-      <NativeBaseProvider theme={theme}>
-        <BrowserRouter>
-          <Routes>
-              <Route path='/' element={<Login/>}/>
-              <Route path='/signup' element={<Signup/>}/>
-              <Route path='/routes' element={<RoutesPage/>}/>
-              {window.location.hostname === 'localhost' && <Route path='/backendtesting' element={<BackendTesting/>}/>}
-              <Route path='*' element={<PageNotFound/>}/>
-          </Routes>
-        </BrowserRouter>
-      </NativeBaseProvider>
-    </Suspense>
-  </React.StrictMode>
+  <Suspense>
+    <NativeBaseProvider theme={theme}>
+      <BrowserRouter>
+        <Routes>
+            <Route path='/' element={<Login/>}/>
+            <Route path='/signup' element={<Signup/>}/>
+            <Route path='/routes' element={<RoutesPage/>}/>
+            <Route path='/route' element={<RouteFeed/>}/>
+            {window.location.hostname === 'localhost' && <Route path='/backendtesting' element={<BackendTesting/>}/>}
+            <Route path='*' element={<PageNotFound/>}/>
+        </Routes>
+      </BrowserRouter>
+    </NativeBaseProvider>
+  </Suspense>
 );
 
 
