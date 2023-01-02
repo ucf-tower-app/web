@@ -6,7 +6,9 @@ import RouteFeedDisplay from '../components/RouteFeedDisplay';
 import { getRouteById } from '../xplat/api';
 import { Forum } from '../xplat/types/forum';
 import { Route } from '../xplat/types/route';
+import { Post } from '../xplat/types/post';
 import '../components/css/feed.css';
+import PostDetails from '../components/PostDetails';
 const placeholder_image = require('../placeholder_image.jpg');
 
 const RouteFeed = () => {
@@ -15,6 +17,14 @@ const RouteFeed = () => {
     const [routeForum, setRouteForum] = useState<Forum>();
     const [setter, setSetter] = useState('');
     const [params, setParams] = useSearchParams();
+    const [selectedPost, setSelectedPost] = useState<Post | undefined>();
+    
+    function setPostToView(passedPost: Post) {
+        if (passedPost !== selectedPost)
+            setSelectedPost(passedPost);
+        else
+            setSelectedPost(undefined);
+    }
 
     // runs on component mount
     useEffect(() => {
@@ -50,11 +60,15 @@ const RouteFeed = () => {
                             <Text> Set by {setter}</Text>
                         </Center>
                     </Box>
-                    <Divider orientation='vertical' top={'10vh'} left={'25%'} height={'75vh'} position='fixed'/>
+                    <Divider orientation='vertical' top={'100px'} left={'25%'} height={'75vh'} position='fixed'/>
                     <Box flexDir={'column'} left={'25%'} width={'50%'} top={'5vh'}>
                         <Center>
-                            <RouteFeedDisplay forum={routeForum}/>
+                            <RouteFeedDisplay forum={routeForum} setPostInParent={setPostToView}/>
                         </Center>
+                    </Box>
+                    <Divider orientation='vertical' top={'100px'} right={'25%'} height={'75vh'} position='fixed'/>
+                    <Box flexDir={'column'} left={'25%'} width={'25%'} top={'5vh'}>
+                        <PostDetails post={selectedPost}/>
                     </Box>
                 </HStack>
             </VStack>

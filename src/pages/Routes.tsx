@@ -15,8 +15,8 @@ const Routes = () => {
 
     return (
         <Box flexDir={'column'}>
-            <Box height={'8%'} marginBottom='3%'><NavBar/></Box>
-            <Box height={'8%'}>
+            <Box height={'50px'} marginBottom={1}><NavBar/></Box>
+            <Box>
                 <Button onPress={navToRoute}>
                     <Text variant={'button'}> Go to Route</Text>
                 </Button>
