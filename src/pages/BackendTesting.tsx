@@ -107,7 +107,7 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
         </div>
         <RouteDisplay route={route}/>
         <div className='hbox'>
-         <input onChange={handleFilesSelected} type="file" multiple />
+         <input onChange={handleFilesSelected} type="file" multiple accept="image/*" />
           <input type="text" value={postText} onChange={(evt) => {setPostText(evt.target.value)}} />
           <button onClick={testCreatePost}>Create post to this route</button>
 
