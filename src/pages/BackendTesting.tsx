@@ -18,7 +18,7 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
   const [routeGrade, setRouteGrade] = useState('5.9')
   const [routeSetterUsername, setRouteSetterUsername] = useState('No Setter')
   const [postText, setPostText] = useState('Hello there!')
-  const [postImage, setPostImage] = useState<Blob | undefined>()
+  const [postImages, setPostImages] = useState<Blob[] | undefined>()
 
   async function makeUser() {
     await createUser(email, password, username, 'Display Name');
@@ -60,19 +60,19 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
   }
 
   async function testCreatePost() {
-    const post = await createPost(await getCurrentUser(), postText, await route.getForum()!, postImage);
+    const post = await createPost(await getCurrentUser(), postText, await route.getForum(), postImages);
     await post.getData();
     console.log(post)
   }
 
-  const handleFileSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleFilesSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const files = Array.from(e.target.files!)
     if(files.length > 0) {
-      console.log("Update postImage with ", files[0]);
-      setPostImage(files[0])
+      console.log("Update postImage with ", files);
+      setPostImages(files)
     }
     console.log("files:", files)
-    console.log(postImage);
+    console.log(postImages);
   }
 
   const _onChangeEmail = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangeEmail(evt.target.value) }
@@ -107,7 +107,7 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
         </div>
         <RouteDisplay route={route}/>
         <div className='hbox'>
-         <input onChange={handleFileSelected} type="file" />
+         <input onChange={handleFilesSelected} type="file" multiple />
           <input type="text" value={postText} onChange={(evt) => {setPostText(evt.target.value)}} />
           <button onClick={testCreatePost}>Create post to this route</button>
 
