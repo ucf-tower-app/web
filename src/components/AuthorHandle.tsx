@@ -22,7 +22,7 @@ const AuthorHandle = ({author}: {author: User | undefined}) => {
 
     return (
         <HStack space={1}>
-            <Skeleton borderRadius={100} width='8%' isLoaded={isLoaded}><img className='avatar' src={avatarURL === undefined ? placeholder_image : avatarURL!} alt='avatar'/></Skeleton>
+            <Skeleton borderRadius={'100'} width='8%' isLoaded={avatarURL !== undefined}><img className='avatar' src={avatarURL!} alt='avatar'/></Skeleton>
             <Skeleton.Text isLoaded={isLoaded} lines={1} width='60%' alignSelf={'center'}>
                 <Text variant='handle'>@{name}</Text>
             </Skeleton.Text>

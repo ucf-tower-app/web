@@ -13,7 +13,7 @@ const PostDetails = ({post}: {post: Post | undefined}) => {
 
 
     return (
-        <Box flexDir={'column'} margin={2}>
+        <Box flexDir={'column'} margin={2} position='fixed' width={'22%'}>
             {post !== undefined ? 
                 <Box>
                     <Text alignSelf={'center'}>Comments</Text>

@@ -8,9 +8,9 @@
 }
 
 .post-thumbnail {
-    width: fit-content;
-    max-width: 100%;
+    width: 75%;
     height: auto;
+    justify-self: center;
     align-self: center;
 }
 
