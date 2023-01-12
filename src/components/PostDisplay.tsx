@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "../xplat/api";
 import { Post, Comment} from "../xplat/types/types";
-import CommentDisplay from "./CommentDisplay";
+import CommentDisplay from "./PostDetailsComment";
 
 
 const PostDisplay = ({post}: {post: Post}) => {
@@ -35,7 +35,7 @@ const PostDisplay = ({post}: {post: Post}) => {
             <div>{comments.map((cmt) => <CommentDisplay comment={cmt}/>)} {comments.length} comments</div>
             <input type="text" value={newCommentText} onChange={(evt) => {setNewCommentText(evt.target.value)}} />
             <button onClick={async () => {
-                await post.addComment(await getCurrentUser(), newCommentText);
+                
                 console.log("Commented")
             }}>Comment</button>
         </div>
