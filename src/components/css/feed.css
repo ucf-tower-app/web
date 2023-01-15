@@ -1,0 +1,21 @@
+
+.avatar {
+    border-radius: 100%;
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+    border: 1px solid black;
+}
+
+.post-thumbnail {
+    width: 75%;
+    height: auto;
+    justify-self: center;
+    align-self: center;
+}
+
+.route-avatar {
+    width: 100%;
+    height: auto;
+    align-self: center;
+}
