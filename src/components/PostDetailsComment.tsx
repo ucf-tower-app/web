@@ -1,9 +1,9 @@
-import { Comment } from "../xplat/types/comment";
+import { Comment } from '../xplat/types/comment';
 import { useEffect, useState } from 'react';
-import { Box, Text } from "native-base";
+import { Box, Text } from 'native-base';
 import './css/feed.css';
-import { User } from "../xplat/types/user";
-import AuthorHandle from "./AuthorHandle";
+import { User } from '../xplat/types/user';
+import AuthorHandle from './AuthorHandle';
 
 const CommentDisplay = ({comment}: {comment: Comment}) => {
     const [author, setAuthor] = useState<User>();
@@ -24,7 +24,7 @@ const CommentDisplay = ({comment}: {comment: Comment}) => {
             <Text fontSize={'sm'}>{body}</Text>
             <Text fontSize={'xs'} color='gray.400'>{postTime}</Text>
         </Box>
-    )
-}
+    );
+};
 
 export default CommentDisplay;

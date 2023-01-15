@@ -1,8 +1,8 @@
-import { Box, Text } from "native-base";
-import { Post } from "../xplat/types/post";
+import { Box, Text } from 'native-base';
+import { Post } from '../xplat/types/post';
 import { useState, useEffect} from 'react';
-import { Comment } from "../xplat/types/comment";
-import CommentDisplay from "./PostDetailsComment";
+import { Comment } from '../xplat/types/comment';
+import CommentDisplay from './PostDetailsComment';
 
 const PostDetails = ({post}: {post: Post | undefined}) => {
     const [comments, setComments] = useState<Comment[] | undefined>();
@@ -25,15 +25,15 @@ const PostDetails = ({post}: {post: Post | undefined}) => {
                                 <Box key={index} margin={2}>
                                     <CommentDisplay comment={value}/>
                                 </Box>
-                            )
-                    })
+                            );
+                        })
                     }
                 </Box> :
                 <Box>
                     <Text alignSelf={'center'}>No post selected</Text>
                 </Box> }
         </Box>
-    )
-}
+    );
+};
 
 export default PostDetails;

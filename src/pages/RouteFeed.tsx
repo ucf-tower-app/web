@@ -9,7 +9,7 @@ import { Route } from '../xplat/types/route';
 import { Post } from '../xplat/types/post';
 import '../components/css/feed.css';
 import PostDetails from '../components/PostDetails';
-const placeholder_image = require('../placeholder_image.jpg');
+import placeholder_image from '../placeholder_image.jpg';
 
 const RouteFeed = () => {
     const [route, setRoute] = useState<Route>();
@@ -42,10 +42,10 @@ const RouteFeed = () => {
         });
         route?.getSetter().then( (user) => {
             user?.getUsername().then( (name) => setSetter(name));
-        })
+        });
         route?.getForum().then( (forum) => {
             setRouteForum(forum);
-        })
+        });
     }, [route]);
 
     return (
@@ -56,7 +56,7 @@ const RouteFeed = () => {
                     <Box flexDir={'column'} width={'25%'} top={'100px'} position='fixed'>
                         <Center>
                             <Text fontSize={'2xl'} bold>{routeName}</Text>
-                            {placeholder_image!! && <img src={placeholder_image} className='route-avatar' alt='route'/>}
+                            {placeholder_image! && <img src={placeholder_image} className='route-avatar' alt='route'/>}
                             <Text> Set by {setter}</Text>
                         </Center>
                     </Box>
@@ -74,7 +74,7 @@ const RouteFeed = () => {
             </VStack>
             
         </Box>
-    )
+    );
 };
 
 export default RouteFeed;

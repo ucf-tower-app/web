@@ -4,7 +4,9 @@ import { Post } from '../xplat/types/post';
 import { useState, useEffect} from 'react';
 import PostInFeed from './PostInFeed';
 
-const RouteFeedDisplay = ({forum, setPostInParent}: {forum: Forum | undefined, setPostInParent: Function},  ) => {
+type callBackFunction = (post: Post) => void;
+
+const RouteFeedDisplay = ({forum, setPostInParent}: {forum: Forum | undefined, setPostInParent: callBackFunction},) => {
     const [posts, setPosts] = useState<Post[]>();
     
     useEffect(() => {
@@ -20,10 +22,10 @@ const RouteFeedDisplay = ({forum, setPostInParent}: {forum: Forum | undefined, s
                     <Pressable onPress={() => setPostInParent(value)} key={index}>
                         <PostInFeed post={value}/>
                     </Pressable>
-                )
+                );
             })}
         </Box>
-    )
-}
+    );
+};
 
 export default RouteFeedDisplay;

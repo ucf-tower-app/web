@@ -1,4 +1,4 @@
-import {extendTheme} from "native-base";
+import {extendTheme} from 'native-base';
 
 const theme = extendTheme({
     components: {
@@ -51,5 +51,5 @@ const theme = extendTheme({
             }
         }
     }
-})
+});
 export default theme;

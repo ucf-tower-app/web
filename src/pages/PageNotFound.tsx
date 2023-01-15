@@ -1,4 +1,4 @@
-import { Text, Box } from "native-base";
+import { Text, Box } from 'native-base';
 
 const PageNotFound = () => {
     return (
@@ -9,7 +9,7 @@ const PageNotFound = () => {
             </Text>
         </Box>
         
-    )
-}
+    );
+};
 
 export default PageNotFound;

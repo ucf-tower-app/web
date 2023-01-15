@@ -18,20 +18,21 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <Suspense>
-    <NativeBaseProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-            <Route path='/' element={<Login/>}/>
-            <Route path='/signup' element={<Signup/>}/>
-            <Route path='/routes' element={<RoutesPage/>}/>
-            <Route path='/route' element={<RouteFeed/>}/>
-            {window.location.hostname === 'localhost' && <Route path='/backendtesting' element={<BackendTesting/>}/>}
-            <Route path='*' element={<PageNotFound/>}/>
-        </Routes>
-      </BrowserRouter>
-    </NativeBaseProvider>
-  </Suspense>
+    <Suspense>
+        <NativeBaseProvider theme={theme}>
+            <BrowserRouter>
+                <Routes>
+                    <Route path='/' element={<Login/>}/>
+                    <Route path='/signup' element={<Signup/>}/>
+                    <Route path='/routes' element={<RoutesPage/>}/>
+                    <Route path='/route' element={<RouteFeed/>}/>
+                    {window.location.hostname === 'localhost' && 
+                      <Route path='/backendtesting' element={<BackendTesting/>}/>}
+                    <Route path='*' element={<PageNotFound/>}/>
+                </Routes>
+            </BrowserRouter>
+        </NativeBaseProvider>
+    </Suspense>
 );
 
 

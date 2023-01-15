@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import { Box, Pressable, ChevronRightIcon, ChevronLeftIcon, HStack, Text, ZStack } from 'native-base';
 import './css/feed.css';
 
@@ -10,15 +10,14 @@ const PostImages = ({imageContent}: {imageContent: (string | undefined)[]}) => {
         if (imageContent !== undefined)
         {
             setImageCount(imageContent!.length);
-
         }
-            
     }, [imageContent]);
 
     return (
         <Box>
             {imageCount > 1 &&
-            <Box position={'absolute'} backgroundColor={'#BDBDBD88'} p={0.5} borderRadius='sm' width={'fit-content'} alignSelf='right' justifyContent={'right'} right={10}>
+            <Box position={'absolute'} backgroundColor={'#BDBDBD88'} p={0.5} borderRadius='sm' 
+                width={'fit-content'} alignSelf='right' justifyContent={'right'} right={10}>
                 <Text color='black'>{`${activeIndex + 1}/${imageCount}`}</Text>
             </Box>}
             <HStack justifyContent={'center'}>
@@ -37,7 +36,7 @@ const PostImages = ({imageContent}: {imageContent: (string | undefined)[]}) => {
                 </Pressable>}
             </HStack>
         </Box>
-    )
-}
+    );
+};
 
 export default PostImages;
