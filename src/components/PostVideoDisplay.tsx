@@ -12,13 +12,15 @@ const PostVideoDisplay = ({video}: {video: Blob}) => {
 
     return (
         <Box>
-            <Player
-                src='https://media.w3.org/2010/05/sintel/trailer_hd.mp4'>
-                <ControlBar>
-                    <ReplayControl seconds={10}/>
-                    <CurrentTimeDisplay/>
-                </ControlBar>
-            </Player>
+            {videoURL !== undefined && 
+                <Player
+                    src={videoURL}>
+                    <ControlBar>
+                        <ReplayControl seconds={10}/>
+                        <CurrentTimeDisplay/>
+                    </ControlBar>
+                </Player>
+            }
         </Box>
     );
 };
