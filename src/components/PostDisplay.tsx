@@ -10,22 +10,32 @@ const PostDisplay = ({post}: {post: Post}) => {
     const [imageUrls, setImageUrls] = useState<string[] | undefined>(undefined);
     const [comments, setComments] = useState<Comment[]>([]);
     const [newCommentText, setNewCommentText] = useState<string>("nice send");
+    const [thumbnailUrl, setThumbnailUrl] = useState<string| undefined>(undefined);
+    const [videoUrl, setVideoUrl] = useState<string| undefined>(undefined);
     
     useEffect(() => {
-        post.getTextContent().then((text) => setTextContent(text));
-        post.getAuthor().then((author) => {author.getUsername().then((username) => setAuthor(username))});
-        post.getImageContentUrls().then((urls) => setImageUrls(urls));
-        post.getComments().then((comments) => setComments(comments))
+        async function fetch() {
+            await post.getData();
+            post.getTextContent().then(setTextContent);
+            post.getAuthor().then((author) => {author.getUsername().then(setAuthor)});
+            post.getImageContentUrls().then(setImageUrls);
+            post.getComments().then(setComments)
+            post.hasVideoContent().then(async (b) => {if(b) {
+                post.getVideoThumbnailUrl().then(setThumbnailUrl);
+                post.getVideoUrl().then(setVideoUrl);
+            }})
+        }
+        fetch();
     }, [post]);
-    // useEffect(() => {
-    //     });
-    // }, [post]);
-    useEffect(() => {}, [post]);
 
     return (
         <div className="hbox">
             <p>"{textContent}"</p>
             {imageUrls && <div>{imageUrls!.map((url) => <img src={url} className="fillHeight" style={{ width: 45, height: 45 }} alt=""/>)}</div>}
+            {thumbnailUrl && <img src={thumbnailUrl} className="fillHeight" style={{ width: 45, height: 45 }} alt=""/>}
+            {videoUrl && <video width="150" height="100" controls >
+      <source src={videoUrl} type="video/mp4"/>
+     </video>}
             <p>- {author}</p>
             <button onClick={() => {console.log(post)}}>Print Object</button>
             <button onClick={() => {getCurrentUser().then((user) => post.addLike(user))}}>Like</button>

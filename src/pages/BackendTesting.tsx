@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import logo from '../logo.svg';
-import '../App.css';
 import { Page } from '../App';
+import '../App.css';
+import logo from '../logo.svg';
 
-import { createRoute, createUser, getCurrentUser, getRouteById, getUrl, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api'
 import RouteDisplay from '../components/RouteDisplay';
-import { createPost } from '../xplat/api';
+import { createPost, createRoute, createUser, getCurrentUser, getRouteById, getUrl, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api';
 
 const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => void; }) => {
   const [email, onChangeEmail] = useState("lkf53414@xcoxc.com");
@@ -19,6 +18,8 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
   const [routeSetterUsername, setRouteSetterUsername] = useState('No Setter')
   const [postText, setPostText] = useState('Hello there!')
   const [postImages, setPostImages] = useState<Blob[] | undefined>()
+  const [postVideoThumbnail, setPostVideoThumbnail] = useState<Blob | undefined>(undefined);
+  const [postVideo, setPostVideo] = useState<Blob | undefined>(undefined);
 
   async function makeUser() {
     await createUser(email, password, username, 'Display Name');
@@ -29,8 +30,14 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
   async function signin() {
     await signIn(email, password);
     const user = await getCurrentUser();
-    console.log(await user.getUsername());
-    console.log(await user.getStatus());
+    await user.getData();
+    console.log(user);
+  }
+
+  async function printcurrent() {
+    const user = await getCurrentUser();
+    await user.getData();
+    console.log(user);
   }
 
   async function testFollow() {
@@ -60,8 +67,14 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
   }
 
   async function testCreatePost() {
-    const post = await createPost(await getCurrentUser(), postText, await route.getForum(), postImages);
+    const post = await createPost(
+      await getCurrentUser(), 
+      postText, 
+      await route.getForum(), 
+      postImages, 
+      postVideo && postVideoThumbnail && {video: postVideo!, thumbnail: postVideoThumbnail!});
     await post.getData();
+    setRoute(route)
     console.log(post)
   }
 
@@ -74,6 +87,14 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
     console.log("files:", files)
     console.log(postImages);
   }
+
+  const deleteUser = async () => {
+    // const del = (await getCurrentUser()).delete(password);
+    // console.log(del)
+    // await del;
+    // console.log("It is done.")
+  }
+
 
   const _onChangeEmail = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangeEmail(evt.target.value) }
   const _onChangeUsername = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangeUsername(evt.target.value) }
@@ -90,6 +111,8 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
           <button onClick={makeUser}>Make new user  </button>
           <button onClick={signin}>Sign in</button>
           <button onClick={sendAuthEmail}>Send Verify Email  </button>
+          <button onClick={printcurrent}>Print current user</button>
+          <button onClick={deleteUser}>Delete current user</button>
           </div>
         <div className='hbox'>
           <input type="text" value={targUsername} onChange={(evt) => {setTargUsername(evt.target.value)}} />
@@ -107,8 +130,10 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
         </div>
         <RouteDisplay route={route}/>
         <div className='hbox'>
-         <input onChange={handleFilesSelected} type="file" multiple accept="image/*" />
+          <input onChange={handleFilesSelected} type="file" multiple accept="image/*" />
           <input type="text" value={postText} onChange={(evt) => {setPostText(evt.target.value)}} />
+          <input onChange={(evt) => {setPostVideoThumbnail(evt.target.files![0])}} type="file" accept="image/*" />
+          <input onChange={(evt) => {setPostVideo(evt.target.files![0])}} type="file" accept="video/*" />
           <button onClick={testCreatePost}>Create post to this route</button>
 
         </div>
