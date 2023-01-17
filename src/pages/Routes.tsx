@@ -1,5 +1,5 @@
 import { NavBar } from '../components/NavigationBar';
-import { Box, Button, Text} from 'native-base';
+import { Box, Button, Center, Divider, HStack, Text} from 'native-base';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 
 
@@ -21,6 +21,17 @@ const Routes = () => {
                     <Text variant={'button'}> Go to Route</Text>
                 </Button>
             </Box>
+            <HStack width={'100%'}>
+                <Center width={'50%'} position='fixed'>
+                    <Text> Active Routes </Text>
+                    {/* TODO: add active routes */}
+                </Center>
+                <Divider orientation='vertical' top={'100px'} left={'50%'} height={'75vh'} position='fixed'/>
+                <Center left={'50%'} width={'50%'} position='fixed'>
+                    <Text> Archived Routes </Text>
+                    {/* TODO: add archived routes */}
+                </Center>
+            </HStack>
         </Box>
         
 
