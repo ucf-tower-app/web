@@ -3,7 +3,7 @@ import { Page } from '../App';
 import '../App.css';
 import logo from '../logo.svg';
 
-import RouteDisplay from '../components/RouteDisplay';
+import RouteDisplay from '../components/backend/RouteDisplay';
 import { createPost, createRoute, createUser, getActiveRoutes, getAllRoutes, getCurrentUser, getRouteById, getUrl, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api';
 
 const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => void; }) => {
