@@ -4,7 +4,7 @@ import '../App.css';
 import logo from '../logo.svg';
 
 import RouteDisplay from '../components/RouteDisplay';
-import { createPost, createRoute, createUser, getCurrentUser, getRouteById, getUrl, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api';
+import { createPost, createRoute, createUser, getActiveRoutes, getAllRoutes, getCurrentUser, getRouteById, getUrl, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api';
 
 const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => void; }) => {
   const [email, onChangeEmail] = useState("lkf53414@xcoxc.com");
@@ -22,9 +22,9 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
   const [postVideo, setPostVideo] = useState<Blob | undefined>(undefined);
 
   async function makeUser() {
-    await createUser(email, password, username, 'Display Name');
+    const cur = await createUser(email, password, username, 'Display Name');
     console.log("done")
-    console.log(await getCurrentUser())
+    console.log(cur)
   }
   
   async function signin() {
@@ -95,6 +95,11 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
     // console.log("It is done.")
   }
 
+  const testGetRoutes = async () => {
+    console.log(await getActiveRoutes())
+    console.log(await getAllRoutes())
+  }
+
 
   const _onChangeEmail = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangeEmail(evt.target.value) }
   const _onChangeUsername = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangeUsername(evt.target.value) }
@@ -126,6 +131,7 @@ const BackendTesting = ({ setCurrentPage }: { setCurrentPage: (arg0: Page) => vo
           <input type="text" value={routeSetterUsername} onChange={(evt) => {setRouteSetterUsername(evt.target.value)}} />
         
           <button onClick={testCreateRoute}>Create route</button>
+          <button onClick={testGetRoutes}>Get Routes</button>
 
         </div>
         <RouteDisplay route={route}/>

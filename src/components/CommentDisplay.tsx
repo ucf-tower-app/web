@@ -23,7 +23,7 @@ const CommentDisplay = ({comment}: {comment: Comment}) => {
             <div className="hbox">
                 <button onClick={() => {console.log(comment)}}>Print Object</button>
                 <button onClick={async () => {await comment.delete(); console.log("Deleted")}}>Delete</button>
-                <button onClick={async () => {await comment.edit("Big Edit Energy"); console.log("Edited")}}>Edit</button>
+                {/* <button onClick={async () => {await comment.edit("Big Edit Energy"); console.log("Edited")}}>Edit</button> */}
             </div>
         </div>
     )
