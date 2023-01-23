@@ -41,11 +41,11 @@ const PostDisplay = ({post}: {post: Post}) => {
                 <source src={videoUrl} type="video/mp4"/>
             </video>}
             <p>- {author}</p>
-            <button onClick={() => {console.log(post);}}>Print Object</button>
-            <button onClick={() => {getCurrentUser().then((user) => post.addLike(user));}}>Like</button>
-            <button onClick={() => {getCurrentUser().then((user) => post.removeLike(user));}}>Unlike</button>
-            <button onClick={() => {getCurrentUser().then(async (user) => console.log(await post.likedBy(user)));}}>Liked?</button>
-            <button onClick={() => {post.delete();}}>Delete</button>
+            <button style={{ width:'50px' }} onClick={() => {console.log(post);}}>Print</button>
+            <button style={{ width:'40px' }} onClick={() => {getCurrentUser().then((user) => post.addLike(user));}}>Like</button>
+            <button style={{ width:'50px' }} onClick={() => {getCurrentUser().then((user) => post.removeLike(user));}}>Unlike</button>
+            <button style={{ width:'50px' }} onClick={() => {post.delete();}}>Delete</button>
+            {/* <button style={{ width:'40px' }} onClick={() => {post.editTextContent('Edited lol');}}>Edit</button> */}
             <div>{comments.map((cmt) => <CommentDisplay comment={cmt}/>)} {comments.length} comments</div>
             <input type="text" value={newCommentText} onChange={(evt) => {setNewCommentText(evt.target.value);}} />
             {/* <button onClick={async () => {
