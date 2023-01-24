@@ -7,6 +7,7 @@ import './index.css';
 import Login from './pages/Login';
 import PageNotFound from './pages/PageNotFound';
 
+const ComponentTesting = lazy(() => import('./pages/ComponentTesting'));
 const BackendTesting = lazy(() => import('./pages/BackendTesting'));
 const RouteFeed = lazy(() => import('./pages/RouteFeed'));
 const RoutesPage = lazy(() => import('./pages/Routes'));
@@ -27,6 +28,8 @@ root.render(
                     <Route path='/route' element={<RouteFeed/>}/>
                     {window.location.hostname === 'localhost' && 
                       <Route path='/backendtesting' element={<BackendTesting/>}/>}
+                    {window.location.hostname === 'localhost' && 
+                      <Route path='/component' element={<ComponentTesting/>}/>}
                     <Route path='*' element={<PageNotFound/>}/>
                 </Routes>
             </BrowserRouter>
