@@ -85,6 +85,7 @@ const CreateRoute = ({refreshRoutes}: {refreshRoutes: refreshRoutesCallback}) =>
                 <Select selectedValue={type} accessibilityLabel='choose route type' 
                     placeholder='Route type' onValueChange={ (value) => {
                         const route_type = value as RouteType;
+                        setRawgrade(undefined);
                         setType(route_type);
                     }}>
                     {RouteTypeList.map( (routetype) => {
