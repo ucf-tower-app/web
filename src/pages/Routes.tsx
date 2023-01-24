@@ -1,24 +1,43 @@
 import { NavBar } from '../components/NavigationBar';
-import { Box, Button, Center, Divider, HStack, Text, VStack} from 'native-base';
+import { Box, Button, Divider, Flex, HStack, Text } from 'native-base';
 import { useNavigate, createSearchParams } from 'react-router-dom';
-import { getActiveRoutes, getAllRoutes } from '../xplat/api';
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { Route } from '../xplat/types/route';
+import { getActiveRoutesCursor, getArchivedRoutesCursor } from '../xplat/api';
+import { RouteRow } from '../components/RouteRow';
 
 const Routes = () => {
-    const [routes, setRoutes] = useState<Route[]>([]);
-    const [routeNames, setRouteNames] = useState<string[]>([]);
+    const [activeRoutes, setActiveRoutes] = useState<Route[]>([]);
+    const [archivedRoutes, setArchivedRoutes] = useState<Route[]>([]);
 
     useEffect(() => {
-        getAllRoutes().then(setRoutes);
+        const fetchActiveRoutes = async () => {
+            const activeRoutesCursor = getActiveRoutesCursor();
+            const tempActiveRoutes: Route[] = [];
+            while ((await activeRoutesCursor.hasNext())) {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                tempActiveRoutes.push((await activeRoutesCursor.pollNext())!);
+            }
+            setActiveRoutes(tempActiveRoutes);
+        };
+        fetchActiveRoutes();
     }, []);
-    
+
     useEffect(() => {
-        Promise.all(routes.map((route: Route) => route.getName())).then(setRouteNames);
-    }, [routes]);
+        const fetchArchivedRoutes = async () => {
+            const archivedRoutesCursor = getArchivedRoutesCursor();
+            const tempArchivedRoutes: Route[] = [];
+            while ((await archivedRoutesCursor.hasNext())) {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                tempArchivedRoutes.push((await archivedRoutesCursor.pollNext())!);
+            }
+            setArchivedRoutes(tempArchivedRoutes);
+        };
+        fetchArchivedRoutes();
+    });
 
     const navigate = useNavigate();
-    const exampleSearchParams = {uid: 'GQBdclAMmE2v4nDPphsc'};
+    const exampleSearchParams = { uid: 'GQBdclAMmE2v4nDPphsc' };
     const navToRoute = () => {
         navigate({
             pathname: '/route',
@@ -28,32 +47,43 @@ const Routes = () => {
 
     return (
         <Box flexDir={'column'}>
-            <Box height={'50px'} marginBottom={1}><NavBar/></Box>
+            <Box height={'50px'} marginBottom={1}><NavBar /></Box>
             <Box>
                 <Button onPress={navToRoute}>
-                    <Text variant={'button'}> Go to Route</Text>
+                    <Text variant={'button'}> Go to Route </Text>
                 </Button>
             </Box>
             <HStack width={'100%'}>
-                <Center width={'50%'} position='fixed'>
-                    <VStack>
-                        <Text> Active Routes </Text>
+                <Flex flexDirection='row' justifyContent='center' width='50%'>
+                    <Flex flexDirection='column' alignItems='center' width='100%'>
+                        <Text>Active Routes</Text>
                         {
-                            routeNames?.map((routeName: string) => <Text key={routeName}>{routeName}</Text>)
+                            activeRoutes.map((currRoute: Route, index: number) => (
+                                <>
+                                    <Divider orientation='horizontal' height='0.5' />
+                                    <RouteRow route={currRoute} key={index} />
+                                </>
+                            ))
                         }
-                        {/* TODO: add active routes */}
-                    </VStack>
-                </Center>
-                <Divider orientation='vertical' top={'100px'} left={'50%'} height={'75vh'} position='fixed'/>
-                <Center left={'50%'} width={'50%'} position='fixed'>
-                    <VStack>
-                        <Text> Archived Routes </Text>
-                        {/* TODO: add archived routes */}
-                    </VStack>
-                </Center>
+                    </Flex>
+                </Flex>
+                <Divider orientation='vertical' top={'100px'} left={'50%'} height={'75vh'} position='fixed' />
+                <Flex flexDirection='row' justifyContent='center' width='50%'>
+                    <Flex flexDirection='column' alignItems='center' width='100%'>
+                        <Text>Archived Routes</Text>
+                        {
+                            archivedRoutes.map((currRoute: Route, index: number) => (
+                                <>
+                                    <Divider orientation='horizontal' height='0.5' />
+                                    <RouteRow route={currRoute} key={index} />
+                                </>
+                            ))
+                        }
+                    </Flex>
+                </Flex>
             </HStack>
         </Box>
-        
+
 
     );
 };
