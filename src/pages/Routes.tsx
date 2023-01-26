@@ -34,7 +34,7 @@ const Routes = () => {
             setArchivedRoutes(tempArchivedRoutes);
         };
         fetchArchivedRoutes();
-    });
+    }, []);
 
     const navigate = useNavigate();
     const exampleSearchParams = { uid: 'GQBdclAMmE2v4nDPphsc' };
