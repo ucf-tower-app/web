@@ -1,29 +1,37 @@
 import { Box, Text } from 'native-base';
 import { Post } from '../xplat/types/post';
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { Comment } from '../xplat/types/comment';
 import CommentDisplay from './PostDetailsComment';
 
-const PostDetails = ({post}: {post: Post | undefined}) => {
+const PostDetails = ({ post }: { post: Post | undefined }) => {
     const [comments, setComments] = useState<Comment[] | undefined>();
 
-    useEffect( () => {
-        post?.getComments().then( (data) => setComments(data));
+    useEffect(() => {
+        const fetchComments = async () => {
+            const commentsCursor = post?.getCommentsCursor();
+            const tempComments: Comment[] = [];
+            while ((await commentsCursor?.hasNext)) {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                tempComments.push((await commentsCursor?.pollNext())!);
+            }
+            setComments(tempComments);
+        };
+        fetchComments();
     }, [post]);
-
 
     return (
         <Box flexDir={'column'} margin={2} position='fixed' width={'22%'}>
-            {post !== undefined ? 
+            {post !== undefined ?
                 <Box>
                     <Text alignSelf={'center'}>Comments</Text>
-                    {comments === undefined || comments!.length === 0 ? 
-                        <Box marginTop={2}><Text alignSelf={'center'}>No comments just yet.</Text></Box> 
+                    {comments === undefined || comments!.length === 0 ?
+                        <Box marginTop={2}><Text alignSelf={'center'}>No comments just yet.</Text></Box>
                         :
-                        comments?.map( (value, index) => {
+                        comments?.map((value, index) => {
                             return (
                                 <Box key={index} margin={2}>
-                                    <CommentDisplay comment={value}/>
+                                    <CommentDisplay comment={value} />
                                 </Box>
                             );
                         })
@@ -31,7 +39,7 @@ const PostDetails = ({post}: {post: Post | undefined}) => {
                 </Box> :
                 <Box>
                     <Text alignSelf={'center'}>No post selected</Text>
-                </Box> }
+                </Box>}
         </Box>
     );
 };
