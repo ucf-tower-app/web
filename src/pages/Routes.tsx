@@ -1,5 +1,5 @@
 import { NavBar } from '../components/NavigationBar';
-import { Box, Button, Divider, Flex, HStack, Text } from 'native-base';
+import { Box, Button, Divider, Flex, Text } from 'native-base';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Route } from '../xplat/types/route';
@@ -53,8 +53,8 @@ const Routes = () => {
                     <Text variant={'button'}> Go to Route </Text>
                 </Button>
             </Box>
-            <HStack width={'100%'}>
-                <Flex flexDirection='row' justifyContent='center' width='50%'>
+            <Flex flexDirection='row' justifyContent='space-evenly' width='100%'>
+                <Flex flexDirection='row' justifyContent='center' width='30%'>
                     <Flex flexDirection='column' alignItems='center' width='100%'>
                         <Text>Active Routes</Text>
                         {
@@ -67,8 +67,8 @@ const Routes = () => {
                         }
                     </Flex>
                 </Flex>
-                <Divider orientation='vertical' top={'100px'} left={'50%'} height={'75vh'} position='fixed' />
-                <Flex flexDirection='row' justifyContent='center' width='50%'>
+                <Divider orientation='vertical' height={'75vh'} position='fixed' />
+                <Flex flexDirection='row' justifyContent='center' width='30%'>
                     <Flex flexDirection='column' alignItems='center' width='100%'>
                         <Text>Archived Routes</Text>
                         {
@@ -81,10 +81,8 @@ const Routes = () => {
                         }
                     </Flex>
                 </Flex>
-            </HStack>
+            </Flex>
         </Box>
-
-
     );
 };
 
