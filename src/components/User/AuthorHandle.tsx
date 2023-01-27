@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { User } from '../xplat/types/user';
+import { User } from '../../xplat/types/user';
 import { HStack, Text, Pressable, Skeleton } from 'native-base';
 import placeholder_image from '../placeholder_image.jpg';
 import './css/feed.css';

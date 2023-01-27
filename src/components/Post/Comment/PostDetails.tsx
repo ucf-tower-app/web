@@ -1,7 +1,7 @@
 import { Box, Text } from 'native-base';
-import { Post } from '../xplat/types/post';
+import { Post } from '../../../xplat/types/post';
 import { useState, useEffect } from 'react';
-import { Comment } from '../xplat/types/comment';
+import { Comment } from '../../../xplat/types/comment';
 import CommentDisplay from './PostDetailsComment';
 
 const PostDetails = ({ post }: { post: Post | undefined }) => {

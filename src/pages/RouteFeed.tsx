@@ -8,7 +8,7 @@ import { Forum } from '../xplat/types/forum';
 import { Route } from '../xplat/types/route';
 import { Post } from '../xplat/types/post';
 import '../components/css/feed.css';
-import PostDetails from '../components/PostDetails';
+import PostDetails from '../components/Post/Comment/PostDetails';
 import placeholder_image from '../placeholder_image.jpg';
 
 const RouteFeed = () => {
