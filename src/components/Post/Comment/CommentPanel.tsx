@@ -11,7 +11,7 @@ const CommentPanel = ({ post }: { post: Post | undefined }) => {
         const fetchComments = async () => {
             const commentsCursor = post?.getCommentsCursor();
             const tempComments: Comment[] = [];
-            while ((await commentsCursor?.hasNext)) {
+            while ((await commentsCursor?.hasNext())) {
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 tempComments.push((await commentsCursor?.pollNext())!);
             }
