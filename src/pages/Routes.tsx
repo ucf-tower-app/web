@@ -1,6 +1,5 @@
 import { NavBar } from '../components/NavigationBar';
-import { Box, Button, Divider, Flex, Text } from 'native-base';
-import { useNavigate, createSearchParams } from 'react-router-dom';
+import { Box, Divider, Flex, Text } from 'native-base';
 import { useState, useEffect } from 'react';
 import { Route } from '../xplat/types/route';
 import { getActiveRoutesCursor, getArchivedRoutesCursor } from '../xplat/api';
@@ -36,31 +35,17 @@ const Routes = () => {
         fetchArchivedRoutes();
     }, []);
 
-    const navigate = useNavigate();
-    const exampleSearchParams = { uid: 'GQBdclAMmE2v4nDPphsc' };
-    const navToRoute = () => {
-        navigate({
-            pathname: '/route',
-            search: `?${createSearchParams(exampleSearchParams)}`
-        });
-    };
-
     return (
         <Box flexDir={'column'}>
             <Box height={'50px'} marginBottom={1}><NavBar /></Box>
-            <Box>
-                <Button onPress={navToRoute}>
-                    <Text variant={'button'}> Go to Route </Text>
-                </Button>
-            </Box>
-            <Flex flexDirection='row' justifyContent='space-evenly' width='100%'>
+            <Flex flexDirection='row' justifyContent='space-evenly' width='100%' top='50px'>
                 <Flex flexDirection='row' justifyContent='center' width='30%'>
                     <Flex flexDirection='column' alignItems='center' width='100%'>
                         <Text>Active Routes</Text>
                         {
                             activeRoutes.map((currRoute: Route, index: number) => (
                                 <>
-                                    <Divider orientation='horizontal' height='0.5' />
+                                    <Divider orientation='horizontal' height='2px' />
                                     <RouteRow route={currRoute} key={index} />
                                 </>
                             ))
@@ -74,7 +59,7 @@ const Routes = () => {
                         {
                             archivedRoutes.map((currRoute: Route, index: number) => (
                                 <>
-                                    <Divider orientation='horizontal' height='0.5' />
+                                    <Divider orientation='horizontal' height='2px' />
                                     <RouteRow route={currRoute} key={index} />
                                 </>
                             ))
