@@ -2,7 +2,7 @@ import { Box, Pressable } from 'native-base';
 import { Forum } from '../xplat/types/forum';
 import { Post } from '../xplat/types/post';
 import { useState, useEffect } from 'react';
-import PostInFeed from './PostInFeed';
+import PostInFeed from './Post/PostInFeed';
 
 type callBackFunction = (post: Post) => void;
 

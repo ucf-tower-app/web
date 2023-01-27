@@ -1,9 +1,9 @@
 import { Box, Text, Skeleton, HStack, FavouriteIcon, Pressable } from 'native-base';
-import { Post } from '../xplat/types/post';
+import { Post } from '../../xplat/types/post';
 import { useEffect, useState } from 'react';
-import './css/feed.css';
-import { User } from '../xplat/types/user';
-import AuthorHandle from './AuthorHandle';
+import '../css/feed.css';
+import { User } from '../../xplat/types/user';
+import AuthorHandle from '../User/AuthorHandle';
 import PostImages from './PostImages';
 
 const PostInFeed = ({ post }: { post: Post }) => {

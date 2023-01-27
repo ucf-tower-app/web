@@ -8,7 +8,7 @@ import { Forum } from '../xplat/types/forum';
 import { Route } from '../xplat/types/route';
 import { Post } from '../xplat/types/post';
 import '../components/css/feed.css';
-import PostDetails from '../components/PostDetails';
+import CommentPanel from '../components/Post/Comment/CommentPanel';
 import placeholder_image from '../placeholder_image.jpg';
 
 const RouteFeed = () => {
@@ -67,7 +67,7 @@ const RouteFeed = () => {
                     </Box>
                     <Divider orientation='vertical' top={'100px'} right={'25%'} height={'75vh'} position='fixed' />
                     <Box flexDir={'column'} left={'25%'} width={'25%'} top={'5vh'}>
-                        <PostDetails post={selectedPost} />
+                        <CommentPanel post={selectedPost} />
                     </Box>
                 </HStack>
             </VStack>
