@@ -1,14 +1,14 @@
 import { Box, Text } from 'native-base';
-import { Post } from '../xplat/types/post';
-import { useState, useEffect} from 'react';
+import { useEffect, useState } from 'react';
 import { Comment } from '../xplat/types/comment';
+import { Post } from '../xplat/types/post';
 import CommentDisplay from './PostDetailsComment';
 
 const PostDetails = ({post}: {post: Post | undefined}) => {
     const [comments, setComments] = useState<Comment[] | undefined>();
 
     useEffect( () => {
-        post?.getComments().then( (data) => setComments(data));
+        // post?.getComments().then( (data) => setComments(data));
     }, [post]);
 
 

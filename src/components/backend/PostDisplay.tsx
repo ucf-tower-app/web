@@ -23,7 +23,8 @@ const PostDisplay = ({post}: {post: Post}) => {
             post.getTextContent().then(setTextContent);
             post.getAuthor().then((author) => {author.getUsername().then(setAuthor);});
             post.getImageContentUrls().then(setImageUrls);
-            post.getComments().then(setComments);
+            const cursor = post.getCommentsCursor();
+            setComments([(await cursor.pollNext())!]);
             // post.hasVideoContent().then(async (b) => {if(b) {
             //     post.getVideoThumbnailUrl().then(setThumbnailUrl);
             //     post.getVideoUrl().then(setVideoUrl);

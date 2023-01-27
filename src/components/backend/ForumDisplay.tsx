@@ -5,7 +5,11 @@ import PostDisplay from './PostDisplay';
 const ForumDisplay = ({forum}: {forum: Forum}) => {
     const [posts, setPosts] = useState<Post[]>([]);
     
-    useEffect(() => {forum.getPosts().then((_posts) => setPosts(_posts));}, [forum]);
+    useEffect(() => {
+        const cursor = forum.getPostsCursor();
+        cursor.________getAll_CLOWNTOWN_LOTS_OF_READS().then(
+            (res => setPosts(res.filter((x) => x !== undefined) as Post[])));
+    }, [forum]);
 
     return (
         <ul className="forumElement">

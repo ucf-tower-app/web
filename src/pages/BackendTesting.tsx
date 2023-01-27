@@ -3,21 +3,26 @@ import React, { useEffect, useState } from 'react';
 import '../App.css';
 import logo from '../logo.svg';
 
+import { Spacer } from 'native-base';
 import RouteDisplay from '../components/backend/RouteDisplay';
-import { createPost, createUser, getActiveRoutesCursor, getAllPostsCursor, getAllRoutesCursor, getAllTopropeRouteClassifiers, getCurrentUser, getRouteById, getSendById, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api';
+import { createPost, createRoute, createUser, getActiveRoutesCursor, getAllPostsCursor, getAllRoutesCursor, getCurrentUser, getRouteById, getRouteByName, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api';
 import { getTestMergePostsCursor } from '../xplat/types/queryCursors';
+import { SubstringMatcher } from '../xplat/types/substringMatcher';
+import { RouteClassifier, RouteTech, RouteType, User } from '../xplat/types/types';
 
 const BackendTesting = () => {
     const [email, onChangeEmail] = useState('lkf53414@xcoxc.com');
     const [username, onChangeUsername] = useState('BinLiftingSux');
     const [password, onChangePassword] = useState('password');
     const [imgSrc] = useState(logo);
-    const [targUsername, setTargUsername] = useState('CringePotato49');
+    const [targUsername, setTargUsername] = useState('alexr');
     const [route, setRoute] = useState(getRouteById('98sSTIj8FVYUaFGTQOR1'));
     const [routeName, setRouteName] = useState('New Route');
     const [routeGrade, setRouteGrade] = useState(3);
     const [routeType, setRouteType] = useState('Boulder');
     const [routeDescription, setRouteDescription] = useState('description');
+    const [routeTech, setRouteTech] = useState('tech');
+    const [routeColor, setRouteColor] = useState('color');
     const [rope, setRope] = useState(-1);
     const [routeThumbnail, setRouteThumbnail] = useState<Blob | undefined>();
     const [routeSetterUsername, setRouteSetterUsername] = useState('No Setter');
@@ -29,31 +34,23 @@ const BackendTesting = () => {
     const [activeRoutesCursor] = useState(getActiveRoutesCursor());
     const [postsCursor] = useState(getAllPostsCursor());
     const [mergeCursor] = useState(getTestMergePostsCursor());
-
+    const [routeGet, setRouteGet] = useState('New Route');
+    const [curUser, setCurUser] = useState<User | undefined>( undefined);
+    const [routeSearch, setRouteSearch] = useState('Search Here');
+    const [routeMatcher, setRouteMatcher] = useState<SubstringMatcher<string> | undefined>(undefined);
+    const [userMatcher, setUserMatcher] = useState<SubstringMatcher<any> | undefined>(undefined);
+    const [userSearch, setUserSearch] = useState('Search Here');
+    
     useEffect(() => {
         const go = async () => {
-            console.log('shrt'.match('^[a-z]{5,15}$'));
-            console.log('goldilocks'.match('^[a-z]{5,15}$'));
-            console.log('waaaaaaaaaaaytoolong'.match('^[a-z]{5,15}$'));
-            console.log('Uppercase'.match('^[a-z]{5,15}$'));
-            console.log('Symbo$^ls!'.match('^[a-z]{5,15}$'));
-            console.log('Sp aa ces'.match('^[a-z]{5,15}$'));
-            console.log('trailspace '.match('^[a-z]{5,15}$'));
-
-
-            const send = getSendById('p5PZ9j3JaH7Ry9dDYVWv');
-            await send.getData();
-            console.log(send);
-            const prom = Promise.resolve('gaming');
-            console.log(prom);
-            console.log(getAllTopropeRouteClassifiers().map((c) => c.displayString));
-        // console.log(getAllRouteClassifiers());
+            const cursor = getActiveRoutesCursor();
+            console.log(await cursor.________getAll_CLOWNTOWN_LOTS_OF_READS());
         };
         go();
     }, []);
 
     async function makeUser() {
-        const cur = await createUser(email, password, username, 'Display Name');
+        const cur = await createUser(email, password, username, 'Display Name Oh Yeah');
         console.log('done');
         console.log(cur);
     }
@@ -84,17 +81,22 @@ const BackendTesting = () => {
         const guy = await getUserByUsername(targUsername);
         await guy?.getData();
         console.log(guy);
+        setCurUser(guy);
     }
 
     async function testCreateRoute() {
-        // await setRoute(
-        //     await createRoute({
-        //         name: routeName, 
-        //         classifier: new RouteClassifier(routeGrade, routeType as RouteType),
-        //         ...(rope != -1 && {rope: rope}),
-        //         ...(routeThumbnail && {thumbnail: routeThumbnail}),
-        //         ...(routeSetterUsername && {setter: await getUserByUsername(routeSetterUsername) })
-        //     }));
+        setRoute(
+            await createRoute({
+                name: routeName, 
+                classifier: new RouteClassifier(routeGrade, routeType as RouteType),
+                ...(rope != -1 && {rope: rope}),
+                ...(routeThumbnail && {thumbnail: routeThumbnail}),
+                ...(routeSetterUsername && {setter: await getUserByUsername(routeSetterUsername) }),
+                ...(routeDescription !== 'description' && {description: routeDescription}),
+                ...(routeSetterUsername !== 'No Setter' && {setter: await getUserByUsername(routeSetterUsername)}),
+                ...(routeTech !== 'tech' && {tech: routeTech as RouteTech}),
+                ...(routeColor !== 'color' && {color: routeColor}),
+            }));
         console.log(route);
     }
 
@@ -142,7 +144,45 @@ const BackendTesting = () => {
     const _onChangeEmail = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangeEmail(evt.target.value); };
     const _onChangeUsername = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangeUsername(evt.target.value); };
     const _onChangePassword = (evt: { target: { value: React.SetStateAction<string>; }; }) => { onChangePassword(evt.target.value); };
+
+    const getRoute = async () => {
+        const rt = await getRouteByName(routeGet);
+        if(rt) {
+            setRoute(rt);
+            console.log(rt);
+        }
+    };
+
+    const upgradeRoute = async () => {
+        const p = route.upgradeStatus();
+        await p;
+        console.log(p);
+        console.log(route);
+    };
+
+    const deleteRoute = async () => {
+        const p = route.delete();
+        await p;
+        console.log(p);
+        console.log(route);
+        console.log('Heeee\'s outta here!');
+    };
+
+    const sendit = async () => {
+        console.log(curUser);
+        if(curUser) {
+            const yeah = await route.FUCKINSENDIT(curUser);
+            await yeah.getData();
+            console.log(yeah);
+        }
+    };
   
+    const searchUser = (str: string) => {
+        console.log('Searching \'' + str + '\':');
+        console.log(userMatcher?.getMatches(str));
+        setUserSearch(str);
+    };
+
     return (
         <div className="App">
             <header className="App-header">
@@ -161,6 +201,9 @@ const BackendTesting = () => {
                     <input type="text" value={targUsername} onChange={(evt) => {setTargUsername(evt.target.value);}} />
                     <button onClick={testGet}>Get</button>
                     <button onClick={testFollow}>Follow</button>
+                    <Spacer width='12px' />
+                    <input type="text" value={userSearch} onChange={(evt) => {searchUser(evt.target.value);}} />
+                
                 </div>
                 {/* <div className='hbox'>
                     <button onClick={testGetAllPosts}>Get next post </button>
@@ -168,18 +211,32 @@ const BackendTesting = () => {
                     <button onClick={() => console.log(mergeCursor)}>Print merger </button>
                 </div> */}
                 <div className='hbox'>
+                    <input type="text" value={routeGet} onChange={(evt) => {setRouteGet(evt.target.value);}} />
+                    <button onClick={getRoute}>Get</button>
+                    <button onClick={upgradeRoute}>Upgrade</button>
+                    <button style={{backgroundColor: 'red'}} onClick={deleteRoute}>Delete!!!</button>
+                    <button onClick={sendit}>Send it!</button>
+                    <Spacer width='12px' />
+                    <input type="text" value={routeSearch} onChange={(evt) => {setRouteSearch(evt.target.value); console.log(routeMatcher?.getMatches(evt.target.value));}} />
+                </div>
+                <div className='hbox'>
                     <input style={{ width:'90px' }} type="text" value={routeName} onChange={(evt) => {setRouteName(evt.target.value);}} />
                     <input style={{ width:'90px' }} type="text" value={routeGrade} onChange={(evt) => {setRouteGrade(parseInt(evt.target.value));}} />
                     <input style={{ width:'90px' }} type="text" value={routeType} onChange={(evt) => {setRouteType(evt.target.value);}} />
                     <input style={{ width:'90px' }} type="text" value={rope} onChange={(evt) => {setRope(parseInt(evt.target.value));}} />
+                    <input style={{ width:'90px' }} type="text" value={routeDescription} onChange={(evt) => {setRouteDescription(evt.target.value);}} />
+                    <input style={{ width:'90px' }} type="text" value={routeTech} onChange={(evt) => {setRouteTech(evt.target.value);}} />
+                    <input style={{ width:'90px' }} type="text" value={routeColor} onChange={(evt) => {setRouteColor(evt.target.value);}} />
                     <input onChange={(evt) => {setRouteThumbnail(evt.target.files![0]);}} type="file" accept="image/*" />
                     <input style={{ width:'90px' }} type="text" value={routeSetterUsername} onChange={(evt) => {setRouteSetterUsername(evt.target.value);}} />
         
                     <button onClick={testCreateRoute}>Create route</button>
+                </div>
+                <div className='hbox'>
                     <button onClick={async () => {console.log(await activeRoutesCursor.pollNext());}}>Get Active Route</button>
                     <button onClick={async () => {console.log(await allRoutesCursor.pollNext());}}>Get All Route</button>
-
                 </div>
+
                 <RouteDisplay route={route}/>
                 <div className='hbox'>
                     <input onChange={handleFilesSelected} type="file" multiple accept="image/*" />
