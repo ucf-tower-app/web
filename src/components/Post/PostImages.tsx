@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Box, Pressable, ChevronRightIcon, ChevronLeftIcon, HStack, Text, ZStack } from 'native-base';
-import './css/feed.css';
+import '../css/feed.css';
 
 const PostImages = ({imageContent}: {imageContent: (string | undefined)[]}) => {
     const [imageCount, setImageCount] = useState(0);

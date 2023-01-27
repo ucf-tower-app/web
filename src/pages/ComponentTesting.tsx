@@ -1,5 +1,5 @@
 import { Box, Center } from 'native-base';
-import PostVideoDisplay from '../components/PostVideoDisplay';
+import PostVideoDisplay from '../components/Post/PostVideoDisplay';
 import RouteFeedDisplay from '../components/RouteFeedDisplay';
 import { ForumMock } from '../xplat/types/forum';
 import { PostMock } from '../xplat/types/post';

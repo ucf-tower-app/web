@@ -1,10 +1,10 @@
 import { Box, Text } from 'native-base';
-import { Post } from '../xplat/types/post';
+import { Post } from '../../../xplat/types/post';
 import { useState, useEffect } from 'react';
-import { Comment } from '../xplat/types/comment';
-import CommentDisplay from './PostDetailsComment';
+import { Comment } from '../../../xplat/types/comment';
+import CommentDisplay from './CommentDisplay';
 
-const PostDetails = ({ post }: { post: Post | undefined }) => {
+const CommentPanel = ({ post }: { post: Post | undefined }) => {
     const [comments, setComments] = useState<Comment[] | undefined>();
 
     useEffect(() => {
@@ -44,4 +44,4 @@ const PostDetails = ({ post }: { post: Post | undefined }) => {
     );
 };
 
-export default PostDetails;
+export default CommentPanel;
