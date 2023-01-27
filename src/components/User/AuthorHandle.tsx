@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { User } from '../../xplat/types/user';
 import { HStack, Text, Pressable, Skeleton } from 'native-base';
 import placeholder_image from '../placeholder_image.jpg';
-import './css/feed.css';
+import '../css/feed.css';
 
 const AuthorHandle = ({author}: {author: User | undefined}) => {
     // TODO: Implement clickable handle that will direct to author profile

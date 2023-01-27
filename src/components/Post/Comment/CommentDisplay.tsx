@@ -1,7 +1,7 @@
 import { Comment } from '../../../xplat/types/comment';
 import { useEffect, useState } from 'react';
 import { Box, Text } from 'native-base';
-import './css/feed.css';
+import '../../css/feed.css';
 import { User } from '../../../xplat/types/user';
 import AuthorHandle from '../../User/AuthorHandle';
 
