@@ -35,7 +35,7 @@ const RouteFeed = () => {
     }, []);
 
     useEffect(() => {
-        const getData =async () => {
+        const getData = async () => {
             await route?.getData();
             setRouteName(route?.name);
             setRouteForum(route?.forum);
