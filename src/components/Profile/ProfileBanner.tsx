@@ -44,9 +44,9 @@ const ProfileBanner = ({user}: {user: User | undefined}) => {
                     <Modal.Header>Edit User Permissions</Modal.Header>
                     <Modal.Body>
                         <Select defaultValue={'' + user?.status}>
-                            <Select.Item label='Read-Only' value='0'/>
-                            <Select.Item label='Read-Write' value='1'/>
-                            <Select.Item label='Approved' value='2'/>
+                            <Select.Item label='Unverified' value='0'/>
+                            <Select.Item label='Can log in' value='1'/>
+                            <Select.Item label='Can post' value='2'/>
                             {userAuth === 4 && <Select.Item label='Employee' value='3'/>}
                         </Select>
                         <Button onPress={handleEditPermission} marginTop='1'>
