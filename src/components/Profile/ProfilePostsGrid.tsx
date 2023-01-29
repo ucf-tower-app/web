@@ -1,6 +1,6 @@
 import { Box, Center, HStack } from 'native-base';
-import PostVideoDisplay from '../PostVideoDisplay';
-import PostImages from '../PostImages';
+import PostVideoDisplay from '../Post/PostVideoDisplay';
+import PostImages from '../Post/PostImages';
 import { useState, useEffect } from 'react';
 import { Post, User } from '../../xplat/types/types';
 import { Pressable } from 'react-native';
