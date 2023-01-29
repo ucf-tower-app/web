@@ -1,17 +1,17 @@
 import { Box, Text } from 'native-base';
-import { Post } from '../xplat/types/post';
+import { Post } from '../../../xplat/types/post';
 import { useState, useEffect } from 'react';
-import { Comment } from '../xplat/types/comment';
-import CommentDisplay from './PostDetailsComment';
+import { Comment } from '../../../xplat/types/comment';
+import CommentDisplay from './CommentDisplay';
 
-const PostDetails = ({ post }: { post: Post | undefined }) => {
+const CommentPanel = ({ post }: { post: Post | undefined }) => {
     const [comments, setComments] = useState<Comment[] | undefined>();
 
     useEffect(() => {
         const fetchComments = async () => {
             const commentsCursor = post?.getCommentsCursor();
             const tempComments: Comment[] = [];
-            while ((await commentsCursor?.hasNext)) {
+            while ((await commentsCursor?.hasNext())) {
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 tempComments.push((await commentsCursor?.pollNext())!);
             }
@@ -44,4 +44,4 @@ const PostDetails = ({ post }: { post: Post | undefined }) => {
     );
 };
 
-export default PostDetails;
+export default CommentPanel;

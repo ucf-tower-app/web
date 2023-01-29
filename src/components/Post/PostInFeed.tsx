@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import '../css/feed.css';
 import { User } from '../../xplat/types/user';
 import AuthorHandle from '../User/AuthorHandle';
-import PostImages from '../PostImages';
+import PostImages from './PostImages';
 
 const PostInFeed = ({ post, _passAuthor }: { post: Post, _passAuthor?: User | undefined }) => {
     const [body, setBody] = useState('');
