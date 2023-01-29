@@ -2,6 +2,30 @@ import {extendTheme} from 'native-base';
 
 const theme = extendTheme({
     components: {
+        View: {
+            baseStyle: {
+                Modal: {
+                    height: '100vh',
+                }
+            }
+        },
+        Modal: {
+            baseStyle: {
+                alignItems: 'center',
+                justifyContent: 'center',
+
+                content: {
+                    bg: 'white',
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: 0,
+                    shadow: 0,
+                    borderWidth: 0,
+                    p: 0,
+                    m: 0
+                },
+            },
+        },
         Button: {
             baseStyle: {},
             defaultProps: {
@@ -30,6 +54,27 @@ const theme = extendTheme({
                 variant: 'default'
             },
             variants: {
+                profileName: {
+                    fontSize: '2xl',
+                    fontWeight: 'bold',
+                    color: 'black',
+                    textAlignVertical: 'center'
+                },
+                profileHandle: {
+                    fontSize: 'md',
+                    color: 'gray.400',
+                    alignSelf: 'center'
+                },
+                profileBio: {
+                    fontSize: 'md',
+                    color: 'black',
+                    noOfLines: 4
+                },
+                profileStat: {
+                    fontSize: 'md',
+                    color: 'gray.400',
+                    alignSelf: 'center'
+                },
                 header: {
                     fontSize: 'large',
                     color: 'black'
@@ -37,6 +82,12 @@ const theme = extendTheme({
                 button: {
                     color: 'white',
                     fontSize: 'medium'
+                },
+                displayname: {
+                    fontSize: 'md',
+                    color: 'black',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
                 },
                 handle: {
                     color: 'gray.400',

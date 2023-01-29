@@ -12,6 +12,7 @@ const BackendTesting = lazy(() => import('./pages/BackendTesting'));
 const RouteFeed = lazy(() => import('./pages/RouteFeed'));
 const RoutesPage = lazy(() => import('./pages/Routes'));
 const Signup = lazy(() => import('./pages/Signup'));
+const Profile = lazy(() => import('./pages/Profile'));
 
 
 const root = ReactDOM.createRoot(
@@ -26,6 +27,7 @@ root.render(
                     <Route path='/signup' element={<Signup/>}/>
                     <Route path='/routes' element={<RoutesPage/>}/>
                     <Route path='/route' element={<RouteFeed/>}/>
+                    <Route path='/profile' element={<Profile/>}/>
                     {window.location.hostname === 'localhost' && 
                       <Route path='/backendtesting' element={<BackendTesting/>}/>}
                     {window.location.hostname === 'localhost' && 

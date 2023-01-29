@@ -1,6 +1,5 @@
-import { HStack, VStack,  Box , Button, Text, Menu, Pressable, HamburgerIcon, Divider} from 'native-base';
+import { HStack, VStack,  Box , Button, Text, Menu, Pressable, HamburgerIcon} from 'native-base';
 import { useNavigate } from 'react-router-dom';
-import theme from '../components/NativeBaseStyling';
 import { auth } from '../xplat/Firebase';
 
 export const NavBar = () => {
