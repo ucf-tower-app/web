@@ -1,12 +1,12 @@
 import { Box, Text, Skeleton, HStack, FavouriteIcon, Pressable } from 'native-base';
-import { Post } from '../xplat/types/post';
+import { Post } from '../../xplat/types/post';
 import { useEffect, useState } from 'react';
-import './css/feed.css';
-import { User } from '../xplat/types/user';
-import AuthorHandle from './AuthorHandle';
-import PostImages from './PostImages';
+import '../css/feed.css';
+import { User } from '../../xplat/types/user';
+import AuthorHandle from '../User/AuthorHandle';
+import PostImages from '../PostImages';
 
-const PostInFeed = ({ post }: { post: Post }) => {
+const PostInFeed = ({ post, _passAuthor }: { post: Post, _passAuthor?: User | undefined }) => {
     const [body, setBody] = useState('');
     const [author, setAuthor] = useState<User>();
     const [imageCount, setImageCount] = useState(0);
@@ -20,7 +20,10 @@ const PostInFeed = ({ post }: { post: Post }) => {
         void post.getTextContent().then(setBody);
         void post.getImageContentUrls().then(setImageURLs);
         void post.getImageCount().then(setImageCount);
-        void post.getAuthor().then(setAuthor);
+        if (_passAuthor)
+            setAuthor(_passAuthor);
+        else
+            void post.getAuthor().then(setAuthor);
         void post.getLikes().then((likesArray) => { setLikes(likesArray.length); });
         setIsLoaded(true);
     }

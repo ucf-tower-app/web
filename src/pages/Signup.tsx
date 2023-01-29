@@ -58,7 +58,7 @@ const Signup =  () => {
     return (
         <Box flex={1} alignSelf='center' alignItems={'center'} justifyContent='center' paddingTop= '10vh'>
             <img src={logo} className="App-logo" alt="logo" />
-            <Modal isOpen={showModal} defaultIsOpen onClose={closeModal} justifyContent='center' size='lg'>
+            <Modal isOpen={showModal} onClose={closeModal} justifyContent='center' size='lg' height='fill'>
                 <Modal.Content maxWidth={'300px'}>
                     <Modal.CloseButton/>
                     <Modal.Header>Email Confirmation</Modal.Header>

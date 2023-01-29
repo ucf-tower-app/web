@@ -7,6 +7,13 @@
     border: 1px solid black;
 }
 
+.avatar-profile {
+    border-radius: 100%;
+    width: 40%;
+    aspect-ratio: 1/1;
+    border: 1px solid black;
+}
+
 .post-thumbnail {
     width: 75%;
     height: auto;
