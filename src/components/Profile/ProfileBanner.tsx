@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, HStack, Text, Center, VStack, Skeleton, Select, Button, Modal } from 'native-base';
+import { Box, HStack, Text, Center, VStack, Skeleton, Select, Button, Modal, Radio } from 'native-base';
 import { User, Post } from '../../xplat/types/types';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
@@ -14,11 +14,18 @@ const ProfileBanner = ({user}: {user: User | undefined}) => {
     const [bio, setBio] = useState<string>();
     const [following, setFollowing] = useState<number>(0);
     const [userAuth, setUserAuth] = useState<number>(0);
+    const [promoteOrDemote, setPromoteOrDemote] = useState<string>('promote');
     const [editPermissionModal, setEditPermissionModal] = useState<boolean>(false);
+    const [profilePermission, setProfilePermission] = useState<number>(0);
+    const [newPermission, setNewPermission] = useState<number>(0);
 
     const handleEditPermission = () => {
         setEditPermissionModal(false);
-        console.log('edit permission');
+        console.log('will change permission to ' + newPermission);
+    };
+
+    const managerSwap = () => {
+        console.log('Will make this user manager and remove manager status from current manager');
     };
 
 
@@ -34,6 +41,7 @@ const ProfileBanner = ({user}: {user: User | undefined}) => {
             setFollowers(user.followers!.length);
             setBio(user.bio);
             setFollowing(user.following!.length);
+            setProfilePermission(user.status!);
             user?.getAvatarUrl().then(setAvatar);
         }
     }, [user?.hasData]);
@@ -44,15 +52,43 @@ const ProfileBanner = ({user}: {user: User | undefined}) => {
                 onClose={() => setEditPermissionModal(false)} modal>
                 <Box p={4} w='100%' h='100%' borderRadius='sm'>
                     <Text alignSelf='center' bold fontSize='lg'>Edit user permission level</Text>
-                    <Select defaultValue={'' + user?.status}>
-                        <Select.Item label='Unverified (cannot login)' value='0'/>
-                        <Select.Item label='Verified (can login, but cannot post)' value='1'/>
-                        <Select.Item label='Approved (can post)' value='2'/>
-                        {userAuth === 4 && <Select.Item label='Employee' value='3'/>}
-                    </Select>
-                    <Button onPress={handleEditPermission} marginTop='1'>
-                        <Text variant='button'>Confirm</Text>
-                    </Button>
+                    {userAuth >= 4 && profilePermission >= 3 
+                        && <Button onPress={managerSwap} marginTop='1' m='3'>
+                            <Text variant='button'>Make Manager</Text>
+                        </Button>
+                    }
+                    <Radio.Group name='Permission' value={promoteOrDemote} 
+                        onChange={(nextValue) => setPromoteOrDemote(nextValue)}>
+                        <Radio value='promote'>Promote</Radio>
+                        <Radio value='demote'>Demote</Radio>
+                    </Radio.Group>
+                    {
+                        promoteOrDemote === 'promote' && profilePermission > 0 ?
+                            <Select placeholder='Select permission level' 
+                                onValueChange={(valueString) => setNewPermission(parseInt(valueString))}>
+                                {userAuth >= 4 && profilePermission < 3 && <Select.Item label='Employee' value='3' />}
+                                {profilePermission < 3 && <Select.Item label='Approved (can post)' value='2' />}
+                                {profilePermission < 2 && 
+                                    <Select.Item label='Verified (can login, cannot post)' value='1' />}
+                                {profilePermission < 1 && <Select.Item label='Unverified (cannot login)' value='0' />}
+                            </Select>
+                            :
+                            <Select placeholder='Select permission level'
+                                onValueChange={(valueString) => setNewPermission(parseInt(valueString))}>
+                                {profilePermission > 1 && <Select.Item label='Approved (can post)' value='2' />}
+                                {profilePermission > 2 && 
+                                    <Select.Item label='Verified (can login, cannot post)' value='1' />}
+                                {profilePermission > 3 && <Select.Item label='Unverified (cannot login)' value='0' />}
+                            </Select>
+                    }
+                    <HStack>
+                        <Button onPress={() => setEditPermissionModal(false)} marginTop='1'>
+                            <Text variant='button'>Cancel</Text>
+                        </Button>
+                        <Button onPress={handleEditPermission} marginTop='1'>
+                            <Text variant='button'>Confirm</Text>
+                        </Button>
+                    </HStack>
                 </Box>
             </Popup>
             <HStack space={2} p={2}>
