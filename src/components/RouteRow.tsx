@@ -12,7 +12,8 @@ export const RouteRow = ({ route }: Props) => {
     const [grade, setGrade] = useState<string>('');
 
     useEffect(() => {
-        Promise.all([route.getName().then(setName), route.getGradeDisplayString().then(setGrade)]);
+        route.getName().then(setName);
+        route.getGradeDisplayString().then(setGrade);
     }, [route]);
 
     const navigate = useNavigate();

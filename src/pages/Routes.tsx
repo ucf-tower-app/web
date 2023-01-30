@@ -1,38 +1,29 @@
 import { NavBar } from '../components/NavigationBar';
-import { Box, Divider, Flex, Text } from 'native-base';
+import { Box, Divider, Flex, Text, VStack } from 'native-base';
 import { useState, useEffect } from 'react';
 import { Route } from '../xplat/types/route';
 import { getActiveRoutesCursor, getArchivedRoutesCursor } from '../xplat/api';
 import { RouteRow } from '../components/RouteRow';
+import { QueryCursor } from '../xplat/types/types';
 
 const Routes = () => {
     const [activeRoutes, setActiveRoutes] = useState<Route[]>([]);
     const [archivedRoutes, setArchivedRoutes] = useState<Route[]>([]);
 
     useEffect(() => {
-        const fetchActiveRoutes = async () => {
-            const activeRoutesCursor = getActiveRoutesCursor();
-            const tempActiveRoutes: Route[] = [];
-            while ((await activeRoutesCursor.hasNext())) {
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                tempActiveRoutes.push((await activeRoutesCursor.pollNext())!);
-            }
-            setActiveRoutes(tempActiveRoutes);
+        const grabRoutes = async (cursor: QueryCursor<Route>) => {
+            const routes: Route[] = [];
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            while (await cursor.hasNext()) routes.push((await cursor.pollNext())!);
+            return routes;
         };
-        fetchActiveRoutes();
-    }, []);
-
-    useEffect(() => {
-        const fetchArchivedRoutes = async () => {
-            const archivedRoutesCursor = getArchivedRoutesCursor();
-            const tempArchivedRoutes: Route[] = [];
-            while ((await archivedRoutesCursor.hasNext())) {
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                tempArchivedRoutes.push((await archivedRoutesCursor.pollNext())!);
-            }
-            setArchivedRoutes(tempArchivedRoutes);
+        const setRoutes = async () => {
+            setActiveRoutes(await grabRoutes(getActiveRoutesCursor()));
+            // TODO: use the cursor for archived routes, since we don't want to pull
+            // every route in history on startup
+            setArchivedRoutes(await grabRoutes(getArchivedRoutesCursor()));
         };
-        fetchArchivedRoutes();
+        setRoutes();
     }, []);
 
     return (
@@ -43,11 +34,11 @@ const Routes = () => {
                     <Flex flexDirection='column' alignItems='center' width='100%'>
                         <Text>Active Routes</Text>
                         {
-                            activeRoutes.map((currRoute: Route, index: number) => (
-                                <>
+                            activeRoutes.map((currRoute: Route) => (
+                                <VStack key={currRoute.docRef?.id} width='100%'>
                                     <Divider orientation='horizontal' height='2px' />
-                                    <RouteRow route={currRoute} key={index} />
-                                </>
+                                    <RouteRow route={currRoute} />
+                                </VStack>
                             ))
                         }
                     </Flex>
@@ -57,11 +48,11 @@ const Routes = () => {
                     <Flex flexDirection='column' alignItems='center' width='100%'>
                         <Text>Archived Routes</Text>
                         {
-                            archivedRoutes.map((currRoute: Route, index: number) => (
-                                <>
+                            archivedRoutes.map((currRoute: Route) => (
+                                <VStack key={currRoute.docRef?.id} width='100%'>
                                     <Divider orientation='horizontal' height='2px' />
-                                    <RouteRow route={currRoute} key={index} />
-                                </>
+                                    <RouteRow route={currRoute} />
+                                </VStack>
                             ))
                         }
                     </Flex>
