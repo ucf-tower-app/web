@@ -15,7 +15,7 @@ const RouteFeed = () => {
     const [route, setRoute] = useState<Route>();
     const [routeName, setRouteName] = useState<string>();
     const [routeForum, setRouteForum] = useState<Forum>();
-    const [setter, setSetter] = useState('');
+    const [setter, setSetter] = useState<string>();
     const [params, setParams] = useSearchParams();
     const [selectedPost, setSelectedPost] = useState<Post | undefined>();
 
@@ -35,16 +35,13 @@ const RouteFeed = () => {
     }, []);
 
     useEffect(() => {
-        route?.getData();
-        route?.getName().then((name) => {
-            setRouteName(name);
-        });
-        route?.getSetter().then((user) => {
-            user?.getUsername().then((name) => setSetter(name));
-        });
-        route?.getForum().then((forum) => {
-            setRouteForum(forum);
-        });
+        const getData = async () => {
+            await route?.getData();
+            setRouteName(route?.name);
+            setRouteForum(route?.forum);
+            setSetter(await route?.setter?.getUsername());
+        };
+        getData();
     }, [route]);
 
     return (
