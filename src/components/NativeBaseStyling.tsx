@@ -96,6 +96,10 @@ const theme = extendTheme({
                     alignSelf: 'center',
                     flex: 1
                 },
+                body: {
+                    fontSize: 'md',
+                    color: 'black'
+                },
                 default: {
                     color: 'inherit'
                 }
