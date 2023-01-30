@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { createUser, isKnightsEmail, sendAuthEmail} from '../xplat/api';
 import { auth } from '../xplat/Firebase';
 import logo from '../logo.svg';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 const Signup =  () => {
     const navigate = useNavigate();
@@ -58,26 +60,24 @@ const Signup =  () => {
     return (
         <Box flex={1} alignSelf='center' alignItems={'center'} justifyContent='center' paddingTop= '10vh'>
             <img src={logo} className="App-logo" alt="logo" />
-            <Modal isOpen={showModal} defaultIsOpen onClose={closeModal} justifyContent='center' size='lg'>
-                <Modal.Content maxWidth={'300px'}>
-                    <Modal.CloseButton/>
-                    <Modal.Header>Email Confirmation</Modal.Header>
-                    <Modal.Body>
+            <Popup modal open={showModal} onClose={closeModal}>
+                <Box flex={1} alignSelf='center' alignItems={'center'} justifyContent='center' paddingTop= '1vh'>
+                    <Text variant = {'header'}>
+                        Email Confirmation
+                    </Text>
+                    <Text variant = {'body'}>
                         A confirmation email has been sent to verify your email address.{'\n'}
-                        If you are a Tower employee you will need to verify your email and then contact your manager 
+                        If you are a Tower employee you will need to verify your email and then contact your manager
                         to gain the appropriate permissions to access the website.
-                    </Modal.Body>
-                    <Modal.Footer width={'fill'}>
-                        <Button flex="1" onPress={() => {
-                            setShowModal(false);
-                            navigate('/');
-                        }}>
-                            <Text variant={'button'}>Close</Text>
-                        </Button>
-                    </Modal.Footer>
-                </Modal.Content>
-                
-            </Modal>
+                    </Text>
+                    <Button onPress={() => {
+                        setShowModal(false);
+                        navigate('/');
+                    }}>
+                        <Text variant={'button'}>Close</Text>
+                    </Button>
+                </Box>
+            </Popup>
             <Text variant = {'header'}>
                 Welcome to the Climbing Tower at UCF!
             </Text>
