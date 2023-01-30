@@ -98,7 +98,7 @@ const ProfileBanner = ({user}: {user: User | undefined}) => {
                 <Skeleton isLoaded={avatar !== undefined} borderRadius='100%' width='15%'>
                     <img src={avatar} className='avatar-profile' alt='avatar'/>
                 </Skeleton>
-                <VStack width='85%'>
+                <VStack width='80%'>
                     <HStack>
                         <Skeleton.Text isLoaded={displayName !== undefined}>
                             <Text variant='profileName'>
