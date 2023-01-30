@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Box, HStack, Text, Center, VStack, Skeleton, Select, Button, Modal } from 'native-base';
 import { User, Post } from '../../xplat/types/types';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 import { getCurrentUser } from '../../xplat/api';
 import '../css/feed.css';
 
@@ -15,6 +17,7 @@ const ProfileBanner = ({user}: {user: User | undefined}) => {
     const [editPermissionModal, setEditPermissionModal] = useState<boolean>(false);
 
     const handleEditPermission = () => {
+        setEditPermissionModal(false);
         console.log('edit permission');
     };
 
@@ -37,27 +40,22 @@ const ProfileBanner = ({user}: {user: User | undefined}) => {
 
     return (
         <>
-            <Modal isOpen={editPermissionModal} justifyContent='center' alignItems='center'
-                onClose={() => setEditPermissionModal(false)} height='fill' position='fixed'>
-                <Modal.Content maxWidth='400px'>
-                    <Modal.CloseButton/>
-                    <Modal.Header>Edit User Permissions</Modal.Header>
-                    <Modal.Body>
-                        <Select defaultValue={'' + user?.status}>
-                            <Select.Item label='Unverified' value='0'/>
-                            <Select.Item label='Can log in' value='1'/>
-                            <Select.Item label='Can post' value='2'/>
-                            {userAuth === 4 && <Select.Item label='Employee' value='3'/>}
-                        </Select>
-                        <Button onPress={handleEditPermission} marginTop='1'>
-                            <Text variant='button'>Confirm</Text>
-                        </Button>
-                    </Modal.Body>
-                    
-                </Modal.Content>
-            </Modal>
+            <Popup open={editPermissionModal} closeOnDocumentClick={false} 
+                onClose={() => setEditPermissionModal(false)} modal>
+                <Box p={4} w='100%' h='100%' borderRadius='sm'>
+                    <Text alignSelf='center' bold fontSize='lg'>Edit user permission level</Text>
+                    <Select defaultValue={'' + user?.status}>
+                        <Select.Item label='Unverified (cannot login)' value='0'/>
+                        <Select.Item label='Verified (can login, but cannot post)' value='1'/>
+                        <Select.Item label='Approved (can post)' value='2'/>
+                        {userAuth === 4 && <Select.Item label='Employee' value='3'/>}
+                    </Select>
+                    <Button onPress={handleEditPermission} marginTop='1'>
+                        <Text variant='button'>Confirm</Text>
+                    </Button>
+                </Box>
+            </Popup>
             <HStack space={2} p={2}>
-                
                 <Skeleton isLoaded={avatar !== undefined} borderRadius='100%' width='15%'>
                     <img src={avatar} className='avatar-profile' alt='avatar'/>
                 </Skeleton>
