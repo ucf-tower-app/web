@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Box, HStack, Text, Center, VStack, Skeleton, Select, Button, Modal, Radio } from 'native-base';
-import { User, Post } from '../../xplat/types/types';
+import { Box, HStack, Text, Input, VStack, Skeleton, Select, Button, Radio } from 'native-base';
+import { User } from '../../xplat/types/types';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { getCurrentUser } from '../../xplat/api';
@@ -18,6 +18,7 @@ const ProfileBanner = ({user}: {user: User | undefined}) => {
     const [editPermissionModal, setEditPermissionModal] = useState<boolean>(false);
     const [profilePermission, setProfilePermission] = useState<number>(0);
     const [newPermission, setNewPermission] = useState<number>(0);
+    const [actionDescription, setActionDescription] = useState<string>('');
 
     const handleEditPermission = () => {
         setEditPermissionModal(false);
@@ -52,7 +53,7 @@ const ProfileBanner = ({user}: {user: User | undefined}) => {
                 onClose={() => setEditPermissionModal(false)} modal>
                 <Box p={4} w='100%' h='100%' borderRadius='sm'>
                     <Text alignSelf='center' bold fontSize='lg'>Edit user permission level</Text>
-                    {userAuth >= 4 && profilePermission >= 3 
+                    {userAuth == 4 && profilePermission == 3 
                         && <Button onPress={managerSwap} marginTop='1' m='3'>
                             <Text variant='button'>Make Manager</Text>
                         </Button>
@@ -81,6 +82,8 @@ const ProfileBanner = ({user}: {user: User | undefined}) => {
                                 {profilePermission > 3 && <Select.Item label='Unverified (cannot login)' value='0' />}
                             </Select>
                     }
+                    <Input type='text' multiline placeholder='Reason for action' marginY='1' numberOfLines={3}
+                        onChangeText={(text) => setActionDescription(text)} />
                     <HStack>
                         <Button onPress={() => setEditPermissionModal(false)} marginTop='1'>
                             <Text variant='button'>Cancel</Text>
@@ -97,16 +100,22 @@ const ProfileBanner = ({user}: {user: User | undefined}) => {
                 </Skeleton>
                 <VStack width='85%'>
                     <HStack>
-                        <Text variant='profileName'>
-                            {displayName}
-                        </Text>
-                        <Text variant='profileHandle'>
-                            @{username}
-                        </Text>
+                        <Skeleton.Text isLoaded={displayName !== undefined}>
+                            <Text variant='profileName'>
+                                {displayName}
+                            </Text>
+                        </Skeleton.Text>
+                        <Skeleton.Text isLoaded={username !== undefined}>
+                            <Text variant='profileHandle'>
+                                @{username}
+                            </Text>
+                        </Skeleton.Text>
                     </HStack>
-                    <Text variant='profileBio'>
-                        {bio}
-                    </Text>
+                    <Skeleton.Text isLoaded={bio !== undefined}>
+                        <Text noOfLines={4} variant='profileBio'>
+                            {bio}
+                        </Text>
+                    </Skeleton.Text>
                     <HStack space='1'>
                         <Text variant='profileStat'>
                             {followers} Followers
