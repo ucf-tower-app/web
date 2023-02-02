@@ -2,29 +2,53 @@ import { NavBar } from '../components/NavigationBar';
 import { Box, Divider, Flex, Text, VStack } from 'native-base';
 import { useState, useEffect } from 'react';
 import { Route } from '../xplat/types/route';
-import { getActiveRoutesCursor, getArchivedRoutesCursor } from '../xplat/api';
 import { RouteRow } from '../components/RouteRow';
 import { QueryCursor } from '../xplat/types/types';
+import { queryClient } from '../index';
+import { useQuery } from 'react-query';
+import { buildRouteListFetcher } from '../utils/queries';
+import { CURSOR_INCREMENT, INITIAL_CURSOR_SIZE } from '../utils/constants';
 
 const Routes = () => {
     const [activeRoutes, setActiveRoutes] = useState<Route[]>([]);
     const [archivedRoutes, setArchivedRoutes] = useState<Route[]>([]);
+    const [archivedCursor, setArchivedCursor] = useState<QueryCursor<Route> | undefined>();
+    const [hasMore, setHasMore] = useState(false);
+    const { isLoading, error, data } = useQuery('routes', buildRouteListFetcher());
+
+    async function getArchivedRoutes() {
+        if (archivedCursor)
+        {
+            const newRoutes: Route[] = [];
+            let hasNext = await archivedCursor.hasNext();
+            while (hasNext && newRoutes.length < CURSOR_INCREMENT)
+            {
+                newRoutes.push((await archivedCursor.pollNext())!);
+                hasNext = await archivedCursor.hasNext();
+            }
+            setHasMore(hasNext);
+            if (archivedRoutes)
+            {
+                setArchivedRoutes([...archivedRoutes, ...newRoutes]);
+            }
+            else
+            {
+                setArchivedRoutes(newRoutes);
+            }
+        }
+    }
+
 
     useEffect(() => {
-        const grabRoutes = async (cursor: QueryCursor<Route>) => {
-            const routes: Route[] = [];
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            while (await cursor.hasNext()) routes.push((await cursor.pollNext())!);
-            return routes;
-        };
-        const setRoutes = async () => {
-            setActiveRoutes(await grabRoutes(getActiveRoutesCursor()));
-            // TODO: use the cursor for archived routes, since we don't want to pull
-            // every route in history on startup
-            setArchivedRoutes(await grabRoutes(getArchivedRoutesCursor()));
-        };
-        setRoutes();
-    }, []);
+        if (data)
+        {
+            
+            setArchivedCursor(data.archivedCursor);
+            setActiveRoutes(data.activeRoutes);
+            setArchivedRoutes(data.archivedRoutes);
+            setHasMore(data.hasNext);
+        }
+    }, [data]);
 
     return (
         <Box flexDir={'column'}>
@@ -33,7 +57,7 @@ const Routes = () => {
                 <Flex flexDirection='row' justifyContent='center' width='30%'>
                     <Flex flexDirection='column' alignItems='center' width='100%'>
                         <Text>Active Routes</Text>
-                        {
+                        { isLoading ? <Text>Loading...</Text> :
                             activeRoutes.map((currRoute: Route) => (
                                 <VStack key={currRoute.docRef?.id} width='100%'>
                                     <Divider orientation='horizontal' height='2px' />
@@ -47,7 +71,7 @@ const Routes = () => {
                 <Flex flexDirection='row' justifyContent='center' width='30%'>
                     <Flex flexDirection='column' alignItems='center' width='100%'>
                         <Text>Archived Routes</Text>
-                        {
+                        { isLoading ? <Text>Loading...</Text> :
                             archivedRoutes.map((currRoute: Route) => (
                                 <VStack key={currRoute.docRef?.id} width='100%'>
                                     <Divider orientation='horizontal' height='2px' />

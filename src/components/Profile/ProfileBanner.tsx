@@ -39,7 +39,7 @@ const ProfileBanner = ({user}: {user: User | undefined}) => {
         {
             setUsername(user.username);
             setDisplayName(user.displayName);
-            setFollowers(user.followers!.length);
+            //setFollowers(user.followers!.length);
             setBio(user.bio);
             setFollowing(user.following!.length);
             setProfilePermission(user.status!);
