@@ -3,7 +3,7 @@ import { User } from '../../xplat/types/user';
 import { HStack, Text, Pressable, Skeleton } from 'native-base';
 import placeholder_image from '../placeholder_image.jpg';
 import '../css/feed.css';
-import { useNavigate, createSearchParams } from 'react-router-dom';
+import { useNavigate, createSearchParams, useSearchParams } from 'react-router-dom';
 
 const AuthorHandle = ({author}: {author: User | undefined}) => {
     // TODO: Implement clickable handle that will direct to author profile
@@ -11,16 +11,18 @@ const AuthorHandle = ({author}: {author: User | undefined}) => {
     const [displayName, setDisplayName] = useState('');
     const [avatarURL, setAvatarURL] = useState<string | undefined>();
     const [isLoaded, setIsLoaded] = useState(false);
+    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const navigateToProfile = () => {
-        if (window.location.pathname === '/profile/?uid=' + author?.docRef?.id)
-        {
+        const path = window.location.href.split('?')[0];
+        if (path.endsWith('/profile') && searchParams.get('uid') === author?.docRef?.id)
             return;
-        }
-        if (author)
-        {
-            navigate(`/profile?${createSearchParams({uid: author.docRef!.id})}`);
-        }
+        else if (author)
+            navigate({
+                pathname: '/profile', 
+                search: `?${createSearchParams({uid: author.docRef!.id})}`
+            });
+        
     };
     
     useEffect( () => {
