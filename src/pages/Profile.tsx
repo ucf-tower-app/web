@@ -50,7 +50,7 @@ const Profile = ({userOverride}: {userOverride?: string}) => {
 
 
     useEffect(() => {
-        if (data)
+        if (data !== undefined)
         {
             setUser(data.userObject);
             setPostCursor(data.postCursor);

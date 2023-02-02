@@ -17,7 +17,7 @@ const RouteFeed = () => {
     const [routeForum, setRouteForum] = useState<Forum>();
     const [params] = useSearchParams();
     const [selectedPost, setSelectedPost] = useState<Post | undefined>();
-    const { isLoading, error, data } = 
+    const { isLoading, data } = 
         useQuery(['routeObject', {id: params.get('uid')}], buildEmptyRouteByID(params.get('uid')));
         
 
@@ -30,7 +30,7 @@ const RouteFeed = () => {
 
     // runs on query resolve
     useEffect(() => {
-        if (data && !error) 
+        if (data !== undefined) 
         {
             setRoute(data);
         }
@@ -60,7 +60,6 @@ const RouteFeed = () => {
                     </Box>
                 </HStack>
             </VStack>
-
         </Box>
     );
 };

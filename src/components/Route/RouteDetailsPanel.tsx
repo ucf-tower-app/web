@@ -9,11 +9,13 @@ const RouteDetailsPanel = ({ route, forumSetter }: { route: Route, forumSetter: 
     const [routeName, setRouteName] = useState<string>();
     const [setter, setSetter] = useState<string>();
     const [setterID, setSetterID] = useState<string>();
+    const [grade, setGrade] = useState<string>();
     const {isLoading, error, data} = useQuery(['route', {id: route.docRef!.id}], buildRouteFetcher(route));
 
     useEffect(() => {
-        if (data && !error) {
+        if (data !== undefined) {
             setRouteName(data.name);
+            setGrade(data.grade);
             if (data.setter)
                 if (data.setter.raw)
                     setSetter(data.setter.string);

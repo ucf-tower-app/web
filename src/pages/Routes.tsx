@@ -40,7 +40,7 @@ const Routes = () => {
 
 
     useEffect(() => {
-        if (data)
+        if (data !== undefined)
         {
             
             setArchivedCursor(data.archivedCursor);

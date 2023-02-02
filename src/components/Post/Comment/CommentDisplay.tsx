@@ -14,7 +14,7 @@ const CommentDisplay = ({comment}: {comment: Comment}) => {
     const { isLoading, error, data } = useQuery(comment.docRef!.id, buildCommentFetcher(comment));
 
     useEffect( () => {
-        if (data)
+        if (data !== undefined)
         {
             setAuthor(data.author);
             setBody(data.body);

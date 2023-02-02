@@ -179,6 +179,7 @@ type FetchedRoute = {
         string: string | undefined;
         uid: string | undefined;
     };
+    grade: string;
     forum: Forum;
     description: string;
     archived: RouteStatus;
@@ -201,6 +202,7 @@ export const buildRouteFetcher = (route: Route) => {
                     await (await route.getSetter()).getDisplayName(),
                 uid: await route.hasSetter() ? (await route.getSetter()).docRef!.id : undefined,
             },
+            grade: await route.getGradeDisplayString(),
             forum: await route.getForum(),
             description: await route.getDescription(),
             archived: await route.getStatus(),

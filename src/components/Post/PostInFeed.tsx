@@ -17,13 +17,10 @@ const PostInFeed = ({ post, _passAuthor }: { post: Post, _passAuthor?: User | un
     const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>();
     const [timestamp, setTimestamp] = useState<Date>();
     const [likes, setLikes] = useState(0);
-    const { isLoading, error, data } = useQuery(
-        post.docRef!.id, 
-        buildPostFetcher(post)   
-    );
+    const { isLoading, error, data } = useQuery(post.docRef!.id, buildPostFetcher(post));
 
     useEffect(() => {
-        if (data && !error)
+        if (data !== undefined)
         {
             setBody(data.body);
             setImageCount(data.imageCount);

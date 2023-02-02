@@ -42,7 +42,7 @@ const RouteFeedDisplay = ({
         }
     }
     useEffect(() => {
-        if (data) {
+        if (data !== undefined) {
             setPosts(data.posts);
             setPostCursor(data.postCursor);
             setHasMorePosts(data.hasMore);

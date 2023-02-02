@@ -43,10 +43,8 @@ const CommentPanel = ({ post }: { post: Post | undefined }) => {
         }
     }
 
-
-
     useEffect(() => {
-        if (data)
+        if (data !== undefined)
         {
             setComments(data.comments);
             setCommentsCursor(data.commentCursor);
