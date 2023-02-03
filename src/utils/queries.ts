@@ -1,5 +1,5 @@
 import { UserStatus } from '../xplat/types/common';
-import { User, QueryCursor, Post, Route, Forum, RouteStatus, Comment } from '../xplat/types/types';
+import { User, QueryCursor, Post, Route, Forum, RouteStatus, Comment, RouteType, Tag } from '../xplat/types/types';
 import { INITIAL_CURSOR_SIZE } from './constants';
 import { getRouteById } from '../xplat/api/route';
 import { getActiveRoutesCursor, getArchivedRoutesCursor, getUserById } from '../xplat/api';
@@ -177,16 +177,27 @@ export const buildForumFetcher = (forum: Forum) => {
 
 type FetchedRoute = {
     name: string;
+    type: RouteType;
+    grade: string;
+    forum: Forum;
+
+    numLikes: number;
+    tags: Tag[];
+    status: RouteStatus;
+    description: string;
+    numSends: number;
+    stars: number;
+
     setter?: {
         raw: boolean | undefined;
         string: string | undefined;
         uid: string | undefined;
     };
     image?: string;
-    grade: string;
-    forum: Forum;
-    description: string;
-    archived: RouteStatus;
+    rope?: number;
+    timestamp?: Date;
+    color?: string;
+
     routeObject: Route;
 };
 export const buildRouteFetcher = (route: Route) => {
@@ -197,6 +208,19 @@ export const buildRouteFetcher = (route: Route) => {
         await route.getData();
         return {
             name: await route.getName(),
+            type: await route.getType(),
+            grade: await route.getGradeDisplayString(),
+            forum: await route.getForum(),
+
+            numLikes: (await route.getLikes()).length,
+            tags: await route.getTags(),
+            status: await route.getStatus(),
+            description: await route.getDescription(),
+            numSends: await route.getSendCount(),
+            // TODO: add star average
+            stars: 5,
+            
+
             setter: (await route.hasSetter() || await route.hasSetterRawName()) ? {
                 raw: await route.hasSetterRawName(),
                 string: (await route.hasSetterRawName())
@@ -206,12 +230,10 @@ export const buildRouteFetcher = (route: Route) => {
                     await (await route.getSetter()).getDisplayName(),
                 uid: await route.hasSetter() ? (await route.getSetter()).docRef!.id : undefined,
             } : undefined,
-            grade: await route.getGradeDisplayString(),
-            forum: await route.getForum(),
             image: (await route.hasThumbnail()) ? await route.getThumbnailUrl() : undefined,
-            description: await route.getDescription(),
-            archived: await route.getStatus(),
-            routeObject: route,
+            rope: (await route.hasRope()) ? await route.getRope() : undefined,
+            timestamp: (await route.hasTimestamp()) ? await route.getTimestamp() : undefined,
+            color: (await route.hasColor()) ? await route.getColor() : undefined,
         } as FetchedRoute;
     };
 };
