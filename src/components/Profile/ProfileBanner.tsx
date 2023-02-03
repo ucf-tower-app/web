@@ -80,33 +80,25 @@ const ProfileBanner = ({user}: {user: FetchedUserProfile | undefined}) => {
                 </Box>
             </Popup>
             <HStack space={2} p={2}>
-               
                 <img src={user.avatarUrl} className='avatar-profile' alt='avatar'/>
-                
                 <VStack width='80%'>
                     <HStack>
-                        
                         <Text variant='profileName'>
                             {user.displayName}
                         </Text>
-                        
-                        
                         <Text variant='profileHandle'>
                                 @{user.username}
                         </Text>
-                        
                     </HStack>
-                    
                     <Text noOfLines={4} variant='profileBio'>
                         {user.bio}
                     </Text>
-                    
                     <HStack space='1'>
                         <Text variant='profileStat'>
-                            {user.followers || 0} Followers
+                            {user.numFollowers || 0} Followers
                         </Text>
                         <Text variant='profileStat'>
-                            {user.following} Following
+                            {user.numFollowing} Following
                         </Text>
                     </HStack>
                     <Button position='absolute' bottom={2} onPress={() => setEditPermissionModal(true)}>

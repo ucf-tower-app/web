@@ -33,8 +33,8 @@ export type FetchedUserProfile = {
     displayName: string;
     bio: string;
     status: UserStatus;
-    following: number;
-    followers: number;
+    numFollowing: number;
+    numFollowers: number;
     avatarUrl: string;
     userObject: User;
     hasMorePosts: boolean;
@@ -65,7 +65,7 @@ export const buildUserByIDFetcher = (uid: string) => {
             bio: await user.getBio(),
             status: await user.getStatus(),
             avatarUrl: await user.getAvatarUrl(),
-            following: await (await user.following || []).length,
+            numFollowing: await (await user.following || []).length,
             userObject: user,
             postCursor: postCursor,
             posts: tempPosts,
