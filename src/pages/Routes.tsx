@@ -5,18 +5,17 @@ import { Route } from '../xplat/types/route';
 import { RouteRow } from '../components/RouteRow';
 import { QueryCursor } from '../xplat/types/types';
 import { queryClient } from '../index';
-import { useQuery } from 'react-query';
+import { isError, useQuery } from 'react-query';
 import { buildRouteListFetcher } from '../utils/queries';
 import { CURSOR_INCREMENT, INITIAL_CURSOR_SIZE } from '../utils/constants';
 
 const Routes = () => {
-    const [activeRoutes, setActiveRoutes] = useState<Route[]>([]);
     const [archivedRoutes, setArchivedRoutes] = useState<Route[]>([]);
     const [archivedCursor, setArchivedCursor] = useState<QueryCursor<Route> | undefined>();
     const [hasMore, setHasMore] = useState(false);
-    const { isLoading, error, data } = useQuery('routes', buildRouteListFetcher());
+    const { isLoading, isError, data } = useQuery('routes', buildRouteListFetcher());
 
-    async function getArchivedRoutes() {
+    async function fetchMoreArchivedRoutes() {
         if (archivedCursor)
         {
             const newRoutes: Route[] = [];
@@ -42,23 +41,68 @@ const Routes = () => {
     useEffect(() => {
         if (data !== undefined)
         {
-            
             setArchivedCursor(data.archivedCursor);
-            setActiveRoutes(data.activeRoutes);
             setArchivedRoutes(data.archivedRoutes);
             setHasMore(data.hasNext);
         }
     }, [data]);
 
+    if (isLoading)
+    {
+        return (
+            <Box flexDir={'column'}>
+                <Box height={'50px'} marginBottom={1}><NavBar /></Box>
+                <Flex flexDirection='row' justifyContent='space-evenly' width='100%' top='50px'>
+                    <Flex flexDirection='row' justifyContent='center' width='30%'>
+                        <Flex flexDirection='column' alignItems='center' width='100%'>
+                            <Text>Active Routes</Text>
+                            <Text>Loading...</Text>
+                        </Flex>
+                    </Flex>
+                    <Divider orientation='vertical' height={'75vh'} position='fixed' />
+                    <Flex flexDirection='row' justifyContent='center' width='30%'>
+                        <Flex flexDirection='column' alignItems='center' width='100%'>
+                            <Text>Archived Routes</Text>
+                            <Text>Loading...</Text>
+                        </Flex>
+                    </Flex>
+                </Flex>
+            </Box>
+        );
+    }
+
+    if (isError || data === undefined)
+    {
+        return (
+            <Box flexDir={'column'}>
+                <Box height={'50px'} marginBottom={1}><NavBar /></Box>
+                <Flex flexDirection='row' justifyContent='space-evenly' width='100%' top='50px'>
+                    <Flex flexDirection='row' justifyContent='center' width='30%'>
+                        <Flex flexDirection='column' alignItems='center' width='100%'>
+                            <Text>Active Routes</Text>
+                            <Text>Error loading routes</Text>
+                        </Flex>
+                    </Flex>
+                    <Divider orientation='vertical' height={'75vh'} position='fixed' />
+                    <Flex flexDirection='row' justifyContent='center' width='30%'>
+                        <Flex flexDirection='column' alignItems='center' width='100%'>
+                            <Text>Archived Routes</Text>
+                            <Text>Error loading routes</Text>
+                        </Flex>
+                    </Flex>
+                </Flex>
+            </Box>
+        );
+    }
     return (
         <Box flexDir={'column'}>
             <Box height={'50px'} marginBottom={1}><NavBar /></Box>
             <Flex flexDirection='row' justifyContent='space-evenly' width='100%' top='50px'>
                 <Flex flexDirection='row' justifyContent='center' width='30%'>
                     <Flex flexDirection='column' alignItems='center' width='100%'>
-                        <Text>Active Routes</Text>
-                        { isLoading ? <Text>Loading...</Text> :
-                            activeRoutes.map((currRoute: Route) => (
+                        <Text bold fontSize='lg'>Active Routes</Text>
+                        {
+                            data.activeRoutes.map((currRoute: Route) => (
                                 <VStack key={currRoute.docRef?.id} width='100%'>
                                     <Divider orientation='horizontal' height='2px' />
                                     <RouteRow route={currRoute} />
@@ -70,7 +114,7 @@ const Routes = () => {
                 <Divider orientation='vertical' height={'75vh'} position='fixed' />
                 <Flex flexDirection='row' justifyContent='center' width='30%'>
                     <Flex flexDirection='column' alignItems='center' width='100%'>
-                        <Text>Archived Routes</Text>
+                        <Text bold fontSize='lg'>Archived Routes</Text>
                         { isLoading ? <Text>Loading...</Text> :
                             archivedRoutes.map((currRoute: Route) => (
                                 <VStack key={currRoute.docRef?.id} width='100%'>
@@ -79,6 +123,7 @@ const Routes = () => {
                                 </VStack>
                             ))
                         }
+                        { hasMore ? <Text onPress={fetchMoreArchivedRoutes}>Load More</Text> : null }
                     </Flex>
                 </Flex>
             </Flex>

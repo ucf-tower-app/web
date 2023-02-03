@@ -6,25 +6,10 @@ import { Route, Forum } from '../../xplat/types/types';
 import { buildRouteFetcher } from '../../utils/queries';
 
 const RouteDetailsPanel = ({ route, forumSetter }: { route: Route, forumSetter: (forum: Forum) => void}) => {
-    const [routeName, setRouteName] = useState<string>();
-    const [setter, setSetter] = useState<string>();
-    const [setterID, setSetterID] = useState<string>();
-    const [grade, setGrade] = useState<string>();
-    const {isLoading, error, data} = useQuery(['route', {id: route.docRef!.id}], buildRouteFetcher(route));
+    const {isLoading, isError, data} = useQuery(['route', {id: route.docRef!.id}], buildRouteFetcher(route));
 
     useEffect(() => {
         if (data !== undefined) {
-            setRouteName(data.name);
-            setGrade(data.grade);
-            if (data.setter)
-                if (data.setter.raw)
-                    setSetter(data.setter.string);
-                else
-                {
-                    setSetter(data.setter.string);
-                    setSetterID(data.setter.uid);
-                }
-            
             forumSetter(data.forum);
         }
     }, [data]);
@@ -40,12 +25,23 @@ const RouteDetailsPanel = ({ route, forumSetter }: { route: Route, forumSetter: 
         );
     }
 
+    if (isError || data === undefined)
+    {
+        return (
+            <Box flexDir={'column'} width={'25%'} top={'100px'} position='fixed'>
+                <Center>
+                    <Text fontSize={'2xl'} bold>Error loading route</Text>
+                </Center>
+            </Box>
+        );
+    }
+
     return (
         <Box flexDir={'column'} width={'25%'} top={'100px'} position='fixed'>
             <Center>
-                <Text fontSize={'2xl'} bold>{routeName}</Text>
-                {placeholder_image && <img src={placeholder_image} className='route-avatar' alt='route' />}
-                {setter !== undefined && <Text> Set by {setter}</Text>}
+                <Text fontSize={'2xl'} bold>{data.name}</Text>
+                {data.image !== undefined && <img src={data.image} className='route-avatar' alt='route' />}
+                {data.setter !== undefined && <Text> Set by {data.setter.string}</Text>}
             </Center>
         </Box>
     );

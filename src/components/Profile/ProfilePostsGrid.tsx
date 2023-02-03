@@ -9,8 +9,8 @@ import PostInFeed from '../Post/PostInFeed';
 type setPostCallback = (post: Post) => void;
 const ROW_LENGTH = 5;
 
-const ProfilePostsGrid = ({posts, user, setSelectedPost}: 
-    {posts: Post[], user: User, setSelectedPost: setPostCallback}) => {
+const ProfilePostsGrid = ({posts, setSelectedPost}: 
+    {posts: Post[], setSelectedPost: setPostCallback}) => {
     const [postGrid, setPostGrid] = useState<Post[][]>([]);
 
     useEffect(() => {
@@ -42,7 +42,7 @@ const ProfilePostsGrid = ({posts, user, setSelectedPost}:
                             return (
                                 <Box key={post.docRef!.id} width='18%'>
                                     <Pressable onPress={() => setSelectedPost(post)}>
-                                        <PostInFeed post={post} _passAuthor={user}/>
+                                        <PostInFeed post={post}/>
                                     </Pressable>
                                 </Box>
                             );

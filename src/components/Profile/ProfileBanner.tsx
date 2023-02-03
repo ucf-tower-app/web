@@ -1,19 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Box, HStack, Text, Input, VStack, Skeleton, Select, Button, Radio } from 'native-base';
-import { User } from '../../xplat/types/types';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { getCurrentUser } from '../../xplat/api';
 import '../css/feed.css';
+import { FetchedUserProfile } from '../../utils/queries';
 
-const ProfileBanner = ({user}: {user: User | undefined}) => {
-    const [username, setUsername] = useState<string>();
-    const [displayName, setDisplayName] = useState<string>();
-    const [avatar, setAvatar] = useState<string>();
-    const [followers, setFollowers] = useState<number>(0);
-    const [bio, setBio] = useState<string>();
-    const [following, setFollowing] = useState<number>(0);
-    const [userAuth, setUserAuth] = useState<number>(0);
+const ProfileBanner = ({user}: {user: FetchedUserProfile | undefined}) => {
     const [promoteOrDemote, setPromoteOrDemote] = useState<string>('promote');
     const [editPermissionModal, setEditPermissionModal] = useState<boolean>(false);
     const [profilePermission, setProfilePermission] = useState<number>(0);
@@ -29,23 +22,14 @@ const ProfileBanner = ({user}: {user: User | undefined}) => {
         console.log('Will make this user manager and remove manager status from current manager');
     };
 
-
-    useEffect(() => {
-        getCurrentUser()
-            .then((user) => {
-                user?.getStatus().then(setUserAuth);
-            });
-        if (user && user.hasData)
-        {
-            setUsername(user.username);
-            setDisplayName(user.displayName);
-            //setFollowers(user.followers!.length);
-            setBio(user.bio);
-            setFollowing(user.following!.length);
-            setProfilePermission(user.status!);
-            user?.getAvatarUrl().then(setAvatar);
-        }
-    }, [user?.hasData]);
+    if (user === undefined)
+    {
+        return (
+            <Box>
+                <Skeleton height='100px' />
+            </Box>
+        );
+    }
 
     return (
         <>
@@ -53,7 +37,7 @@ const ProfileBanner = ({user}: {user: User | undefined}) => {
                 onClose={() => setEditPermissionModal(false)} modal>
                 <Box p={4} w='100%' h='100%' borderRadius='sm'>
                     <Text alignSelf='center' bold fontSize='lg'>Edit user permission level</Text>
-                    {userAuth == 4 && profilePermission == 3 
+                    {user.status == 4 && profilePermission == 3 
                         && <Button onPress={managerSwap} marginTop='1' m='3'>
                             <Text variant='button'>Make Manager</Text>
                         </Button>
@@ -67,7 +51,8 @@ const ProfileBanner = ({user}: {user: User | undefined}) => {
                         promoteOrDemote === 'promote' && profilePermission > 0 ?
                             <Select placeholder='Select permission level' 
                                 onValueChange={(valueString) => setNewPermission(parseInt(valueString))}>
-                                {userAuth >= 4 && profilePermission < 3 && <Select.Item label='Employee' value='3' />}
+                                {user.status >= 4 && 
+                                    profilePermission < 3 && <Select.Item label='Employee' value='3' />}
                                 {profilePermission < 3 && <Select.Item label='Approved (can post)' value='2' />}
                                 {profilePermission < 2 && 
                                     <Select.Item label='Verified (can login, cannot post)' value='1' />}
@@ -95,33 +80,33 @@ const ProfileBanner = ({user}: {user: User | undefined}) => {
                 </Box>
             </Popup>
             <HStack space={2} p={2}>
-                <Skeleton isLoaded={avatar !== undefined} borderRadius='100%' width='15%'>
-                    <img src={avatar} className='avatar-profile' alt='avatar'/>
-                </Skeleton>
+               
+                <img src={user.avatarUrl} className='avatar-profile' alt='avatar'/>
+                
                 <VStack width='80%'>
                     <HStack>
-                        <Skeleton.Text isLoaded={displayName !== undefined}>
-                            <Text variant='profileName'>
-                                {displayName}
-                            </Text>
-                        </Skeleton.Text>
-                        <Skeleton.Text isLoaded={username !== undefined}>
-                            <Text variant='profileHandle'>
-                                @{username}
-                            </Text>
-                        </Skeleton.Text>
-                    </HStack>
-                    <Skeleton.Text isLoaded={bio !== undefined}>
-                        <Text noOfLines={4} variant='profileBio'>
-                            {bio}
+                        
+                        <Text variant='profileName'>
+                            {user.displayName}
                         </Text>
-                    </Skeleton.Text>
+                        
+                        
+                        <Text variant='profileHandle'>
+                                @{user.username}
+                        </Text>
+                        
+                    </HStack>
+                    
+                    <Text noOfLines={4} variant='profileBio'>
+                        {user.bio}
+                    </Text>
+                    
                     <HStack space='1'>
                         <Text variant='profileStat'>
-                            {followers} Followers
+                            {user.followers || 0} Followers
                         </Text>
                         <Text variant='profileStat'>
-                            {following} Following
+                            {user.following} Following
                         </Text>
                     </HStack>
                     <Button position='absolute' bottom={2} onPress={() => setEditPermissionModal(true)}>

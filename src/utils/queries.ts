@@ -27,12 +27,14 @@ export const buildUserFetcher = (user: User) => {
         } as FetchedUser;
     };
 };
-type FetchedUserProfile = {
+export type FetchedUserProfile = {
     username: string;
     email: string;
     displayName: string;
     bio: string;
     status: UserStatus;
+    following: number;
+    followers: number;
     avatarUrl: string;
     userObject: User;
     hasMorePosts: boolean;
@@ -63,6 +65,7 @@ export const buildUserByIDFetcher = (uid: string) => {
             bio: await user.getBio(),
             status: await user.getStatus(),
             avatarUrl: await user.getAvatarUrl(),
+            following: await (await user.following || []).length,
             userObject: user,
             postCursor: postCursor,
             posts: tempPosts,
@@ -179,6 +182,7 @@ type FetchedRoute = {
         string: string | undefined;
         uid: string | undefined;
     };
+    image?: string;
     grade: string;
     forum: Forum;
     description: string;
@@ -193,7 +197,7 @@ export const buildRouteFetcher = (route: Route) => {
         await route.getData();
         return {
             name: await route.getName(),
-            setter: (await route.hasSetter() || await route.hasSetterRawName()) && {
+            setter: (await route.hasSetter() || await route.hasSetterRawName()) ? {
                 raw: await route.hasSetterRawName(),
                 string: (await route.hasSetterRawName())
                     ? 
@@ -201,9 +205,10 @@ export const buildRouteFetcher = (route: Route) => {
                     : 
                     await (await route.getSetter()).getDisplayName(),
                 uid: await route.hasSetter() ? (await route.getSetter()).docRef!.id : undefined,
-            },
+            } : undefined,
             grade: await route.getGradeDisplayString(),
             forum: await route.getForum(),
+            image: (await route.hasThumbnail()) ? await route.getThumbnailUrl() : undefined,
             description: await route.getDescription(),
             archived: await route.getStatus(),
             routeObject: route,

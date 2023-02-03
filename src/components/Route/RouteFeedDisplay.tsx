@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import PostInFeed from '../Post/PostInFeed';
 import { QueryCursor } from '../../xplat/types/queryCursors';
 import { useQuery } from 'react-query';
-import { CURSOR_INCREMENT, INITIAL_CURSOR_SIZE } from '../../utils/constants';
+import { CURSOR_INCREMENT } from '../../utils/constants';
 import { buildForumFetcher } from '../../utils/queries';
 
 type callBackFunction = (post: Post) => void;
@@ -20,7 +20,7 @@ const RouteFeedDisplay = ({
     const [posts, setPosts] = useState<Post[]>();
     const [postCursor, setPostCursor] = useState<QueryCursor<Post>>();
     const [hasMorePosts, setHasMorePosts] = useState(true);
-    const { isLoading, error, data } = useQuery(forum.docRef!.id,buildForumFetcher(forum));
+    const { isLoading, isError, data } = useQuery(forum.docRef!.id,buildForumFetcher(forum));
 
     async function fetchMorePosts() {
         if (!hasMorePosts || !postCursor) {
@@ -43,11 +43,27 @@ const RouteFeedDisplay = ({
     }
     useEffect(() => {
         if (data !== undefined) {
-            setPosts(data.posts);
             setPostCursor(data.postCursor);
+            setPosts(data.posts);
             setHasMorePosts(data.hasMore);
         }
     }, [data]);
+
+    if (isLoading) {
+        return (
+            <Box zIndex={10} width={'75%'}>
+                <Text alignSelf={'center'}>Loading posts...</Text>
+            </Box>
+        );
+    }
+
+    if (isError || data === undefined) {
+        return (
+            <Box zIndex={10} width={'75%'}>
+                <Text alignSelf={'center'}>Error loading posts</Text>
+            </Box>
+        );
+    }
 
     return (
         <Box zIndex={10} width={'75%'}>

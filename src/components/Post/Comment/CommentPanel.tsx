@@ -12,7 +12,7 @@ const CommentPanel = ({ post }: { post: Post | undefined }) => {
     const [comments, setComments] = useState<Comment[] | undefined>();
     const [commentsCursor, setCommentsCursor] = useState<QueryCursor<Comment>>();
     const [hasMoreComments, setHasMoreComments] = useState<boolean>(false);
-    const { isLoading, error, data } = useQuery('comments', buildCommentListFetcher(post!), 
+    const { isLoading, isError, data } = useQuery(['comments', post?.docRef!.id], buildCommentListFetcher(post!), 
         { 
             enabled: post !== undefined 
         });
@@ -52,6 +52,24 @@ const CommentPanel = ({ post }: { post: Post | undefined }) => {
         }
     }, [data]);
 
+    if (isLoading)
+    {
+        return (
+            <Box flexDir={'column'} margin={2} position='fixed' width={'22%'}>
+                <Text alignSelf={'center'}>Loading comments...</Text>
+            </Box>
+        );
+    }
+
+    if (isError)
+    {
+        return (
+            <Box flexDir={'column'} margin={2} position='fixed' width={'22%'}>
+                <Text alignSelf={'center'}>Error loading comments.</Text>
+            </Box>
+        );
+    }
+
     return (
         <Box flexDir={'column'} margin={2} position='fixed' width={'22%'}>
             {post !== undefined ?
@@ -67,7 +85,6 @@ const CommentPanel = ({ post }: { post: Post | undefined }) => {
                                 </Box>
                             );
                         })
-                        
                     }
                     {hasMoreComments && 
                         <Button onPress={fetchMoreComments}><Text variant='button'>Load More</Text></Button>}

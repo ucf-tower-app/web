@@ -37,7 +37,15 @@ const RouteFeed = () => {
     }, [data]);
     if (isLoading)
     {
-        return <></>;
+        return (
+            <Box>
+                <VStack>
+                    <NavBar />
+                    <Text top='50px'>Loading...</Text>
+                </VStack>
+            </Box>
+
+        );
     }
 
 
