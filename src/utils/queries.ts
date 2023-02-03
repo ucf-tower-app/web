@@ -234,6 +234,7 @@ export const buildRouteFetcher = (route: Route) => {
             rope: (await route.hasRope()) ? await route.getRope() : undefined,
             timestamp: (await route.hasTimestamp()) ? await route.getTimestamp() : undefined,
             color: (await route.hasColor()) ? await route.getColor() : undefined,
+            routeObject: route,
         } as FetchedRoute;
     };
 };
