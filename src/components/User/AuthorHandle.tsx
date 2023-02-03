@@ -1,53 +1,48 @@
-import { useState, useEffect } from 'react';
 import { User } from '../../xplat/types/user';
 import { HStack, Text, Pressable, Skeleton } from 'native-base';
-import placeholder_image from '../placeholder_image.jpg';
+import { useQuery } from 'react-query';
 import '../css/feed.css';
-import { useNavigate, createSearchParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, createSearchParams } from 'react-router-dom';
+import { buildUserFetcher } from '../../utils/queries';
 
-const AuthorHandle = ({author}: {author: User | undefined}) => {
-    // TODO: Implement clickable handle that will direct to author profile
-    const [username, setUsername] = useState('');
-    const [displayName, setDisplayName] = useState('');
-    const [avatarURL, setAvatarURL] = useState<string | undefined>();
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [searchParams] = useSearchParams();
+const AuthorHandle = ({ author }: { author: User }) => {
+    const { isLoading, isError, data } = useQuery(author.docRef!.id, buildUserFetcher(author));
     const navigate = useNavigate();
     const navigateToProfile = () => {
-        const path = window.location.href.split('?')[0];
-        if (path.endsWith('/profile') && searchParams.get('uid') === author?.docRef?.id)
+        if (window.location.pathname === '/profile/?uid=' + author?.docRef?.id) {
             return;
-        else if (author)
-            navigate({
-                pathname: '/profile', 
-                search: `?${createSearchParams({uid: author.docRef!.id})}`
-            });
-        
+        }
+        if (author) {
+            navigate(`/profile?${createSearchParams({ uid: author.docRef!.id })}`);
+        }
     };
-    
-    useEffect( () => {
-        const getData = async () => {
-            await author?.getData();
-            author?.getUsername().then(setUsername);
-            author?.getDisplayName().then(setDisplayName);
-            author?.getAvatarUrl().then(setAvatarURL);
-            setIsLoaded(true);
-        };
-        getData();
-    }, [author]);
+
+    if (isLoading) {
+        return (
+            <HStack space={1}>
+                <Skeleton borderRadius={'100'} width='8%' isLoaded={false} />
+                <Skeleton.Text lines={1} width='60%' alignSelf={'center'} />
+                <Skeleton.Text lines={1} width='60%' alignSelf={'center'} />
+            </HStack>
+        );
+    }
+
+    if (isError || data === undefined) {
+        return (
+            <HStack space={1}>
+                <Skeleton borderRadius={'100'} width='8%' isLoaded={false} />
+                <Skeleton.Text lines={1} width='60%' alignSelf={'center'} />
+                <Skeleton.Text lines={1} width='60%' alignSelf={'center'} />
+            </HStack>
+        );
+    }
 
     return (
         <Pressable onPress={navigateToProfile}>
             <HStack space={1}>
-                <Skeleton borderRadius={'100'} width='8%' isLoaded={avatarURL !== undefined}>
-                    <img className='avatar' src={avatarURL!} alt='avatar'/>
-                </Skeleton>
-                <Skeleton.Text isLoaded={isLoaded} lines={1} width='60%' alignSelf={'center'}>
-                    <Text variant='displayname'>{displayName}</Text>
-                </Skeleton.Text>
-                <Skeleton.Text isLoaded={isLoaded} lines={1} width='60%' alignSelf={'center'}>
-                    <Text variant='handle'>@{username}</Text>
-                </Skeleton.Text>
+                <img className='avatar' src={data.avatarUrl} alt='avatar' />
+                <Text variant='displayname'>{data.displayName}</Text>
+                <Text variant='handle'>@{data.username}</Text>
             </HStack>
         </Pressable>
     );

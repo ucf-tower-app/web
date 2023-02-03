@@ -17,6 +17,7 @@
     "react-native-safe-area-context": "^3.3.2",
     "react-native-svg": "^12.1.1",
     "react-native-web": "^0.17.1",
+    "react-query": "^3.39.3",
     "react-scripts": "5.0.1",
     "reactjs-popup": "^2.0.5",
     "video-react": "^0.16.0",

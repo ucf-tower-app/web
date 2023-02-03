@@ -1,8 +1,10 @@
 import { Box, Flex, Text } from 'native-base';
 import { Route } from '../xplat/types/route';
 import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Pressable } from 'react-native';
+import { buildRouteFetcher } from '../utils/queries';
 
 type Props = {
     route: Route;
@@ -10,11 +12,7 @@ type Props = {
 export const RouteRow = ({ route }: Props) => {
     const [name, setName] = useState<string>('');
     const [grade, setGrade] = useState<string>('');
-
-    useEffect(() => {
-        route.getName().then(setName);
-        route.getGradeDisplayString().then(setGrade);
-    }, [route]);
+    const {isLoading, data} = useQuery(['route-row', {id: route.docRef!.id}], buildRouteFetcher(route));
 
     const navigate = useNavigate();
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -25,6 +23,13 @@ export const RouteRow = ({ route }: Props) => {
             search: `?${createSearchParams(exampleSearchParams)}`
         });
     };
+
+    useEffect(() => {
+        if (data !== undefined ) {
+            setName(data.name);
+            setGrade(data.grade);
+        }
+    }, [data]);
 
     return (
         <Box width='100%'>

@@ -1,28 +1,33 @@
 import { Comment } from '../../../xplat/types/comment';
 import { useEffect, useState } from 'react';
-import { Box, Text } from 'native-base';
+import { useQuery } from 'react-query';
+import { buildCommentFetcher } from '../../../utils/queries';
+import { Box, Text, Skeleton } from 'native-base';
 import '../../css/feed.css';
 import { User } from '../../../xplat/types/user';
 import AuthorHandle from '../../User/AuthorHandle';
 
 const CommentDisplay = ({comment}: {comment: Comment}) => {
-    const [author, setAuthor] = useState<User>();
-    const [body, setBody] = useState('');
-    const [postTime, setPostTime] = useState<string>();
+    const { isLoading, isError, data } = useQuery(comment.docRef!.id, buildCommentFetcher(comment));
 
-    useEffect( () => {
-        comment?.getTextContent().then( (text) => setBody(text));
-        comment?.getAuthor().then(setAuthor);
-        // comment?.getTimestamp().then( (val) => {
-        // })
-    }, [comment]);
-
+    if (isLoading) {
+        return (
+            <Box flexDir={'column'} p={1} background={'primary.200'} borderRadius={'md'} borderWidth={1}>
+                <Skeleton w='100%'/>
+                <Skeleton.Text/>
+                <Skeleton.Text/>
+            </Box>
+        );
+    }
+    if (isError || data === undefined) {
+        return null;
+    }
 
     return (
         <Box flexDir={'column'} p={1} background={'primary.200'} borderRadius={'md'} borderWidth={1}>
-            <AuthorHandle author={author}/>
-            <Text fontSize={'sm'}>{body}</Text>
-            <Text fontSize={'xs'} color='gray.400'>{postTime}</Text>
+            <AuthorHandle author={data.author}/>
+            <Text fontSize={'sm'}>{data.body}</Text>
+            <Text fontSize={'xs'} color='gray.400'>{data.timestamp.toLocaleString()}</Text>
         </Box>
     );
 };
