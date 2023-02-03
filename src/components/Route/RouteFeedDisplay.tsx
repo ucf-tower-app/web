@@ -19,7 +19,7 @@ const RouteFeedDisplay = ({
 }) => {
     const [posts, setPosts] = useState<Post[]>();
     const [postCursor, setPostCursor] = useState<QueryCursor<Post>>();
-    const [hasMorePosts, setHasMorePosts] = useState(true);
+    const [hasMorePosts, setHasMorePosts] = useState(false);
     const { isLoading, isError, data } = useQuery(forum.docRef!.id,buildForumFetcher(forum));
 
     async function fetchMorePosts() {
@@ -74,7 +74,7 @@ const RouteFeedDisplay = ({
                     </Pressable>
                 );
             })}
-            { hasMorePosts && !isLoading  && 
+            { hasMorePosts && 
                 <Button m='1' alignSelf='center' onPress={fetchMorePosts} disabled={isLoading}>
                     <Text variant='button'>Load more posts</Text>
                 </Button>
