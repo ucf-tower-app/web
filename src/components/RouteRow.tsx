@@ -17,10 +17,11 @@ export const RouteRow = ({ route }: Props) => {
     }, [route]);
 
     const navigate = useNavigate();
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const exampleSearchParams = { uid: route.docRef!.id };
     const navToRoute = () => {
         navigate({
-            pathname: '/route',
+            pathname: '/routeview',
             search: `?${createSearchParams(exampleSearchParams)}`
         });
     };
