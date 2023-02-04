@@ -3,14 +3,16 @@ import { User } from '../../xplat/types/user';
 import { HStack, Text, Pressable, Skeleton } from 'native-base';
 import { useQuery } from 'react-query';
 import '../css/feed.css';
-
+import { useSearchParams } from 'react-router-dom';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { buildUserFetcher } from '../../utils/queries';
 
 const AuthorHandle = ({author}: {author: User}) => {
   const { isLoading, isError, data } = useQuery(author.docRef!.id, buildUserFetcher(author));
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const navigateToProfile = () => {
+    const path = window.location.href.split('?')[0];
     if (path.endsWith('/profile') && searchParams.get('uid') === author?.docRef?.id)
       return;
     if (author)
