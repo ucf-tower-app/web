@@ -10,13 +10,13 @@ import { UserMock } from '../xplat/types/user';
 
 const ComponentTesting = () => {
 
-    return (
-        <Center>
-            <Box width='50%' alignSelf='center'>
+  return (
+    <Center>
+      <Box width='50%' alignSelf='center'>
                 
-            </Box>
-        </Center>
-    );
+      </Box>
+    </Center>
+  );
 };
 
 export default ComponentTesting;
