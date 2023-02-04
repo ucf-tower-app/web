@@ -28,6 +28,8 @@ export const buildUserFetcher = (user: User) => {
       bio: await user.getBio(),
       status: await user.getStatus(),
       avatarUrl: await user.getAvatarUrl(),
+      sends: await user.getSends(),
+      totalPostSizeInBytes: await user.getTotalPostSizeInBytes(),
       userObject: user,
     } as FetchedUser;
   };
