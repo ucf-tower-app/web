@@ -10,7 +10,8 @@ const PostVideoDisplay = ({video, thumbnail}: {video: string, thumbnail?: string
         fluid={false}
         width={325}
         poster={thumbnail}
-        src={video}>
+        playsInline>
+        <source src={video} />
         <BigPlayButton position="center" />
         <ControlBar>
           <ReplayControl seconds={5}/>
