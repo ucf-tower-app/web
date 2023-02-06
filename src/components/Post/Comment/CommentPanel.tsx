@@ -8,7 +8,8 @@ import { buildCommentListFetcher } from '../../../utils/queries';
 import { QueryCursor } from '../../../xplat/types/queryCursors';
 import { CURSOR_INCREMENT } from '../../../utils/constants';
 
-const PanelHeight = (document.documentElement.clientHeight * 0.8) - 50;
+// Calculates panel height based on screen height, excludes NavBar height
+const PanelHeight = (document.documentElement.clientHeight - 50 ) * 0.8;
 
 const CommentPanel = ({ post }: { post: Post | undefined }) => {
   const [comments, setComments] = useState<Comment[] | undefined>();
