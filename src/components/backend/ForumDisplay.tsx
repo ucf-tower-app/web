@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Forum, Post } from '../../xplat/types/types';
+import { Forum, Post } from '../../xplat/types';
 import PostDisplay from './PostDisplay';
 
 const ForumDisplay = ({ forum }: { forum: Forum }) => {

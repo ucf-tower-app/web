@@ -2,31 +2,28 @@ import { Box, Center, HStack } from 'native-base';
 import PostVideoDisplay from '../Post/PostVideoDisplay';
 import PostImages from '../Post/PostImages';
 import { useState, useEffect } from 'react';
-import { Post, User } from '../../xplat/types/types';
+import { Post, User } from '../../xplat/types';
 import { Pressable } from 'react-native';
 import PostInFeed from '../Post/PostInFeed';
 
 type setPostCallback = (post: Post) => void;
 const ROW_LENGTH = 5;
 
-const ProfilePostsGrid = ({posts, setSelectedPost}: 
-    {posts: Post[], setSelectedPost: setPostCallback}) => {
+const ProfilePostsGrid = ({ posts, setSelectedPost }:
+    { posts: Post[], setSelectedPost: setPostCallback }) => {
     const [postGrid, setPostGrid] = useState<Post[][]>([]);
 
     useEffect(() => {
         const grid: Post[][] = [];
         let row: Post[] = [];
-        for (let i = 0; i < posts.length; i++)
-        {
+        for (let i = 0; i < posts.length; i++) {
             row.push(posts[i]);
-            if (row.length === ROW_LENGTH)
-            {
+            if (row.length === ROW_LENGTH) {
                 grid.push(row);
                 row = [];
             }
         }
-        if (row.length > 0)
-        {
+        if (row.length > 0) {
             grid.push(row);
         }
         setPostGrid(grid);
@@ -42,7 +39,7 @@ const ProfilePostsGrid = ({posts, setSelectedPost}:
                             return (
                                 <Box key={post.docRef!.id} width='18%'>
                                     <Pressable onPress={() => setSelectedPost(post)}>
-                                        <PostInFeed post={post}/>
+                                        <PostInFeed post={post} />
                                     </Pressable>
                                 </Box>
                             );
