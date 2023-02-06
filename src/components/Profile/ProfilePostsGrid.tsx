@@ -1,13 +1,11 @@
 import { Box, Center, HStack } from 'native-base';
-import PostVideoDisplay from '../Post/PostVideoDisplay';
-import PostImages from '../Post/PostImages';
 import { useState, useEffect } from 'react';
 import { Post, User } from '../../xplat/types/types';
 import { Pressable } from 'react-native';
 import PostInFeed from '../Post/PostInFeed';
 
 type setPostCallback = (post: Post) => void;
-const ROW_LENGTH = 5;
+const ROW_LENGTH = 4;
 
 const ProfilePostsGrid = ({posts, setSelectedPost}: 
     {posts: Post[], setSelectedPost: setPostCallback}) => {
@@ -40,7 +38,7 @@ const ProfilePostsGrid = ({posts, setSelectedPost}:
           <HStack key={index} space='4' width='100%' alignSelf='center' justifyContent='center'>
             {row.map((post) => {
               return (
-                <Box key={post.docRef!.id} width='18%'>
+                <Box key={post.docRef!.id} width='24%'>
                   <Pressable onPress={() => setSelectedPost(post)}>
                     <PostInFeed post={post}/>
                   </Pressable>
