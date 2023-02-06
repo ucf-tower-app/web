@@ -12,7 +12,7 @@ type Props = {
 export const RouteRow = ({ route }: Props) => {
     const [name, setName] = useState<string>('');
     const [grade, setGrade] = useState<string>('');
-    const {isLoading, data} = useQuery(['route-row', {id: route.docRef!.id}], buildRouteFetcher(route));
+    const { data } = useQuery(['route-row', { id: route.docRef!.id }], buildRouteFetcher(route));
 
     const navigate = useNavigate();
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -25,7 +25,7 @@ export const RouteRow = ({ route }: Props) => {
     };
 
     useEffect(() => {
-        if (data !== undefined ) {
+        if (data !== undefined) {
             setName(data.name);
             setGrade(data.grade);
         }
