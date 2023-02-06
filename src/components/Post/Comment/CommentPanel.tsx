@@ -8,6 +8,8 @@ import { buildCommentListFetcher } from '../../../utils/queries';
 import { QueryCursor } from '../../../xplat/types/queryCursors';
 import { CURSOR_INCREMENT } from '../../../utils/constants';
 
+const PanelHeight = (document.documentElement.clientHeight * 0.8) - 50;
+
 const CommentPanel = ({ post }: { post: Post | undefined }) => {
   const [comments, setComments] = useState<Comment[] | undefined>();
   const [commentsCursor, setCommentsCursor] = useState<QueryCursor<Comment>>();
@@ -78,7 +80,7 @@ const CommentPanel = ({ post }: { post: Post | undefined }) => {
           {comments === undefined || comments!.length === 0 ?
             <Box marginTop={2}><Text alignSelf={'center'}>No comments just yet.</Text></Box>
             :
-            <Box position='relative' overflowY='scroll' height='80vh'>
+            <Box position='relative' overflowY='scroll' height={PanelHeight}>
               {comments?.map((value, index) => {
                 return (
                   <Box key={index} margin={2}>
