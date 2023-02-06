@@ -1,4 +1,4 @@
-import { Box, Text, Button } from 'native-base';
+import { Box, Text, Button, ScrollView } from 'native-base';
 import { Post } from '../../../xplat/types/post';
 import { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
@@ -78,16 +78,19 @@ const CommentPanel = ({ post }: { post: Post | undefined }) => {
           {comments === undefined || comments!.length === 0 ?
             <Box marginTop={2}><Text alignSelf={'center'}>No comments just yet.</Text></Box>
             :
-            comments?.map((value, index) => {
-              return (
-                <Box key={index} margin={2}>
-                  <CommentDisplay comment={value} />
-                </Box>
-              );
-            })
+            <Box position='relative' overflowY='scroll' height='80vh'>
+              {comments?.map((value, index) => {
+                return (
+                  <Box key={index} margin={2}>
+                    <CommentDisplay comment={value} />
+                  </Box>
+                );
+              })}
+            </Box>
+           
           }
           {hasMoreComments && 
-                        <Button onPress={fetchMoreComments}><Text variant='button'>Load More</Text></Button>}
+            <Button onPress={fetchMoreComments} m='1'><Text variant='button'>Load More</Text></Button>}
         </Box> :
         <Box>
           <Text alignSelf={'center'}>No post selected</Text>
