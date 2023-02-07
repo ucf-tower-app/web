@@ -3,7 +3,7 @@ import { Post } from '../../xplat/types/post';
 import { useQuery } from 'react-query';
 import '../css/feed.css';
 import AuthorHandle from '../User/AuthorHandle';
-import PostImages from './PostImages';
+import PostMedia from './PostMedia';
 import { buildPostFetcher } from '../../utils/queries';
 
 const PostInFeed = ({ post }: { post: Post}) => {
@@ -27,7 +27,7 @@ const PostInFeed = ({ post }: { post: Post}) => {
       width='100%' borderRadius={'md'} borderWidth={1} alignSelf={'center'}>
       <AuthorHandle author={data.author}/>
       <Text flexWrap={'wrap'} noOfLines={4} p={1} fontSize='md'>{data.body}</Text>
-      {data.imageCount > 0 && <PostImages imageContent={data.imageURLs}/>}
+      {data.imageCount > 0 && <PostMedia imageContent={data.imageURLs} videoContent={data.videoContent}/>}
       <HStack>
         <Box width={'80%'}>
           <Text fontSize={'sm'} color='gray.400'>{data.timestamp.toLocaleString()}</Text>
