@@ -11,27 +11,22 @@ export const NavBar = () => {
           backgroundColor={'#F1F1F1'} paddingTop={'5px'} position={'fixed'} zIndex={100}>
           <Button onPress={()=>{navigate('/routes');}}>
             <Text variant={'button'}>
-                            Routes
+              Routes
             </Text>
           </Button>
           <Button onPress={() => navigate('/reports')}>
             <Text variant={'button'}>
-                                Reports
+              Reports
             </Text>
           </Button>
           <Button onPress={() => navigate('/tutorial')}>
             <Text variant={'button'}>
-                                Tutorial
+              Tutorial
             </Text>
           </Button>
-          <Button onPress={() => navigate('/lost')}>
+          <Button onPress={() => navigate('/faq')}>
             <Text variant={'button'}>
-                                Lost and Found
-            </Text>
-          </Button>
-          <Button onPress={() => navigate('/competitions')}>
-            <Text variant={'button'}>
-                                Competitions
+              FAQ
             </Text>
           </Button>
           <Box top={'15px'} right='1%' position={'fixed'}>
