@@ -99,16 +99,16 @@ const BackendTesting = () => {
   }
 
   async function testCreatePost() {
-    const post = await createPost(
-      await getCurrentUser(), 
-      postText, 
-      await route.getForum(), 
-      postImages, 
-      postVideo && postVideoThumbnail && {video: postVideo!, thumbnail: postVideoThumbnail!}
-    );
-    await post.getData();
-    setRoute(route);
-    console.log(post);
+    // const post = await createPost(
+    //   await getCurrentUser(), 
+    //   postText, 
+    //   await route.getForum(), 
+    //   postImages, 
+    //   postVideo && postVideoThumbnail && {video: postVideo!, thumbnail: postVideoThumbnail!}
+    // );
+    // await post.getData();
+    // setRoute(route);
+    // console.log(post);
   }
 
   const handleFilesSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {

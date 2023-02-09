@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useEffect, useState } from 'react';
 import { getCurrentUser } from '../../xplat/api';
-import { Comment, Post } from '../../xplat/types/types';
+import { Comment, Post } from '../../xplat/types';
 import CommentDisplay from './CommentDisplay';
 
 

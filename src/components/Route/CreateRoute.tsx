@@ -4,7 +4,7 @@ import { createRoute } from '../../xplat/api';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { User } from '../../xplat/types/user';
-import { RouteType, RouteClassifier, RouteColor, RouteTech } from '../../xplat/types/route';
+import { RouteType, RouteClassifier, RouteColor, NaturalRules } from '../../xplat/types/route';
 import { getAllBoulderClassifiers, getAllTraverseRouteClassifiers, 
   getAllCompetitionRouteClassifiers,
   getAllLeadclimbRouteClassifiers,
@@ -42,7 +42,7 @@ const CreateRoute = ({refreshRoutes, isOpen, setIsOpen}: CreateRouteProps) => {
   const [rope, setRope] = useState<number>();
   const [rawgrade, setRawgrade] = useState<number>();
   const [description, setDescription] = useState<string>();
-  const [rules, setRules] = useState<RouteTech>();
+  const [rules, setRules] = useState<NaturalRules>();
   const [routeColor, setRouteColor] = useState<RouteColor>();
   const [confirmationBoxOpen, setConfirmationBoxOpen] = useState(false);
   const [thumbnailFile, setThumbnailFile] = useState<File>();
@@ -81,7 +81,7 @@ const CreateRoute = ({refreshRoutes, isOpen, setIsOpen}: CreateRouteProps) => {
         setterRawName: overrideSetterString,
         description: description,
         rope: rope,
-        tech: rules,
+        naturalRules: rules,
         thumbnail: thumbnailFile,
         color: routeColor,
       })
@@ -161,10 +161,10 @@ const CreateRoute = ({refreshRoutes, isOpen, setIsOpen}: CreateRouteProps) => {
           </Select>
           <FormControl.Label isRequired>Natural Rules</FormControl.Label>
           <Select placeholder='Natural Rules' onValueChange={ (rulesString) => {
-            const rules = rulesString as RouteTech;
+            const rules = rulesString as NaturalRules;
             setRules(rules);
           }}>
-            {Object.values(RouteTech).map( (rules) => {
+            {Object.values(NaturalRules).map( (rules) => {
               return <Select.Item key={rules} label={rules} value={rules}/>;
             })}
           </Select>

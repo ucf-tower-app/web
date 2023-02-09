@@ -1,6 +1,6 @@
 import { Box, Divider, VStack, Text, Button, Skeleton } from 'native-base';
 import { useEffect, useState } from 'react';
-import { Post, QueryCursor } from '../xplat/types/types';
+import { Post, QueryCursor } from '../xplat/types';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import ProfileBanner from '../components/Profile/ProfileBanner';

@@ -1,6 +1,6 @@
 import { Box, Center, HStack } from 'native-base';
 import { useState, useEffect } from 'react';
-import { Post, User } from '../../xplat/types/types';
+import { Post, User } from '../../xplat/types';
 import { Pressable } from 'react-native';
 import PostInFeed from '../Post/PostInFeed';
 
