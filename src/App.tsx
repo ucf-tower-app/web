@@ -1,32 +1,36 @@
-import React from 'react';
+import {lazy, useEffect, useState} from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+// import { Redirect } from 'react-router';
 import './App.css';
-import BackendTesting from './pages/BackendTesting';
-import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
-import RoutesPage from './pages/Routes';
+import Signup from './pages/Signup';
+import PageNotFound from './pages/PageNotFound';
+import AuthenticatedRoute from './utils/RequireAuth';
 
-export enum Page {
-  LandingPage,
-  BackendTesting,
-  Login,
-  RoutesPage
-}
+
+const ComponentTesting = lazy(() => import('./pages/ComponentTesting'));
+const BackendTesting = lazy(() => import('./pages/BackendTesting'));
+const RouteFeed = lazy(() => import('./pages/RouteFeed'));
+const RoutesPage = lazy(() => import('./pages/Routes'));
+const Profile = lazy(() => import('./pages/Profile'));
 
 function App() {
-  const [currentPage, setCurrentPage] = React.useState(Page.Login);
-
-  switch (currentPage) {
-  default:
-  case Page.LandingPage:
-    return <div className='App'> <LandingPage setCurrentPage={setCurrentPage} /> </div>;
-  case Page.BackendTesting:
-    return <div className='App'> <BackendTesting /> </div>;
-  case Page.Login:
-    return <div className='App'> <Login/></div>;
-  case Page.RoutesPage:
-    return <div className='App'> <RoutesPage/></div>;
-  }
-
+  return (
+    
+    <Routes>
+      <Route path='/' element={<Login/>}/>
+      <Route path='/signup' element={<Signup/>}/>
+      
+      <Route path='/route' element={<RouteFeed/>}/>
+      <Route path='/profile' element={<Profile/>}/>
+      {window.location.hostname === 'localhost' &&
+        <Route path='/backendtesting' element={<BackendTesting/>}/>}
+      {window.location.hostname === 'localhost' &&
+        <Route path='/component' element={<ComponentTesting/>}/>}
+      <Route path='*' element={<PageNotFound/>}/>
+    </Routes>
+      
+  );
 }
 
 export default App;

@@ -3,7 +3,7 @@ import { Box, Divider, Flex, Text, VStack } from 'native-base';
 import { useState, useEffect } from 'react';
 import { Route } from '../xplat/types/route';
 import { RouteRow } from '../components/RouteRow';
-import { QueryCursor } from '../xplat/types/types';
+import { QueryCursor } from '../xplat/types';
 import { queryClient } from '../index';
 import { isError, useQuery } from 'react-query';
 import { buildRouteListFetcher } from '../utils/queries';
