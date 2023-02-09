@@ -19,7 +19,10 @@ const RequireAuth = () => {
     return <>Error loading user authentication</>;
 
   if (data.status < UserStatus.Employee)
-    return <>You do not have permission to access this page</>;
+  {
+    FirebaseAuth.signOut();
+    return <Navigate to={'/'} state={{ from: location }} replace/>;
+  }
 
   return <Outlet/>;
 };
