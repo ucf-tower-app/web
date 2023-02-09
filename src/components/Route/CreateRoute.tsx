@@ -87,9 +87,10 @@ const CreateRoute = ({refreshRoutes, isOpen, setIsOpen}: CreateRouteProps) => {
       })
       .then( (route) => {
         // handle successful create route (refresh Routes page or pass route to parent component)
-        console.log('route created: ', route.docRef?.id);
-        refreshRoutes();
-        setIsOpen(false);
+        route.upgradeStatus().then( () => {
+          refreshRoutes();
+          setIsOpen(false);
+        });
       });
   }
 
