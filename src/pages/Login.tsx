@@ -4,12 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { signIn , getCurrentUser} from '../xplat/api';
 import { UserStatus } from '../xplat/types/common';
 import logo from '../logo.svg';
-import useAuth from '../utils/auth';
 import { auth } from '../xplat/Firebase';
 
 const Login =  () => {
   const navigate = useNavigate();
-  const { authUser } = useAuth();
+ 
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [password, setPassword] = useState('');
