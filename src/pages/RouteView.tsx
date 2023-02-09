@@ -1,4 +1,4 @@
-import { Box, Button, Center, Flex, HStack, Text, VStack } from 'native-base';
+import { Box, Button, Center, Flex, Text, VStack } from 'native-base';
 import { NavBar } from '../components/NavigationBar';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { getRouteById } from '../xplat/api';
@@ -84,10 +84,10 @@ const RouteView = () => {
                             <Text variant='button'>Archive This Route</Text>
                         </Button>
                     </Flex>
-                    <Center><HStack>
-                        {/* TODO: make the route-avatar not take up the entire screen */}
-                        {/* <img src={data.image ?? placeholder_image} className='route-avatar' alt='route' /> */}
-                        {placeholder_image! && <img src={placeholder_image} className='route-avatar' alt='route' />}
+                    <Flex flexDir='row' justifyContent='center' width='100%'>
+                        <Box width='30%' height='30%'>
+                            <img src={data.image ?? placeholder_image} className='route-avatar' alt='route' />
+                        </Box>
                         <VStack>
                             <Text> Status: {RouteStatus[data.status]} </Text>
                             <Text> Type: {data.type} </Text>
@@ -104,7 +104,7 @@ const RouteView = () => {
                             {/* TODO: make this stars field only visible to managers */}
                             <Text> Rating: {data.stars ?? 5} stars </Text>
                         </VStack>
-                    </HStack></Center>
+                    </Flex>
                 </Flex>
             </VStack>
         </Box>
