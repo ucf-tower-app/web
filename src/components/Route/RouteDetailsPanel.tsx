@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { Box, Center, Text } from 'native-base';
 import placeholder_image from '../../placeholder_image.jpg';
-import { Route, Forum } from '../../xplat/types/types';
+import { Route, Forum } from '../../xplat/types';
 import { buildRouteFetcher } from '../../utils/queries';
 
 const RouteDetailsPanel = ({ route, forumSetter }: { route: Route, forumSetter: (forum: Forum) => void}) => {

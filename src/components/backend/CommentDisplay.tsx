@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useEffect, useState } from 'react';
-import { Comment } from '../../xplat/types/types';
+import { Comment } from '../../xplat/types';
 
 const CommentDisplay = ({comment}: {comment: Comment}) => {
   const [author, setAuthor] = useState('!!!');

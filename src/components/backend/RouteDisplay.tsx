@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Forum, Route } from '../../xplat/types/types';
+import { Forum, Route } from '../../xplat/types';
 import ForumDisplay from './ForumDisplay';
 
 const RouteDisplay = ({route}: {route: Route}) => {

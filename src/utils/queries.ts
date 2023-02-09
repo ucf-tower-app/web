@@ -1,6 +1,6 @@
 import { UserStatus } from '../xplat/types/common';
 import { User, QueryCursor, Post, Route, 
-  Forum, RouteStatus, Comment, RouteType, Tag, Send } from '../xplat/types/types';
+  Forum, RouteStatus, Comment, RouteType, Tag, Send } from '../xplat/types';
 import { INITIAL_CURSOR_SIZE } from './constants';
 import { getRouteById } from '../xplat/api/route';
 import { getActiveRoutesCursor, getArchivedRoutesCursor, getUserById } from '../xplat/api';
@@ -28,7 +28,6 @@ export const buildUserFetcher = (user: User) => {
       bio: await user.getBio(),
       status: await user.getStatus(),
       avatarUrl: await user.getAvatarUrl(),
-      sends: await user.getSends(),
       totalPostSizeInBytes: await user.getTotalPostSizeInBytes(),
       userObject: user,
     } as FetchedUser;
