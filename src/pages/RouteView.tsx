@@ -2,11 +2,11 @@ import { Box, Button, Center, Flex, Text, VStack } from 'native-base';
 import { NavBar } from '../components/NavigationBar';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { getRouteById } from '../xplat/api';
-import placeholder_image from '../placeholder_image.jpg';
 import { useQuery } from 'react-query';
 import { buildRouteFetcher } from '../utils/queries';
 import { NaturalRules, RouteStatus, Tag } from '../xplat/types';
 import { queryClient } from '..';
+import placeholder_image from '../placeholder_image.jpg';
 
 const RouteView = () => {
     const [params] = useSearchParams();
@@ -79,10 +79,13 @@ const RouteView = () => {
                         <Button onPress={navToRouteFeed}>
                             <Text variant='button'>View Route Feed</Text>
                         </Button>
-                        {/* TODO: make this button only visible for Active Routes */}
-                        <Button onPress={archiveThisRoute}>
-                            <Text variant='button'>Archive This Route</Text>
-                        </Button>
+                        {data.status === RouteStatus.Active ?
+                            <Button onPress={archiveThisRoute}>
+                                <Text variant='button'>Archive This Route</Text>
+                            </Button>
+                            :
+                            null
+                        }
                     </Flex>
                     <Flex flexDir='row' justifyContent='center' width='100%'>
                         <Box width='30%' height='30%'>
