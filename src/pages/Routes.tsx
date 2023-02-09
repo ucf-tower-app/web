@@ -1,5 +1,5 @@
 import { NavBar } from '../components/NavigationBar';
-import { Box, Divider, Flex, Text, VStack } from 'native-base';
+import { Box, Divider, Flex, Text, VStack, Button } from 'native-base';
 import { useState, useEffect } from 'react';
 import { Route } from '../xplat/types/route';
 import { RouteRow } from '../components/RouteRow';
@@ -8,11 +8,13 @@ import { queryClient } from '../index';
 import { isError, useQuery } from 'react-query';
 import { buildRouteListFetcher } from '../utils/queries';
 import { CURSOR_INCREMENT, INITIAL_CURSOR_SIZE } from '../utils/constants';
+import CreateRoute from '../components/Route/CreateRoute';
 
 const Routes = () => {
   const [archivedRoutes, setArchivedRoutes] = useState<Route[]>([]);
   const [archivedCursor, setArchivedCursor] = useState<QueryCursor<Route> | undefined>();
   const [hasMore, setHasMore] = useState(false);
+  const [createRoutePopup, setCreateRoutePopup] = useState(false);
   const { isLoading, isError, data } = useQuery('routes', buildRouteListFetcher());
 
   async function fetchMoreArchivedRoutes() {
@@ -95,8 +97,12 @@ const Routes = () => {
     );
   }
   return (
-    <Box flexDir={'column'}>
+    <VStack height='100%'>
       <Box height={'50px'} marginBottom={1}><NavBar /></Box>
+      <Button onPress={() => setCreateRoutePopup(true)} 
+        position='sticky' m={1}>
+        <Text variant='button'>Create route</Text>
+      </Button>
       <Flex flexDirection='row' justifyContent='space-evenly' width='100%' top='50px'>
         <Flex flexDirection='row' justifyContent='center' width='30%'>
           <Flex flexDirection='column' alignItems='center' width='100%'>
@@ -127,7 +133,10 @@ const Routes = () => {
           </Flex>
         </Flex>
       </Flex>
-    </Box>
+      
+      <CreateRoute refreshRoutes={() => queryClient.invalidateQueries('routes')} 
+        isOpen={createRoutePopup} setIsOpen={setCreateRoutePopup}/>
+    </VStack>
   );
 };
 
