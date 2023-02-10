@@ -1,4 +1,4 @@
-import { Box, Text, Button, ScrollView } from 'native-base';
+import { Box, Text, Button, Flex, VStack } from 'native-base';
 import { Post } from '../../../xplat/types/post';
 import { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
@@ -7,17 +7,15 @@ import CommentDisplay from './CommentDisplay';
 import { buildCommentListFetcher } from '../../../utils/queries';
 import { QueryCursor } from '../../../xplat/types/queryCursors';
 import { CURSOR_INCREMENT } from '../../../utils/constants';
-
-// Calculates panel height based on screen height, excludes NavBar height
-const PanelHeight = (document.documentElement.clientHeight - 50 ) * 0.8;
+import '../../css/feed.css';
 
 const CommentPanel = ({ post }: { post: Post | undefined }) => {
   const [comments, setComments] = useState<Comment[] | undefined>();
   const [commentsCursor, setCommentsCursor] = useState<QueryCursor<Comment>>();
   const [hasMoreComments, setHasMoreComments] = useState<boolean>(false);
-  const { isLoading, isError, data } = useQuery(['comments', post?.docRef!.id], buildCommentListFetcher(post!), 
+  const { isLoading, isError, data } = useQuery(['comments', post!.docRef!.id], buildCommentListFetcher(post!), 
     { 
-      enabled: post !== undefined 
+      enabled: post !== undefined && post.docRef !== undefined,
     });
 
   async function fetchMoreComments() {
@@ -74,27 +72,32 @@ const CommentPanel = ({ post }: { post: Post | undefined }) => {
   }
 
   return (
-    <Box flexDir={'column'} margin={2} position='fixed' width={'22%'}>
+    <Box flexDir={'column'} top='100px' position='fixed' width={'25%'} height='100%'>
       {post !== undefined ?
-        <Box>
-          <Text alignSelf={'center'}>Comments</Text>
-          {comments === undefined || comments!.length === 0 ?
+        <>
+          <Box height='25px'>
+            <Text alignSelf={'center'} bold>Comments</Text>
+          </Box>
+          {comments === undefined || comments.length === 0 ?
             <Box marginTop={2}><Text alignSelf={'center'}>No comments just yet.</Text></Box>
             :
-            <Box position='relative' overflowY='scroll' height={PanelHeight}>
-              {comments?.map((value, index) => {
-                return (
-                  <Box key={index} margin={2}>
-                    <CommentDisplay comment={value} />
-                  </Box>
-                );
-              })}
-            </Box>
-           
-          }
-          {hasMoreComments && 
-            <Button onPress={fetchMoreComments} m='1'><Text variant='button'>Load More</Text></Button>}
-        </Box> :
+            <div className='comment-panel-container'>
+              <div className='comment-panel'>
+                {comments?.map((value, index) => {
+                  return (
+                    <Box key={index} margin={1}>
+                      <CommentDisplay comment={value} />
+                    </Box>
+                  );
+                })}
+                {hasMoreComments && 
+                  <Button onPress={fetchMoreComments} m='1'>
+                    <Text variant='button'>Load More</Text>
+                  </Button>}
+              </div>
+            </div>
+          } 
+        </> :
         <Box>
           <Text alignSelf={'center'}>No post selected</Text>
         </Box>}
