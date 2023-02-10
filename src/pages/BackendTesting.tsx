@@ -4,7 +4,7 @@ import '../App.css';
 import logo from '../logo.svg';
 
 import RouteDisplay from '../components/backend/RouteDisplay';
-import { createPost, createUser, getActiveRoutesCursor, getAllPostsCursor, getAllRoutesCursor, getAllTopropeRouteClassifiers, getCurrentUser, getRouteById, getSendById, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api';
+import { createPost, createUser, getActiveRoutesCursor, getAllPostsCursor, getAllRoutesCursor, getCurrentUser, getRouteById, getSendById, getUserByUsername, sendAuthEmail, signIn } from '../xplat/api';
 import { getTestMergePostsCursor } from '../xplat/types/queryCursors';
 
 const BackendTesting = () => {
@@ -46,7 +46,7 @@ const BackendTesting = () => {
       console.log(send);
       const prom = Promise.resolve('gaming');
       console.log(prom);
-      console.log(getAllTopropeRouteClassifiers().map((c) => c.displayString));
+      //console.log(getAllTopropeRouteClassifiers().map((c) => c.displayString));
       // console.log(getAllRouteClassifiers());
     };
     go();
