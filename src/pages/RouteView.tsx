@@ -7,10 +7,12 @@ import { buildRouteFetcher } from '../utils/queries';
 import { NaturalRules, RouteStatus, Tag } from '../xplat/types';
 import { queryClient } from '..';
 import placeholder_image from '../placeholder_image.jpg';
+import { useEffect, useState } from 'react';
 
 const RouteView = () => {
     const [params] = useSearchParams();
     const navigate = useNavigate();
+    const [displayTags, setDisplayTags] = useState<string>('none');
 
     const hasUID: boolean = params.has('uid');
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -24,6 +26,21 @@ const RouteView = () => {
             enabled: hasUID
         }
     );
+
+    useEffect(() => {
+        let tempDisplayTags = '';
+        data?.tags.forEach((currTag: Tag, index: number) => {
+            if (index > 0) {
+                // comma separate tags (skip putting one before the first guy)
+                tempDisplayTags += ', ';
+            }
+            tempDisplayTags += currTag.getName();
+        });
+        if (tempDisplayTags === '') {
+            tempDisplayTags = 'none';
+        }
+        setDisplayTags(tempDisplayTags);
+    }, [data]);
 
     if (!hasUID) {
         // with our navigation this should never happen, but can never be too safe?
@@ -48,26 +65,15 @@ const RouteView = () => {
         });
     };
 
-    const archiveThisRoute = () => {
+    const archiveThisRoute = async () => {
         // TODO: find a nice way to have the component rerender after these async calls
-        getRouteById(myUID).upgradeStatus().then(() =>
-            queryClient.invalidateQueries({ queryKey: ['routes', myUID] })
-        );
+        getRouteById(myUID).upgradeStatus().then(() => {
+            queryClient.invalidateQueries({ queryKey: ['routes', myUID] });
+        });
     };
 
     const notAssigned = 'not assigned';
     const displayNaturalRules = data.naturalRules ? NaturalRules[data.naturalRules] : notAssigned;
-    let displayTags = '';
-    data.tags.forEach((currTag: Tag, index: number) => {
-        if (index > 0) {
-            // comma separate tags (skip putting one before the first guy)
-            displayTags += ', ';
-        }
-        displayTags += currTag.getName();
-    });
-    if (displayTags == '') {
-        displayTags = 'none';
-    }
 
     return (
         <Box>
