@@ -13,7 +13,7 @@ const CommentPanel = ({ post }: { post: Post | undefined }) => {
   const [comments, setComments] = useState<Comment[] | undefined>();
   const [commentsCursor, setCommentsCursor] = useState<QueryCursor<Comment>>();
   const [hasMoreComments, setHasMoreComments] = useState<boolean>(false);
-  const { isLoading, isError, data } = useQuery(['comments', post!.docRef!.id], buildCommentListFetcher(post!), 
+  const { isLoading, isError, data } = useQuery(['comments', post], buildCommentListFetcher(post!), 
     { 
       enabled: post !== undefined && post.docRef !== undefined,
     });
