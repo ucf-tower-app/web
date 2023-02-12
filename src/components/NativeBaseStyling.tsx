@@ -86,12 +86,14 @@ const theme = extendTheme({
         displayname: {
           fontSize: 'md',
           color: 'black',
+          noOfLines: 1,
           justifyContent: 'center',
           alignSelf: 'center',
         },
         handle: {
           color: 'gray.400',
           fontSize: 'sm',
+          noOfLines: 1,
           justifyContent: 'center',
           alignSelf: 'center',
           flex: 1
