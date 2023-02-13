@@ -4,7 +4,7 @@ import { createSearchParams, useNavigate, useSearchParams } from 'react-router-d
 import { getRouteById } from '../xplat/api';
 import { useQuery } from 'react-query';
 import { buildRouteFetcher } from '../utils/queries';
-import { NaturalRules, RouteStatus, Tag } from '../xplat/types';
+import { NaturalRules, RouteStatus, Tag, invalidateDocRefId } from '../xplat/types';
 import { queryClient } from '..';
 import placeholder_image from '../placeholder_image.jpg';
 import { useEffect, useState } from 'react';
@@ -68,7 +68,9 @@ const RouteView = () => {
     const archiveThisRoute = async () => {
         // TODO: find a nice way to have the component rerender after these async calls
         getRouteById(myUID).upgradeStatus().then(() => {
+            // do these need to be in a particular order?
             queryClient.invalidateQueries({ queryKey: ['routes', myUID] });
+            invalidateDocRefId(myUID);
         });
     };
 
