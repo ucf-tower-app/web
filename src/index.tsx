@@ -7,12 +7,13 @@ import theme from './components/NativeBaseStyling';
 import './index.css';
 import Login from './pages/Login';
 import PageNotFound from './pages/PageNotFound';
+import RequireAuth from './utils/RequireAuth';
 
 const ComponentTesting = lazy(() => import('./pages/ComponentTesting'));
 const BackendTesting = lazy(() => import('./pages/BackendTesting'));
-const RouteFeed = lazy(() => import('./pages/RouteFeed'));
 const RoutesPage = lazy(() => import('./pages/Routes'));
 const RouteView = lazy(() => import('./pages/RouteView'));
+const RouteFeed = lazy(() => import('./pages/RouteFeed'));
 const Signup = lazy(() => import('./pages/Signup'));
 const Profile = lazy(() => import('./pages/Profile'));
 
@@ -37,10 +38,13 @@ root.render(
           <Routes>
             <Route path='/' element={<Login />} />
             <Route path='/signup' element={<Signup />} />
-            <Route path='/routes' element={<RoutesPage />} />
-            <Route path='/routefeed' element={<RouteFeed />} />
-            <Route path='/routeview' element={<RouteView />} />
-            <Route path='/profile' element={<Profile />} />
+            <Route element={<RequireAuth />}>
+              <Route path='/routes' element={<RoutesPage />} />
+              <Route path='/routeview' element={<RouteView />} />
+              <Route path='/routefeed' element={<RouteFeed />} />
+              <Route path='/profile' element={<Profile />} />
+            </Route>
+
             {window.location.hostname === 'localhost' &&
               <Route path='/backendtesting' element={<BackendTesting />} />}
             {window.location.hostname === 'localhost' &&

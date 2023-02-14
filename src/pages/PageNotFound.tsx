@@ -1,15 +1,15 @@
 import { Text, Box } from 'native-base';
 
 const PageNotFound = () => {
-    return (
+  return (
         
-        <Box alignSelf={'center'} alignItems={'center'} top='50vh'>
-            <Text fontSize={'large'}>
+    <Box alignSelf={'center'} alignItems={'center'} top='50vh'>
+      <Text fontSize={'large'}>
                 Error 404, page not found.
-            </Text>
-        </Box>
+      </Text>
+    </Box>
         
-    );
+  );
 };
 
 export default PageNotFound;
