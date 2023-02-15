@@ -6,12 +6,10 @@ import theme from './components/NativeBaseStyling';
 import './index.css';
 import Login from './pages/Login';
 import PageNotFound from './pages/PageNotFound';
-
 import FirebaseAuthContext from './utils/AuthContext';
 import ProtectedRoute from './utils/ProtectedRoute';
 
 const ComponentTesting = lazy(() => import('./pages/ComponentTesting'));
-const BackendTesting = lazy(() => import('./pages/BackendTesting'));
 const RouteFeed = lazy(() => import('./pages/RouteFeed'));
 const RoutesPage = lazy(() => import('./pages/Routes'));
 const Signup = lazy(() => import('./pages/Signup'));
@@ -43,9 +41,7 @@ const App = () => {
                   <Route path='/route' element={<RouteFeed/>}/>
                 </Route>
                 {window.location.hostname === 'localhost' &&
-                        <Route path='/backendtesting' element={<BackendTesting/>}/>}
-                {window.location.hostname === 'localhost' &&
-                        <Route path='/component' element={<ComponentTesting/>}/>}
+                  <Route path='/component' element={<ComponentTesting/>}/>}
                 <Route path='*' element={<PageNotFound/>}/>
               </Routes>
             </BrowserRouter>

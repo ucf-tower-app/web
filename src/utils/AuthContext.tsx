@@ -3,17 +3,17 @@ import {auth} from '../xplat/Firebase';
 import { User } from '../xplat/types';
 import { FetchedUser } from '../xplat/types';
 
-type authStateReturnType = ReturnType<typeof auth.onAuthStateChanged>;
-type authContext = {
+type AuthStateReturnType = ReturnType<typeof auth.onAuthStateChanged>;
+type AuthContextType = {
   userDataPresent:boolean, 
   user: FetchedUser | null, 
-  listener: authStateReturnType | null
+  listener: AuthStateReturnType | null
 };
 
-export const AuthContext= 
-  createContext<authContext>({userDataPresent:false,user:null,listener: null});
+export const AuthContext = createContext<AuthContextType>({userDataPresent:false,user:null,listener: null});
+
 export default function FirebaseAuthContext({children}: {children: JSX.Element[] | JSX.Element}){
-  const [state,changeState] = useState<authContext>({
+  const [state,changeState] = useState<AuthContextType>({
     userDataPresent:false,   
     user:null,
     listener:null
@@ -25,29 +25,21 @@ export default function FirebaseAuthContext({children}: {children: JSX.Element[]
     changeState(prevState=>({...prevState, user:fetched, userDataPresent: true}));
   }
 
-  useEffect(()=>{
-        
-    if(state.listener==null){
-        
-       
+  useEffect( () => {
+    if (state.listener === null){
       changeState({...state,listener:auth.onAuthStateChanged((user)=>{
-        if(user)
-        {
+        if (user !== null)
           setUser(user.uid);
-        }
         else
           changeState(oldState=>({...oldState,userDataPresent:false,user:null}));
-      })});
-        
+      })
+      });
     }
     return ()=>{
       if(state.listener)
         state.listener();
     };
-    
   },[]);
-  
-  
   
   return (
     <AuthContext.Provider value={state}>
