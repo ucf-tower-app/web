@@ -5,6 +5,8 @@ import { INITIAL_CURSOR_SIZE } from './constants';
 import { getRouteById } from '../xplat/api/route';
 import { getActiveRoutesCursor, getArchivedRoutesCursor, getUserById } from '../xplat/api';
 
+// TODO: delete this file
+
 type FetchedUser = {
     username: string;
     email: string;

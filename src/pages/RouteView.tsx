@@ -8,98 +8,97 @@ import { queryClient } from '..';
 import placeholder_image from '../placeholder_image.jpg';
 
 const RouteView = () => {
-    const [params] = useSearchParams();
-    const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
 
-    const hasUID: boolean = params.has('uid');
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const myUID: string = (hasUID ? params.get('uid')! : '');
+  const hasUID: boolean = params.has('uid');
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const myUID: string = (hasUID ? params.get('uid')! : '');
 
-    // TODO: migrate this fetcher to the one in xplat and delete the one in ../utils/queries
-    const { isLoading, isError, data, error } = useQuery(
-        ['routes', myUID],
-        Route.buildFetcherFromDocRefId(myUID),
-        {
-            enabled: hasUID
-        }
-    );
-
-    if (!hasUID) {
-        // with our navigation this should never happen, but can never be too safe?
-        console.error('no uid params given');
-        return null;
+  const { isLoading, isError, data, error } = useQuery(
+    ['routes', myUID],
+    Route.buildFetcherFromDocRefId(myUID),
+    {
+      enabled: hasUID
     }
+  );
 
-    if (isLoading) {
-        return null;
-    }
+  if (!hasUID) {
+    // with our navigation this should never happen, but can never be too safe?
+    console.error('no uid params given');
+    return null;
+  }
 
-    if (isError || data === undefined) {
-        console.error(error);
-        return null;
-    }
+  if (isLoading) {
+    return null;
+  }
 
-    const navToRouteFeed = () => {
-        const searchParams = { uid: myUID };
-        navigate({
-            pathname: '/routefeed',
-            search: `?${createSearchParams(searchParams)}`
-        });
-    };
+  if (isError || data === undefined) {
+    console.error(error);
+    return null;
+  }
 
-    const archiveThisRoute = async () => {
-        getRouteById(myUID).upgradeStatus().then(() => {
-            invalidateDocRefId(myUID);
-            queryClient.invalidateQueries({ queryKey: ['routes', myUID] });
-        });
-    };
+  const navToRouteFeed = () => {
+    navigate({
+      pathname: '/routefeed',
+      search: `?${createSearchParams({ uid: myUID })}`
+    });
+  };
 
-    const notAssigned = 'not assigned';
-    const displayNaturalRules = data.naturalRules ? NaturalRules[data.naturalRules] : notAssigned;
+  const archiveThisRoute = async () => {
+    getRouteById(myUID).upgradeStatus().then(() => {
+      invalidateDocRefId(myUID);
+      queryClient.invalidateQueries({ queryKey: ['routes', myUID] });
+    });
+  };
 
-    return (
-        <Box>
+  const notAssigned = 'not assigned';
+  const displayNaturalRules = data.naturalRules ? NaturalRules[data.naturalRules] : notAssigned;
+
+  return (
+    <Box>
+      <VStack>
+        <NavBar />
+        <Flex flexDir='column' justifyContent='center' top='70px' width='100%' position='fixed'>
+          <Center><Text fontSize='2xl' bold>{data.name}</Text></Center>
+          <Flex flexDir='row' justifyContent='center' width='100%'>
+            <Button onPress={navToRouteFeed}>
+              <Text variant='button'>View Route Feed</Text>
+            </Button>
+            {data.status === RouteStatus.Active ?
+              <Button onPress={archiveThisRoute}>
+                <Text variant='button'>Archive This Route</Text>
+              </Button>
+              :
+              null
+            }
+          </Flex>
+          <Flex flexDir='row' justifyContent='center' width='100%'>
+            <Box width='30%' height='30%'>
+              <img src={data.thumbnailUrl ?? placeholder_image} className='route-avatar' alt='route' />
+            </Box>
             <VStack>
-                <NavBar />
-                <Flex flexDir='column' justifyContent='center' top='70px' width='100%' position='fixed'>
-                    <Center><Text fontSize='2xl' bold>{data.name}</Text></Center>
-                    <Flex flexDir='row' justifyContent='center' width='100%'>
-                        <Button onPress={navToRouteFeed}>
-                            <Text variant='button'>View Route Feed</Text>
-                        </Button>
-                        {data.status === RouteStatus.Active ?
-                            <Button onPress={archiveThisRoute}>
-                                <Text variant='button'>Archive This Route</Text>
-                            </Button>
-                            :
-                            null
-                        }
-                    </Flex>
-                    <Flex flexDir='row' justifyContent='center' width='100%'>
-                        <Box width='30%' height='30%'>
-                            <img src={data.thumbnailUrl ?? placeholder_image} className='route-avatar' alt='route' />
-                        </Box>
-                        <VStack>
-                            <Text> Status: {RouteStatus[data.status]} </Text>
-                            <Text> Type: {data.classifier.type} </Text>
-                            <Text> Color: {data.color} </Text>
-                            <Text> Grade: {data.gradeDisplayString} </Text>
-                            <Text> Natural Rules: {displayNaturalRules} </Text>
-                            <Text> Tags: {data.stringifiedTags} </Text>
-                            <Text> Rope: {data.rope ?? notAssigned} </Text>
-                            <Text> Setter: {data.setterRawName ?? notAssigned} </Text>
-                            {/* TODO: make this a readable date format? Also it is not even accurate atm */}
-                            <Text> Date Set: {data.timestamp?.toDateString() ?? notAssigned} </Text>
-                            {/* <Text> Sends: {data.numSends} </Text> */}
-                            <Text> Likes: {data.likes.length} </Text>
-                            {/* TODO: make this stars field only visible to managers */}
-                            {/* <Text> Rating: {data.stars ?? 5} stars </Text> */}
-                        </VStack>
-                    </Flex>
-                </Flex>
+              <Text> Status: {RouteStatus[data.status]} </Text>
+              <Text> Type: {data.classifier.type} </Text>
+              <Text> Color: {data.color} </Text>
+              <Text> Grade: {data.gradeDisplayString} </Text>
+              <Text> Natural Rules: {displayNaturalRules} </Text>
+              <Text> Tags: {data.stringifiedTags} </Text>
+              <Text> Rope: {data.rope ?? notAssigned} </Text>
+              <Text> Setter: {data.setterRawName ?? notAssigned} </Text>
+              {/* TODO: make this a readable date format? Also it is not even accurate atm */}
+              <Text> Date Set: {data.timestamp?.toDateString() ?? notAssigned} </Text>
+              {/* TODO: put these fields in xplat fetcher */}
+              {/* <Text> Sends: {data.numSends} </Text> */}
+              <Text> Likes: {data.likes.length} </Text>
+              {/* TODO: make this stars field only visible to managers */}
+              {/* <Text> Rating: {data.stars ?? 5} stars </Text> */}
             </VStack>
-        </Box>
-    );
+          </Flex>
+        </Flex>
+      </VStack>
+    </Box>
+  );
 };
 
 export default RouteView;
