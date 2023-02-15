@@ -1,14 +1,12 @@
 import { NativeBaseProvider } from 'native-base';
-import { createContext, lazy, Suspense, useState } from 'react';
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
-import { auth } from './xplat/Firebase';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import theme from './components/NativeBaseStyling';
 import './index.css';
 import Login from './pages/Login';
 import PageNotFound from './pages/PageNotFound';
-import { FetchedUser, User } from './xplat/types';
-import { UserStatus } from './xplat/types';
+
 import FirebaseAuthContext from './utils/AuthContext';
 import ProtectedRoute from './utils/ProtectedRoute';
 

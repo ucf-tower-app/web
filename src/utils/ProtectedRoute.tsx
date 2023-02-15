@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import {AuthContext}from './AuthContext';
-import {Route, Navigate, Outlet} from 'react-router-dom';
+import {Navigate, Outlet} from 'react-router-dom';
 import { UserStatus } from '../xplat/types';
+import Loading from './Loading';
 
 export default function ProtectedRoute({redirectTo}: 
   {redirectTo: string}){
@@ -18,6 +19,6 @@ export default function ProtectedRoute({redirectTo}:
     }
   }
   else{
-    return <>No user is currently logged in</>;
+    return <Loading/>;
   }
 }

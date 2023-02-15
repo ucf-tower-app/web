@@ -1,15 +1,13 @@
 import { Button, FormControl, Input, Text, VStack, Select, HStack } from 'native-base';
 import { useState } from 'react';
-import { createRoute } from '../../xplat/api';
+import { convertCompetitionStringToClassifier, convertLeadclimbStringToClassifier, 
+  convertTopropeStringToClassifier, convertTraverseStringToClassifier, createRoute } from '../../xplat/api';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { User } from '../../xplat/types/user';
 import { RouteType, RouteClassifier, RouteColor, NaturalRules } from '../../xplat/types/route';
-import { getAllBoulderClassifiers, getAllTraverseRouteClassifiers, 
-  getAllCompetitionRouteClassifiers,
-  getAllLeadclimbRouteClassifiers,
-  getAllTopropeRouteClassifiers } from '../../xplat/api';
-
+import { getAllBoulderClassifiers, getAllTraverseRouteClassifiers, getAllRopeDifficulties,
+  getAllCompRouteClassifiers, getAllRopeModifiers, convertBoulderStringToClassifier} from '../../xplat/api';
 
 const RouteTypeToGetAllClassifiers = (type: RouteType) => {
   if (type === RouteType.Boulder)
@@ -17,11 +15,25 @@ const RouteTypeToGetAllClassifiers = (type: RouteType) => {
   if (type === RouteType.Traverse)
     return getAllTraverseRouteClassifiers();
   if (type === RouteType.Competition)
-    return getAllCompetitionRouteClassifiers();
-  if (type === RouteType.Leadclimb)
-    return getAllLeadclimbRouteClassifiers();
-  return getAllTopropeRouteClassifiers();
+    return getAllCompRouteClassifiers();
+  return getAllRopeDifficulties();
 };
+
+function handleRouteClassifier(type: RouteType, grade: string): RouteClassifier
+{
+  switch (type){
+  case RouteType.Boulder:
+    return convertBoulderStringToClassifier(grade);
+  case RouteType.Competition:
+    return convertCompetitionStringToClassifier(grade);
+  case RouteType.Leadclimb:
+    return convertLeadclimbStringToClassifier(grade);
+  case RouteType.Toprope:
+    return convertTopropeStringToClassifier(grade);
+  default:
+    return convertTraverseStringToClassifier(grade);
+  }
+}
 
 const Ropes = [
   '1', '2', '3', '4', '5', '6', '7', '8', '9'
@@ -40,7 +52,8 @@ const CreateRoute = ({refreshRoutes, isOpen, setIsOpen}: CreateRouteProps) => {
   const [name, setName] = useState<string>('');
   const [type, setType] = useState<RouteType>();
   const [rope, setRope] = useState<number>();
-  const [rawgrade, setRawgrade] = useState<number>();
+  const [rawgrade, setRawgrade] = useState<string>();
+  const [modifier, setModifier] = useState<string>('');
   const [description, setDescription] = useState<string>();
   const [rules, setRules] = useState<NaturalRules>();
   const [routeColor, setRouteColor] = useState<RouteColor>();
@@ -69,6 +82,7 @@ const CreateRoute = ({refreshRoutes, isOpen, setIsOpen}: CreateRouteProps) => {
   }
 
   async function submitRoute() {
+    
     // pacify data
     if (checkRouteData() === false)
       return;
@@ -76,7 +90,7 @@ const CreateRoute = ({refreshRoutes, isOpen, setIsOpen}: CreateRouteProps) => {
     createRoute(
       {
         name: name, 
-        classifier: new RouteClassifier(rawgrade!, type!), 
+        classifier: handleRouteClassifier(type!, rawgrade! + modifier), 
         setter: setter,
         setterRawName: overrideSetterString,
         description: description,
@@ -129,6 +143,7 @@ const CreateRoute = ({refreshRoutes, isOpen, setIsOpen}: CreateRouteProps) => {
             placeholder='Route type' onValueChange={ (value) => {
               const route_type = value as RouteType;
               setRawgrade(undefined);
+              setModifier('');
               setType(route_type);
             }}>
             {Object.values(RouteType).map( (routetype) => {
@@ -137,13 +152,28 @@ const CreateRoute = ({refreshRoutes, isOpen, setIsOpen}: CreateRouteProps) => {
           </Select>
           <FormControl.Label isRequired>Route grade</FormControl.Label>
           <Select isDisabled={type === undefined} placeholder='Route grade'
-            onValueChange={ (value) => setRawgrade(parseInt(value))}>
+            onValueChange={ (value) => setRawgrade(value)}>
             {type !== undefined &&
               RouteTypeToGetAllClassifiers(type).map( (value) => {
-                return <Select.Item value={''+value.rawgrade} label={value.displayString}
-                  key={value.displayString}/>;
+                if (value instanceof RouteClassifier)
+                {
+                  return <Select.Item value={''+value.displayString} label={value.displayString}
+                    key={value.displayString}/>;
+                }
+                
+                return <Select.Item value={value} label={value}
+                  key={value}/>;
               })
             }
+          </Select>
+          <FormControl.Label>Route Modifier</FormControl.Label>
+          <Select isDisabled={rawgrade === undefined || (type !== RouteType.Toprope && type !== RouteType.Leadclimb)} 
+            placeholder='Route grade modifier' onValueChange={(itemValue) => {
+              setModifier(itemValue);
+            }}>
+            {getAllRopeModifiers().map( (value) => {
+              return <Select.Item key={value} value={value} label={value}/>;
+            })}
           </Select>
           <FormControl.Label isRequired>Rope</FormControl.Label>
           <Select placeholder='Rope' onValueChange={ (ropeString) => setRope(parseInt(ropeString))}>
