@@ -22,7 +22,7 @@ export default function FirebaseAuthContext({children}: {children: JSX.Element[]
   async function setUser(userUID: string)
   {
     const fetched = await User.buildFetcherFromDocRefId(userUID)();
-    changeState({...state, user:fetched, userDataPresent: true});
+    changeState(prevState=>({...prevState, user:fetched, userDataPresent: true}));
   }
 
   useEffect(()=>{
@@ -36,7 +36,7 @@ export default function FirebaseAuthContext({children}: {children: JSX.Element[]
           setUser(user.uid);
         }
         else
-          changeState(oldState=>({...oldState,userDataPresent:true,user:null}));
+          changeState(oldState=>({...oldState,userDataPresent:false,user:null}));
       })});
         
     }

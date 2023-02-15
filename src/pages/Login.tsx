@@ -22,21 +22,7 @@ const Login =  () => {
     setPermissionError(false);
     await signIn(email, password).then( () => {
       // Signed in successfully
-      getCurrentUser().then((user) => {
-        // Check user status
-        user.getStatus().then((status: number) => {
-          if (status >= UserStatus.Employee)
-          {
-            navigate('/routes');
-            return;
-          }  
-          else
-          {
-            setPermissionError(true);
-            auth.signOut();
-          }
-        });
-      });
+      navigate('/routes');
     }).catch( (error) => {
       const errorMessage: string = error.message;
 
