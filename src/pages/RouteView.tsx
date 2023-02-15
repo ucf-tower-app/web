@@ -88,11 +88,10 @@ const RouteView = () => {
               <Text> Setter: {data.setterRawName ?? notAssigned} </Text>
               {/* TODO: make this a readable date format? Also it is not even accurate atm */}
               <Text> Date Set: {data.timestamp?.toDateString() ?? notAssigned} </Text>
-              {/* TODO: put these fields in xplat fetcher */}
-              {/* <Text> Sends: {data.numSends} </Text> */}
+              <Text> Sends: {data.numSends} </Text>
               <Text> Likes: {data.likes.length} </Text>
               {/* TODO: make this stars field only visible to managers */}
-              {/* <Text> Rating: {data.stars ?? 5} stars </Text> */}
+              <Text> Rating: {data.starRating ?? 5} stars </Text>
             </VStack>
           </Flex>
         </Flex>
