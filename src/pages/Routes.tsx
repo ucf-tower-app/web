@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Route } from '../xplat/types/route';
 import { RouteRow } from '../components/RouteRow';
 import { QueryCursor } from '../xplat/types';
-import { queryClient } from '../index';
+import { queryClient } from '../App';
 import { isError, useQuery } from 'react-query';
 import { buildRouteListFetcher } from '../utils/queries';
 import { CURSOR_INCREMENT, INITIAL_CURSOR_SIZE } from '../utils/constants';

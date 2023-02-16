@@ -4,7 +4,7 @@ import { createSearchParams, useNavigate, useSearchParams } from 'react-router-d
 import { getCurrentUser, getRouteById } from '../xplat/api';
 import { useQuery } from 'react-query';
 import { NaturalRules, Route, RouteStatus, User, UserStatus, invalidateDocRefId } from '../xplat/types';
-import { queryClient } from '..';
+import { queryClient } from '../App';
 import placeholder_image from '../placeholder_image.jpg';
 import { useEffect, useState } from 'react';
 import { buildUserByIDFetcher } from '../utils/queries';
