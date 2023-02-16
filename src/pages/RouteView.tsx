@@ -66,7 +66,6 @@ const RouteView = () => {
   };
 
   const notAssigned = 'not assigned';
-  const displayNaturalRules = routeQuery.data.naturalRules ? NaturalRules[routeQuery.data.naturalRules] : notAssigned;
 
   return (
     <Box>
@@ -96,7 +95,9 @@ const RouteView = () => {
               <Text> Type: {routeQuery.data.classifier.type} </Text>
               <Text> Color: {routeQuery.data.color} </Text>
               <Text> Grade: {routeQuery.data.gradeDisplayString} </Text>
-              <Text> Natural Rules: {displayNaturalRules} </Text>
+              <Text> Natural Rules: {
+                routeQuery.data.naturalRules ? NaturalRules[routeQuery.data.naturalRules] : notAssigned
+              } </Text>
               <Text> Tags: {routeQuery.data.stringifiedTags} </Text>
               <Text> Rope: {routeQuery.data.rope ?? notAssigned} </Text>
               <Text> Setter: {routeQuery.data.setterRawName ?? notAssigned} </Text>
