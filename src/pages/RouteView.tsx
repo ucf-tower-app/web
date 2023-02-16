@@ -7,12 +7,13 @@ import { NaturalRules, Route, RouteStatus, User, UserStatus, invalidateDocRefId 
 import { queryClient } from '..';
 import placeholder_image from '../placeholder_image.jpg';
 import { useEffect, useState } from 'react';
+import { buildUserByIDFetcher } from '../utils/queries';
 
 const RouteView = () => {
   const [params] = useSearchParams();
   const navigate = useNavigate();
   const [hasUserUID, setHasUserUID] = useState<boolean>(false);
-  const [userUID, setUserUID] = useState<string>('sugma'); // for some reason, it breaks using ''
+  const [userUID, setUserUID] = useState<string>('');
 
   const hasRouteUID: boolean = params.has('uid');
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -27,20 +28,23 @@ const RouteView = () => {
   );
 
   useEffect(() => {
-    const fetchData = async () => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      setUserUID((await getCurrentUser()).docRef!.id);
-      setHasUserUID(true);
+    const fetchUserUID = async () => {
+      getCurrentUser().then((user: User) => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        setUserUID(user.docRef!.id);
+        setHasUserUID(true);
+      });
     };
     // only refetch data if we have not set userID before
     if (!hasUserUID) {
-      fetchData();
+      fetchUserUID();
     }
   }, []);
 
+  // TODO: use xplat user fetcher once it gets updated
   const currUser = useQuery(
     ['currentUser', userUID],
-    User.buildFetcherFromDocRefId(userUID),
+    buildUserByIDFetcher(userUID),
     {
       enabled: hasUserUID,
     }
