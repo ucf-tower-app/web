@@ -19,7 +19,7 @@ const RouteView = () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const routeUID: string = (hasRouteUID ? params.get('uid')! : '');
 
-  const currRoute = useQuery(
+  const routeQuery = useQuery(
     ['routes', routeUID],
     Route.buildFetcherFromDocRefId(routeUID),
     {
@@ -42,7 +42,7 @@ const RouteView = () => {
   }, []);
 
   // TODO: use xplat user fetcher once it gets updated
-  const currUser = useQuery(
+  const userQuery = useQuery(
     ['currentUser', userUID],
     buildUserByIDFetcher(userUID),
     {
@@ -56,17 +56,17 @@ const RouteView = () => {
     return null;
   }
 
-  if (!hasUserUID || currRoute.isLoading || currUser.isLoading) {
+  if (!hasUserUID || routeQuery.isLoading || userQuery.isLoading) {
     return null;
   }
 
-  if (currRoute.isError || currRoute.data === undefined) {
-    console.error(currRoute.error);
+  if (routeQuery.isError || routeQuery.data === undefined) {
+    console.error(routeQuery.error);
     return null;
   }
 
-  if (currUser.isError || currUser.data === undefined) {
-    console.error(currUser.error);
+  if (userQuery.isError || userQuery.data === undefined) {
+    console.error(userQuery.error);
     return null;
   }
 
@@ -87,19 +87,19 @@ const RouteView = () => {
   };
 
   const notAssigned = 'not assigned';
-  const displayNaturalRules = currRoute.data.naturalRules ? NaturalRules[currRoute.data.naturalRules] : notAssigned;
+  const displayNaturalRules = routeQuery.data.naturalRules ? NaturalRules[routeQuery.data.naturalRules] : notAssigned;
 
   return (
     <Box>
       <VStack>
         <NavBar />
         <Flex flexDir='column' justifyContent='center' top='70px' width='100%' position='fixed'>
-          <Center><Text fontSize='2xl' bold>{currRoute.data.name}</Text></Center>
+          <Center><Text fontSize='2xl' bold>{routeQuery.data.name}</Text></Center>
           <Flex flexDir='row' justifyContent='center' width='100%'>
             <Button onPress={navToRouteFeed}>
               <Text variant='button'>View Route Feed</Text>
             </Button>
-            {currRoute.data.status === RouteStatus.Active ?
+            {routeQuery.data.status === RouteStatus.Active ?
               <Button onPress={archiveThisRoute}>
                 <Text variant='button'>Archive This Route</Text>
               </Button>
@@ -110,23 +110,23 @@ const RouteView = () => {
           <Flex flexDir='row' justifyContent='center' width='100%'>
             {/* TODO: make this image size properly */}
             <Box width='30%' height='30%'>
-              <img src={currRoute.data.thumbnailUrl ?? placeholder_image} className='route-avatar' alt='route' />
+              <img src={routeQuery.data.thumbnailUrl ?? placeholder_image} className='route-avatar' alt='route' />
             </Box>
             <VStack>
-              <Text> Status: {RouteStatus[currRoute.data.status]} </Text>
-              <Text> Type: {currRoute.data.classifier.type} </Text>
-              <Text> Color: {currRoute.data.color} </Text>
-              <Text> Grade: {currRoute.data.gradeDisplayString} </Text>
+              <Text> Status: {RouteStatus[routeQuery.data.status]} </Text>
+              <Text> Type: {routeQuery.data.classifier.type} </Text>
+              <Text> Color: {routeQuery.data.color} </Text>
+              <Text> Grade: {routeQuery.data.gradeDisplayString} </Text>
               <Text> Natural Rules: {displayNaturalRules} </Text>
-              <Text> Tags: {currRoute.data.stringifiedTags} </Text>
-              <Text> Rope: {currRoute.data.rope ?? notAssigned} </Text>
-              <Text> Setter: {currRoute.data.setterRawName ?? notAssigned} </Text>
+              <Text> Tags: {routeQuery.data.stringifiedTags} </Text>
+              <Text> Rope: {routeQuery.data.rope ?? notAssigned} </Text>
+              <Text> Setter: {routeQuery.data.setterRawName ?? notAssigned} </Text>
               {/* TODO: make this a readable date format? Also it is not even accurate atm */}
-              <Text> Date Set: {currRoute.data.timestamp?.toDateString() ?? notAssigned} </Text>
-              <Text> Sends: {currRoute.data.numSends} </Text>
-              <Text> Likes: {currRoute.data.likes.length} </Text>
-              {currUser.data.status >= UserStatus.Manager ?
-                <Text> Rating: {currRoute.data.starRating ?? 5} stars </Text>
+              <Text> Date Set: {routeQuery.data.timestamp?.toDateString() ?? notAssigned} </Text>
+              <Text> Sends: {routeQuery.data.numSends} </Text>
+              <Text> Likes: {routeQuery.data.likes.length} </Text>
+              {userQuery.data.status >= UserStatus.Manager ?
+                <Text> Rating: {routeQuery.data.starRating ?? 5} stars </Text>
                 :
                 null
               }
