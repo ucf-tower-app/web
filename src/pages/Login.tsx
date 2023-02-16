@@ -14,29 +14,15 @@ const Login =  () => {
   const [password, setPassword] = useState('');
   const [loginFailure, setLoginFailure] = useState(false);
   const [permissionError, setPermissionError] = useState(false);
-
+  
   async function attemptLogin() {
     console.log('running attemptLogin');
     setLoginFailure(false);
     setEmailError(false);
     setPermissionError(false);
-    await signIn(email, password).then( (userCredential) => {
+    await signIn(email, password).then( () => {
       // Signed in successfully
-      getCurrentUser().then((user) => {
-        // Check user status
-        user.getStatus().then((status: number) => {
-          if (status >= UserStatus.Employee)
-          {
-            navigate('/routes');
-            return;
-          }  
-          else
-          {
-            setPermissionError(true);
-            auth.signOut();
-          }
-        });
-      });
+      navigate('/routes');
     }).catch( (error) => {
       const errorMessage: string = error.message;
 
