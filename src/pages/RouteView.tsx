@@ -1,19 +1,18 @@
 import { Box, Button, Center, Flex, Text, VStack } from 'native-base';
 import { NavBar } from '../components/NavigationBar';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { getCurrentUser, getRouteById } from '../xplat/api';
+import { getRouteById } from '../xplat/api';
 import { useQuery } from 'react-query';
-import { NaturalRules, Route, RouteStatus, User, UserStatus, invalidateDocRefId } from '../xplat/types';
+import { NaturalRules, Route, RouteStatus, UserStatus, invalidateDocRefId } from '../xplat/types';
 import { queryClient } from '../App';
 import placeholder_image from '../placeholder_image.jpg';
-import { useEffect, useState } from 'react';
-import { buildUserByIDFetcher } from '../utils/queries';
+import { useContext } from 'react';
+import { AuthContext } from '../utils/AuthContext';
 
 const RouteView = () => {
   const [params] = useSearchParams();
   const navigate = useNavigate();
-  const [hasUserUID, setHasUserUID] = useState<boolean>(false);
-  const [userUID, setUserUID] = useState<string>('');
+  const authContext = useContext(AuthContext);
 
   const hasRouteUID: boolean = params.has('uid');
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -27,36 +26,13 @@ const RouteView = () => {
     }
   );
 
-  useEffect(() => {
-    const fetchUserUID = async () => {
-      getCurrentUser().then((user: User) => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        setUserUID(user.docRef!.id);
-        setHasUserUID(true);
-      });
-    };
-    // only refetch data if we have not set userID before
-    if (!hasUserUID) {
-      fetchUserUID();
-    }
-  }, []);
-
-  // TODO: use xplat user fetcher once it gets updated
-  const userQuery = useQuery(
-    ['currentUser', userUID],
-    buildUserByIDFetcher(userUID),
-    {
-      enabled: hasUserUID,
-    }
-  );
-
   if (!hasRouteUID) {
     // with our navigation this should never happen, but can never be too safe?
     console.error('no uid params given');
     return null;
   }
 
-  if (!hasUserUID || routeQuery.isLoading || userQuery.isLoading) {
+  if (routeQuery.isLoading) {
     return null;
   }
 
@@ -65,9 +41,12 @@ const RouteView = () => {
     return null;
   }
 
-  if (userQuery.isError || userQuery.data === undefined) {
-    console.error(userQuery.error);
-    return null;
+  if (authContext.user === null) {
+    return (
+      <Box h='100px'>
+        <Text>You are not currently logged in</Text>
+      </Box>
+    );
   }
 
   const navToRouteFeed = () => {
@@ -125,7 +104,7 @@ const RouteView = () => {
               <Text> Date Set: {routeQuery.data.timestamp?.toDateString() ?? notAssigned} </Text>
               <Text> Sends: {routeQuery.data.numSends} </Text>
               <Text> Likes: {routeQuery.data.likes.length} </Text>
-              {userQuery.data.status >= UserStatus.Manager ?
+              {authContext.user.status >= UserStatus.Manager ?
                 <Text> Rating: {routeQuery.data.starRating ?? 5} stars </Text>
                 :
                 null
