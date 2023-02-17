@@ -5,9 +5,11 @@ import { convertCompetitionStringToClassifier, convertLeadclimbStringToClassifie
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { User } from '../../xplat/types/user';
+import { compressImage } from '../../utils/CompressImage';
 import { RouteType, RouteClassifier, RouteColor, NaturalRules } from '../../xplat/types/route';
 import { getAllBoulderClassifiers, getAllTraverseRouteClassifiers, getAllRopeDifficulties,
   getAllCompRouteClassifiers, getAllRopeModifiers, convertBoulderStringToClassifier} from '../../xplat/api';
+import '../css/feed.css';
 
 const RouteTypeToGetAllClassifiers = (type: RouteType) => {
   if (type === RouteType.Boulder)
@@ -59,6 +61,7 @@ const CreateRoute = ({refreshRoutes, isOpen, setIsOpen}: CreateRouteProps) => {
   const [routeColor, setRouteColor] = useState<RouteColor>();
   const [confirmationBoxOpen, setConfirmationBoxOpen] = useState(false);
   const [thumbnailFile, setThumbnailFile] = useState<File>();
+  const [imageCompressing, setImageCompressing] = useState<boolean>(false);
   const [setter, setSetter] = useState<User>();
   const [overrideSetterBool, setOverrideSetterBool] = useState<boolean>(true);
   const [overrideSetterString, setOverrideSetterString] = useState<string>('');
@@ -67,7 +70,15 @@ const CreateRoute = ({refreshRoutes, isOpen, setIsOpen}: CreateRouteProps) => {
   function handleFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.files === null)
       return;
-    setThumbnailFile(event.target.files[0]);
+    setImageCompressing(true);
+    compressImage(event.target.files[0]).then( (compressedFile) => {
+      console.log('successfully compressed image');
+      setThumbnailFile(compressedFile);
+    }).catch( (err) => {
+      console.log('failed to compress image');
+      console.log(err);
+    });
+    setImageCompressing(false);
   }
 
   function checkRouteData(): boolean {
@@ -87,6 +98,7 @@ const CreateRoute = ({refreshRoutes, isOpen, setIsOpen}: CreateRouteProps) => {
     if (checkRouteData() === false)
       return;
     // check that no active route has the same name
+    
     createRoute(
       {
         name: name, 
@@ -132,12 +144,38 @@ const CreateRoute = ({refreshRoutes, isOpen, setIsOpen}: CreateRouteProps) => {
         </Popup>
       </div>
       <FormControl isInvalid={formError} p={1}>
-        <VStack space={1}>
+        <VStack space={1} overflowY='scroll' maxH='90vh'>
           <Text fontSize='lg' alignSelf='center'>Create a new Route</Text>
           <FormControl.Label isRequired>Route name</FormControl.Label>
           <Input isRequired type='text' onChangeText={setName} placeholder='Name'/>
           <FormControl.Label>Route Thumbnail</FormControl.Label>
-          <input type='file' accept='image/*' onChange={handleFileSelect}/>
+          { // if thumbnailFile is undefined, show select file input
+            thumbnailFile === undefined ? 
+              <>
+                { // show compression text if image is being compressed
+                  imageCompressing ?
+                    <Text variant='subtext'>Compressing image...</Text>
+                    :<>
+                      <input className='hidden-input' type='file'  id="file" accept='image/*'
+                        onChange={handleFileSelect}/>
+                      <label htmlFor="file" className='native-button'>Choose a file</label>
+                    </>
+                }
+                
+              </>
+              
+              :
+              // show thumbnail preview and remove button
+              <>
+                <img src={URL.createObjectURL(thumbnailFile)} alt='thumbnail' width='200px'/>
+                <HStack space='2'>
+                  <Text variant='subtext'>Thumbnail preview</Text>
+                  <button className='native-button' onClick={() => setThumbnailFile(undefined)}>
+                  Remove thumbnail
+                  </button>
+                </HStack>
+              </>
+          }
           <FormControl.Label isRequired>Route type</FormControl.Label>
           <Select selectedValue={type} accessibilityLabel='choose route type'
             placeholder='Route type' onValueChange={ (value) => {
