@@ -1,8 +1,13 @@
 import { HStack, VStack,  Box , Button, Text, Menu, Pressable, HamburgerIcon} from 'native-base';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { auth } from '../xplat/Firebase';
+import { useContext } from 'react';
+import { AuthContext } from '../utils/AuthContext';
+import './css/feed.css';
 
 export const NavBar = () => {
+  const [searchParams] = useSearchParams();
+  const authContext = useContext(AuthContext);
   const navigate = useNavigate();
   return (
     <Box height='1' zIndex={100}>
@@ -29,10 +34,18 @@ export const NavBar = () => {
               FAQ
             </Text>
           </Button>
-          <Box top={'15px'} right='1%' position={'fixed'}>
-            <Menu  trigger={triggerProps => {
+          <HStack right='1%' position={'fixed'} alignSelf='center' space={2}>
+            {authContext.user && <img src={authContext.user.avatarUrl} alt='profile' className='nav-avatar'
+              onClick={() => {
+                const path = window.location.href.split('?')[0];
+                if (path.endsWith('/profile') && searchParams.get('uid') === authContext.user!.docRefId)
+                  return;
+
+                navigate('/profile?uid=' + authContext.user?.docRefId);
+              }}/>}
+            <Menu trigger={triggerProps => {
               return <Pressable accessibilityLabel="Online session options" {...triggerProps} >
-                <HamburgerIcon size='lg' />
+                <HamburgerIcon position='relative' top={'5px'} size='lg' />
               </Pressable>;
             }}>
               <Menu.Item onPress={() => {
@@ -42,7 +55,7 @@ export const NavBar = () => {
                 
               }}>Logout</Menu.Item>
             </Menu>
-          </Box>
+          </HStack>
         </HStack>
       </VStack>
     </Box>
