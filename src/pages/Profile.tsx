@@ -9,15 +9,15 @@ import { NavBar } from '../components/NavigationBar';
 import { buildUserByIDFetcher } from '../utils/queries';
 import { CURSOR_INCREMENT } from '../utils/constants';
 
-const Profile = ({userOverride}: {userOverride?: string}) => {
+const Profile = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [postCursor, setPostCursor] = useState<QueryCursor<Post>>();
   const [hasMorePosts, setHasMorePosts] = useState(false);
   const [selectedPost, setSelectedPost] = useState<Post | undefined>();
   const [searchParams] = useSearchParams();
   const {isLoading, isError, data} = 
-        useQuery(['userprofile', {uid: userOverride ? userOverride : searchParams.get('uid')}], 
-          buildUserByIDFetcher(userOverride ? userOverride : searchParams.get('uid')!));
+        useQuery(['userprofile', {uid:  searchParams.get('uid')}], 
+          buildUserByIDFetcher(searchParams.get('uid')!));
 
   const handlePostClick = (post: Post) => {
     if (post === selectedPost)
