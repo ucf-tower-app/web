@@ -146,7 +146,7 @@ const CreateRoute = ({refreshRoutes, isOpen, setIsOpen}: CreateRouteProps) => {
       <FormControl isInvalid={formError} p={1}>
         <VStack space={1} overflowY='scroll' maxH='90vh'>
           <Text fontSize='lg' alignSelf='center'>Create a new Route</Text>
-          <FormControl.Label isRequired>Route name</FormControl.Label>
+          <FormControl.Label isRequired>Route Name</FormControl.Label>
           <Input isRequired type='text' onChangeText={setName} placeholder='Name'/>
           <FormControl.Label>Route Thumbnail</FormControl.Label>
           { // if thumbnailFile is undefined, show select file input
@@ -176,11 +176,11 @@ const CreateRoute = ({refreshRoutes, isOpen, setIsOpen}: CreateRouteProps) => {
                 </HStack>
               </>
           }
-          <FormControl.Label isRequired>Route type</FormControl.Label>
+          <FormControl.Label isRequired>Route Type</FormControl.Label>
           <Select selectedValue={type} accessibilityLabel='choose route type'
             placeholder='Route type' onValueChange={ (value) => {
               const route_type = value as RouteType;
-              setRawgrade(undefined);
+              setRawgrade('');
               setModifier('');
               setType(route_type);
             }}>
@@ -188,24 +188,32 @@ const CreateRoute = ({refreshRoutes, isOpen, setIsOpen}: CreateRouteProps) => {
               return <Select.Item key={routetype} label={routetype} value={routetype}/>;
             })}
           </Select>
-          <FormControl.Label isRequired>Route grade</FormControl.Label>
-          <Select isDisabled={type === undefined} placeholder='Route grade'
-            onValueChange={ (value) => setRawgrade(value)}>
+          <FormControl.Label isRequired>Route Grade</FormControl.Label>
+          <Select isDisabled={type === undefined} placeholder='Route grade' selectedValue={rawgrade}
+            onValueChange={ (value) => {
+              setRawgrade(value);
+              setModifier('');
+            }}>
             {type !== undefined &&
               RouteTypeToGetAllClassifiers(type).map( (value) => {
                 if (value instanceof RouteClassifier)
                 {
-                  return <Select.Item value={''+value.displayString} label={value.displayString}
-                    key={value.displayString}/>;
+                  return <Select.Item value={value.displayString} label={value.displayString}
+                    key={value.rawgrade}/>;
                 }
                 
                 return <Select.Item value={value} label={value}
-                  key={value}/>;
+                  key={type + ' ' + value}/>;
               })
             }
           </Select>
           <FormControl.Label>Route Modifier</FormControl.Label>
-          <Select isDisabled={rawgrade === undefined || (type !== RouteType.Toprope && type !== RouteType.Leadclimb)} 
+          <Select selectedValue={modifier} 
+            isDisabled={
+              (rawgrade === undefined || rawgrade === '') 
+              || 
+              (type !== RouteType.Toprope && type !== RouteType.Leadclimb)
+            } 
             placeholder='Route grade modifier' onValueChange={(itemValue) => {
               setModifier(itemValue);
             }}>
