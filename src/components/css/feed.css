@@ -7,6 +7,20 @@
     border: 1px solid black;
 }
 
+.nav-avatar {
+    border-radius: 100%;
+    width: 32px;
+    height: 32px;
+    align-self: center;
+    border: 1px solid black;
+    
+}
+
+.nav-avatar:hover {
+    border: 1px solid #0891B2;
+    cursor: pointer;
+}
+
 .avatar-profile {
     border-radius: 100%;
     width: 15%;
