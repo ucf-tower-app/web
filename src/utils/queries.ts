@@ -7,7 +7,6 @@ import { getActiveRoutesCursor, getArchivedRoutesCursor, getUserById } from '../
 
 type FetchedUser = {
     username: string;
-    email: string;
     displayName: string;
     bio: string;
     status: UserStatus;
@@ -23,7 +22,6 @@ export const buildUserFetcher = (user: User) => {
     await user.getData();
     return {
       username: await user.getUsername(),
-      email: await user.getEmail(),
       displayName: await user.getDisplayName(),
       bio: await user.getBio(),
       status: await user.getStatus(),
@@ -36,7 +34,6 @@ export const buildUserFetcher = (user: User) => {
 };
 export type FetchedUserProfile = {
     username: string;
-    email: string;
     displayName: string;
     bio: string;
     status: UserStatus;
@@ -66,7 +63,6 @@ export const buildUserByIDFetcher = (uid: string) => {
     }
     return  {
       username: await user.getUsername(),
-      email: await user.getEmail(),
       displayName: await user.getDisplayName(),
       hasMorePosts: hasNext,
       bio: await user.getBio(),
