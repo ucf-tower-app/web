@@ -90,7 +90,7 @@ const RouteView = () => {
             <Box width='30%' height='30%'>
               <img src={routeQuery.data.thumbnailUrl ?? placeholder_image} className='route-avatar' alt='route' />
             </Box>
-            <VStack>
+            <Flex flexDir='column' backgroundColor='#F1F1F1'>
               <Text> Status: {RouteStatus[routeQuery.data.status]} </Text>
               <Text> Type: {routeQuery.data.classifier.type} </Text>
               <Text> Color: {routeQuery.data.color} </Text>
@@ -110,7 +110,7 @@ const RouteView = () => {
                 :
                 null
               }
-            </VStack>
+            </Flex>
           </Flex>
         </Flex>
       </VStack>
