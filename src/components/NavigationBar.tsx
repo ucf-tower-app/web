@@ -49,9 +49,7 @@ export const NavBar = () => {
               </Pressable>;
             }}>
               <Menu.Item onPress={() => {
-                auth.signOut().then( () => {
-                  navigate('/');
-                });
+                auth.signOut();
                 
               }}>Logout</Menu.Item>
             </Menu>
