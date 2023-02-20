@@ -7,6 +7,20 @@
     border: 1px solid black;
 }
 
+.nav-avatar {
+    border-radius: 100%;
+    width: 32px;
+    height: 32px;
+    align-self: center;
+    border: 1px solid black;
+    
+}
+
+.nav-avatar:hover {
+    border: 1px solid #0891B2;
+    cursor: pointer;
+}
+
 .avatar-profile {
     border-radius: 100%;
     width: 15%;
@@ -19,6 +33,25 @@
     overflow: hidden;
     height: calc(100vh - 125px);
     justify-content: center;
+}
+
+.hidden-input {
+    display: none;
+}
+
+.native-button {
+    background-color: #0891B2;
+    color: white;
+    border: none;
+    width: fit-content;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
 .comment-panel {

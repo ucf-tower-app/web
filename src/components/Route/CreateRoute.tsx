@@ -7,11 +7,13 @@ import {
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { User } from '../../xplat/types/user';
+import { compressImage } from '../../utils/CompressImage';
 import { RouteType, RouteClassifier, RouteColor, NaturalRules } from '../../xplat/types/route';
 import {
   getAllBoulderClassifiers, getAllTraverseRouteClassifiers, getAllRopeDifficulties,
   getAllCompRouteClassifiers, getAllRopeModifiers, convertBoulderStringToClassifier
 } from '../../xplat/api';
+import '../css/feed.css';
 
 const RouteTypeToGetAllClassifiers = (type: RouteType) => {
   if (type === RouteType.Boulder)
@@ -62,6 +64,7 @@ const CreateRoute = ({ refreshRoutes, isOpen, setIsOpen }: CreateRouteProps) => 
   const [routeColor, setRouteColor] = useState<RouteColor>();
   const [confirmationBoxOpen, setConfirmationBoxOpen] = useState(false);
   const [thumbnailFile, setThumbnailFile] = useState<File>();
+  const [imageCompressing, setImageCompressing] = useState<boolean>(false);
   const [setter, setSetter] = useState<User>();
   const [overrideSetterBool, setOverrideSetterBool] = useState<boolean>(true);
   const [overrideSetterString, setOverrideSetterString] = useState<string>('');
@@ -70,7 +73,15 @@ const CreateRoute = ({ refreshRoutes, isOpen, setIsOpen }: CreateRouteProps) => 
   function handleFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.files === null)
       return;
-    setThumbnailFile(event.target.files[0]);
+    setImageCompressing(true);
+    compressImage(event.target.files[0]).then((compressedFile) => {
+      console.log('successfully compressed image');
+      setThumbnailFile(compressedFile);
+    }).catch((err) => {
+      console.log('failed to compress image');
+      console.log(err);
+    });
+    setImageCompressing(false);
   }
 
   function checkRouteData(): boolean {
@@ -133,17 +144,43 @@ const CreateRoute = ({ refreshRoutes, isOpen, setIsOpen }: CreateRouteProps) => 
         </Popup>
       </div>
       <FormControl isInvalid={formError} p={1}>
-        <VStack space={1}>
+        <VStack space={1} overflowY='scroll' maxH='90vh'>
           <Text fontSize='lg' alignSelf='center'>Create a new Route</Text>
-          <FormControl.Label isRequired>Route name</FormControl.Label>
+          <FormControl.Label isRequired>Route Name</FormControl.Label>
           <Input isRequired type='text' onChangeText={setName} placeholder='Name' />
           <FormControl.Label>Route Thumbnail</FormControl.Label>
-          <input type='file' accept='image/*' onChange={handleFileSelect} />
-          <FormControl.Label isRequired>Route type</FormControl.Label>
+          { // if thumbnailFile is undefined, show select file input
+            thumbnailFile === undefined ?
+              <>
+                { // show compression text if image is being compressed
+                  imageCompressing ?
+                    <Text variant='subtext'>Compressing image...</Text>
+                    : <>
+                      <input className='hidden-input' type='file' id="file" accept='image/*'
+                        onChange={handleFileSelect} />
+                      <label htmlFor="file" className='native-button'>Choose a file</label>
+                    </>
+                }
+
+              </>
+
+              :
+              // show thumbnail preview and remove button
+              <>
+                <img src={URL.createObjectURL(thumbnailFile)} alt='thumbnail' width='200px' />
+                <HStack space='2'>
+                  <Text variant='subtext'>Thumbnail preview</Text>
+                  <button className='native-button' onClick={() => setThumbnailFile(undefined)}>
+                    Remove thumbnail
+                  </button>
+                </HStack>
+              </>
+          }
+          <FormControl.Label isRequired>Route Type</FormControl.Label>
           <Select selectedValue={type} accessibilityLabel='choose route type'
             placeholder='Route type' onValueChange={(value) => {
               const route_type = value as RouteType;
-              setRawgrade(undefined);
+              setRawgrade('');
               setModifier('');
               setType(route_type);
             }}>
@@ -151,23 +188,31 @@ const CreateRoute = ({ refreshRoutes, isOpen, setIsOpen }: CreateRouteProps) => 
               return <Select.Item key={routetype} label={routetype} value={routetype} />;
             })}
           </Select>
-          <FormControl.Label isRequired>Route grade</FormControl.Label>
-          <Select isDisabled={type === undefined} placeholder='Route grade'
-            onValueChange={(value) => setRawgrade(value)}>
+          <FormControl.Label isRequired>Route Grade</FormControl.Label>
+          <Select isDisabled={type === undefined} placeholder='Route grade' selectedValue={rawgrade}
+            onValueChange={(value) => {
+              setRawgrade(value);
+              setModifier('');
+            }}>
             {type !== undefined &&
               RouteTypeToGetAllClassifiers(type).map((value) => {
                 if (value instanceof RouteClassifier) {
-                  return <Select.Item value={'' + value.displayString} label={value.displayString}
-                    key={value.displayString} />;
+                  return <Select.Item value={value.displayString} label={value.displayString}
+                    key={value.rawgrade} />;
                 }
 
                 return <Select.Item value={value} label={value}
-                  key={value} />;
+                  key={type + ' ' + value} />;
               })
             }
           </Select>
           <FormControl.Label>Route Modifier</FormControl.Label>
-          <Select isDisabled={rawgrade === undefined || (type !== RouteType.Toprope && type !== RouteType.Leadclimb)}
+          <Select selectedValue={modifier}
+            isDisabled={
+              (rawgrade === undefined || rawgrade === '')
+              ||
+              (type !== RouteType.Toprope && type !== RouteType.Leadclimb)
+            }
             placeholder='Route grade modifier' onValueChange={(itemValue) => {
               setModifier(itemValue);
             }}>

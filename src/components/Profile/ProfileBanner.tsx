@@ -114,9 +114,10 @@ const ProfileBanner = ({user}: {user: FetchedUserProfile | undefined}) => {
               {user.numFollowing} Following
             </Text>
           </HStack>
+          {authContext.user.docRefId !== user.userObject.docRef!.id &&  
           <Button position='absolute' bottom={2} onPress={() => setEditPermissionModal(true)}>
             <Text variant='button'>Edit User Permissions</Text>
-          </Button>
+          </Button>}
         </VStack>
       </HStack>
     </>

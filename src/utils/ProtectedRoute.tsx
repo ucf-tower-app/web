@@ -8,7 +8,7 @@ export default function ProtectedRoute({redirectTo}:
   {redirectTo: string}){
    
   const authValue = useContext(AuthContext);
-  if (authValue.userDataPresent){
+  if (authValue.waiting === false){
     if(authValue.user === null || authValue.user.status < UserStatus.Employee){
       return(<Navigate to={redirectTo}/>);
     }
