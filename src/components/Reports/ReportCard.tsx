@@ -12,16 +12,16 @@ import ReportedUser from './ReportedUser';
   * appropriate card.
 */
 
-const ReportCard = ({reported}: {reported: Post | Comment | User}) => {
-  if (reported instanceof User)
+const ReportCard = ({content, reporters}: {content: Post | Comment | User, reporters: User[]}) => {
+  if (content instanceof User)
   {
-    return <ReportedUser user={reported}/>;
+    return <ReportedUser user={content}/>;
   }
-  if (reported instanceof Post)
+  if (content instanceof Post)
   {
-    return <ReportedPost post={reported}/>;
+    return <ReportedPost post={content}/>;
   }
-  return <ReportedComment comment={reported}/>;
+  return <ReportedComment comment={content}/>;
 };
 
 export default ReportCard;

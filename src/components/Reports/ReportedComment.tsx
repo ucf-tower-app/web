@@ -1,4 +1,4 @@
-import { Comment } from '../../xplat/types';
+import { Comment, FetchedComment } from '../../xplat/types';
 
 
 const ReportedComment = ({comment}: {comment: Comment}) => {
