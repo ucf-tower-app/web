@@ -17,9 +17,19 @@ import { constructPageData, constructReportPageData, getIQParams_Reports, Report
   * Reported content will be grouped by content, will be sorted by date, and will show a list of reporters.
 */
 
+type ReportMap = Map<string, {content: User | Post | Comment, reporters: User[]}>;
+
 const Reports = () => {
   const [reportedContent, setReportedContent] = 
-    useState<Set<ReportedContent>>(new Set<ReportedContent>());
+    useState<ReportMap>(new Map<string, {content: User | Post | Comment, reporters: User[]}>());
+
+  const updateMap = (content: User | Post | Comment, reporter: User) => {
+    const fetchedReport = reportedContent.get(content.getId());
+    const fetchedReporters = fetchedReport === undefined ? [] : fetchedReport.reporters;
+    fetchedReporters.push(reporter);
+    setReportedContent(new Map(reportedContent.set(content.getId(), {content: content, reporters: fetchedReporters})));
+  };
+  
   const modHistory = 
     useInfiniteQuery(getIQParams_ModHistory());
   
@@ -40,22 +50,27 @@ const Reports = () => {
 
 
     const _reports = reports.data.pages.flatMap( page => constructReportPageData(page));
-    
+    console.log(_reports);
+    _reports.forEach( report => {
+      updateMap(report.content, report.reporter);
+    });
   }, [reports.data]);
   
 
   return (
     <VStack>
       <Box height='50px' marginBottom={1}><NavBar/></Box>
-      <Text variant='header' bold alignSelf='center'>Reported Content</Text>
+      <Text fontSize='3xl' bold alignSelf='center'>Reported Content</Text>
 
       <FlatList
         data={Array.from(reportedContent)}
         renderItem={({ item }) => (
-          <ReportCard content={item.content} reporters={item.reporters}/>
+          <ReportCard content={item[1].content} reporters={item[1].reporters}/>
         )}
         keyExtractor={(item, index) => {
-          return item.content.getId();
+          if (item[0] === undefined)
+            return index.toString();
+          return item[1].content.getId();
         }}
       />
     </VStack>

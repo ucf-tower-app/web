@@ -19,7 +19,7 @@ const ReportCard = ({content, reporters}: {content: Post | Comment | User, repor
   }
   if (content instanceof Post)
   {
-    return <ReportedPost post={content}/>;
+    return <ReportedPost post={content} reporters={reporters}/>;
   }
   return <ReportedComment comment={content}/>;
 };
