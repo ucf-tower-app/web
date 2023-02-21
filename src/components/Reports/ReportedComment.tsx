@@ -14,13 +14,11 @@ const ReportedComment = ({comment}: {comment: Comment}) => {
     return <></>;
 
   return (
-    <>
-      <Box flexDir={'column'} p={1} background={'primary.200'} borderRadius={'md'} borderWidth={1}>
-        <AuthorHandle author={data.author}/>
-        <Text fontSize={'sm'}>{data.textContent}</Text>
-        <Text fontSize={'xs'} color='gray.400'>{data.timestamp.toLocaleString()}</Text>
-      </Box>
-    </>
+    <Box flexDir={'column'} p={1} background={'primary.200'} borderRadius={'md'} borderWidth={1} w='40%'>
+      <AuthorHandle author={data.author}/>
+      <Text fontSize={'sm'}>{data.textContent}</Text>
+      <Text fontSize={'xs'} color='gray.400'>{data.timestamp.toLocaleString()}</Text>
+    </Box>
   );
 };
 

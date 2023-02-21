@@ -1,4 +1,4 @@
-import { Text, Box, VStack, HStack, FlatList } from 'native-base';
+import { Text, Box, VStack, HStack, FlatList, Divider, Button } from 'native-base';
 import { useEffect, useState } from 'react';
 import { queryClient } from '../App';
 import { getIQParams_ModHistory } from '../xplat/queries/modHistory';
@@ -29,6 +29,12 @@ const Reports = () => {
     fetchedReporters.push(reporter);
     setReportedContent(new Map(reportedContent.set(content.getId(), {content: content, reporters: fetchedReporters})));
   };
+
+  async function loadNewReports()
+  {
+    if (reports.hasNextPage && !reports.isFetchingNextPage)
+      await reports.fetchNextPage();
+  }
   
   const modHistory = 
     useInfiniteQuery(getIQParams_ModHistory());
@@ -39,7 +45,6 @@ const Reports = () => {
   useEffect( () => {
     if (modHistory.data === undefined)
       return;
-    
     
     
   }, [modHistory.data]);
@@ -58,22 +63,35 @@ const Reports = () => {
   
 
   return (
+    
     <VStack>
       <Box height='50px' marginBottom={1}><NavBar/></Box>
       <Text fontSize='3xl' bold alignSelf='center'>Reported Content</Text>
 
-      <FlatList
-        data={Array.from(reportedContent)}
-        renderItem={({ item }) => (
-          <ReportCard content={item[1].content} reporters={item[1].reporters}/>
-        )}
-        keyExtractor={(item, index) => {
-          if (item[0] === undefined)
-            return index.toString();
-          return item[1].content.getId();
-        }}
-      />
+      <HStack>
+        <Box flexDir='column' minW='15%' maxW='30%'>
+          <Text variant='header'textAlign='center' bold>Mod Action History</Text>
+          <Button alignSelf='center'>
+            <Text variant='button'>Show History</Text>
+          </Button>
+        </Box>
+        <Divider h='70vh' orientation='vertical'/>
+        <FlatList
+          data={Array.from(reportedContent)}
+          renderItem={({ item }) => (
+            <ReportCard content={item[1].content} reporters={item[1].reporters}/>
+          )}
+          keyExtractor={(item, index) => {
+            if (item[0] === undefined)
+              return index.toString();
+            return item[1].content.getId();
+          }}
+          onEndReached={loadNewReports}
+          onEndReachedThreshold={0.9}
+        />
+      </HStack>
     </VStack>
+    
   );
 };
 

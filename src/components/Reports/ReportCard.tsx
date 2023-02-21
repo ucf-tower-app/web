@@ -2,6 +2,7 @@ import { Post, User, Comment } from '../../xplat/types';
 import ReportedComment from './ReportedComment';
 import ReportedPost from './ReportedPost';
 import ReportedUser from './ReportedUser';
+import { ArrowForwardIcon, HStack, Text } from 'native-base';
 
 /*
   * Users can report content that they believe should not be hosted on the Tower app.
@@ -13,15 +14,32 @@ import ReportedUser from './ReportedUser';
 */
 
 const ReportCard = ({content, reporters}: {content: Post | Comment | User, reporters: User[]}) => {
+
+  function showReporters() {
+    undefined;
+  }
+
+  let contentjsx: JSX.Element = <></>;
   if (content instanceof User)
   {
-    return <ReportedUser user={content}/>;
-  }
+    contentjsx = <ReportedUser user={content}/>;
+  } else
   if (content instanceof Post)
   {
-    return <ReportedPost post={content} reporters={reporters}/>;
-  }
-  return <ReportedComment comment={content}/>;
+    contentjsx =  <ReportedPost post={content} reporters={reporters}/>;
+  } else
+    contentjsx =  <ReportedComment comment={content}/>;
+
+  return (
+    <HStack justifyContent='center'>
+      {contentjsx}
+      <ArrowForwardIcon size='lg' alignSelf='center'/>
+      <Text variant='body' alignSelf='center'>
+        This was reported by{' '}
+        <Text underline onPress={() => showReporters()}>{reporters.length} users.</Text>
+      </Text>
+    </HStack>
+  );
 };
 
 export default ReportCard;
