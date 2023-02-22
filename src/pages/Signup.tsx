@@ -1,11 +1,11 @@
-import { Text, Box, Input, Button, HStack, FormControl, Modal} from 'native-base';
+import { Box, Button, FormControl, HStack, Input, Text } from 'native-base';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createUser, isKnightsEmail, sendAuthEmail} from '../xplat/api';
-import { auth } from '../xplat/Firebase';
-import logo from '../logo.svg';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import logo from '../logo.svg';
+import { auth } from '../xplat/Firebase';
+import { createUser, isKnightsEmail, sendAuthEmail } from '../xplat/api';
 
 const Signup =  () => {
   const navigate = useNavigate();

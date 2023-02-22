@@ -1,9 +1,19 @@
-import { UserStatus } from '../xplat/types/common';
-import { User, QueryCursor, Post, Route, 
-  Forum, RouteStatus, Comment, RouteType, Tag, Send } from '../xplat/types';
-import { INITIAL_CURSOR_SIZE } from './constants';
-import { getRouteById } from '../xplat/api/route';
 import { getActiveRoutesCursor, getArchivedRoutesCursor, getUserById } from '../xplat/api';
+import { getRouteById } from '../xplat/api/route';
+import {
+  Comment,
+  Forum,
+  Post,
+  QueryCursor,
+  Route,
+  RouteStatus,
+  RouteType,
+  Send,
+  Tag,
+  User
+} from '../xplat/types';
+import { UserStatus } from '../xplat/types/common';
+import { INITIAL_CURSOR_SIZE } from './constants';
 
 type FetchedUser = {
     username: string;
@@ -23,7 +33,7 @@ export const buildUserFetcher = (user: User) => {
     await user.getData();
     return {
       username: await user.getUsername(),
-      email: await user.getEmail(),
+      // email: await user.getEmail(),
       displayName: await user.getDisplayName(),
       bio: await user.getBio(),
       status: await user.getStatus(),
@@ -66,7 +76,7 @@ export const buildUserByIDFetcher = (uid: string) => {
     }
     return  {
       username: await user.getUsername(),
-      email: await user.getEmail(),
+      // email: await user.getEmail(),
       displayName: await user.getDisplayName(),
       hasMorePosts: hasNext,
       bio: await user.getBio(),
