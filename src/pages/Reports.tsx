@@ -85,14 +85,14 @@ const Reports = () => {
       <Box height='50px' marginBottom={1}><NavBar/></Box>
       <Text fontSize='3xl' bold alignSelf='center'>Reported Content</Text>
       <HStack>
-        <Box flexDir='column' minW='15%' maxW='30%'>
+        <Box flexDir='column' w='25%'>
           <Text variant='header'textAlign='center' bold>Mod Action History</Text>
           <Button alignSelf='center'>
             <Text variant='button'>Show History</Text>
           </Button>
         </Box>
         <Divider h='70vh' orientation='vertical'/>
-        <Box marginX='auto' minW='50%' maxW='80%'>
+        <Box marginX='auto' w='60%'>
           <FlatList
             marginTop={1}
             data={Array.from(reportedContent)}

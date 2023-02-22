@@ -4,7 +4,7 @@ import { Box, Text, HStack, FavouriteIcon, Pressable, ArrowForwardIcon, VStack }
 import AuthorHandle from '../User/AuthorHandle';
 import PostMedia from '../Post/PostMedia';
 
-const ReportedPost = ({post, reporters}: {post: Post, reporters: User[]}) => {
+const ReportedPost = ({post}: {post: Post}) => {
   const {data, isLoading, isError} = useQuery<FetchedPost>(['post', post.getId()], () => post.fetch());
 
   if (isLoading)

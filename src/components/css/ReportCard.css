@@ -1,6 +1,7 @@
 
 .reporter-handle {
   text-decoration: underline;
+  color: white;
 }
 
 .reporter-handle:hover {

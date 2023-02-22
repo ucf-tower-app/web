@@ -3,7 +3,7 @@ import ReportedComment from './ReportedComment';
 import ReportedPost from './ReportedPost';
 import ReportedUser from './ReportedUser';
 import { ArrowForwardIcon, HStack, Text, Button, Box } from 'native-base';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import '../css/ReportCard.css';
@@ -20,32 +20,34 @@ import AuthorHandle from '../User/AuthorHandle';
 
 const ReportCard = ({content, reporters}: {content: Post | Comment | User, reporters: User[]}) => {
   const [author, setAuthor] = useState<User | undefined>(undefined);
+  const [contentjsx, setContentjsx] = useState<JSX.Element>(<></>);
 
   const handleGetAuthor = async (content: Post | Comment) => {
     setAuthor(await content.getAuthor());
   };
 
-  let contentjsx: JSX.Element = <></>;
-  if (content instanceof User)
-  {
-    contentjsx = <ReportedUser user={content}/>;
-    setAuthor(content);
-  } else
-  if (content instanceof Post)
-  {
-    contentjsx =  <ReportedPost post={content} reporters={reporters}/>;
-    handleGetAuthor(content);
-  } else{
-    contentjsx =  <ReportedComment comment={content}/>;
-    handleGetAuthor(content);
-  }
+  useEffect(() => {
+    if (content instanceof User)
+    {
+      setContentjsx(<ReportedUser user={content}/>);
+      setAuthor(content);
+    } else
+    if (content instanceof Post)
+    {
+      setContentjsx(<ReportedPost post={content}/>);
+      handleGetAuthor(content);
+    } else{
+      setContentjsx(<ReportedComment comment={content}/>);
+      handleGetAuthor(content);
+    }
+  }, []);
     
 
   return (
     <HStack justifyContent='space-evenly'>
       {contentjsx}
       <ArrowForwardIcon size='lg' alignSelf='center' color='white'/>
-      <Text variant='body' alignSelf='center'>
+      <Text variant='body' alignSelf='center' color='white'>
         This was reported by{' '}
         <Popup
           position='bottom center'
