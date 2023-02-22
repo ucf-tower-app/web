@@ -3,10 +3,13 @@ import ReportedComment from './ReportedComment';
 import ReportedPost from './ReportedPost';
 import ReportedUser from './ReportedUser';
 import { ArrowForwardIcon, HStack, Text, Button, Box } from 'native-base';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../../utils/AuthContext';
+import { queryClient } from '../../App';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import '../css/ReportCard.css';
+import { ModerationAction } from '../../pages/Reports';
 import AuthorHandle from '../User/AuthorHandle';
 
 /*
@@ -20,6 +23,8 @@ import AuthorHandle from '../User/AuthorHandle';
 
 const ReportCard = ({content, reporters}: {content: Post | Comment | User, reporters: User[]}) => {
   const [author, setAuthor] = useState<User | undefined>(undefined);
+  const [confirmationOpen, setConfirmationOpen] = useState<boolean>(false);
+  const [moderationAction, setModerationAction] = useState<ModerationAction>(ModerationAction.None);
   const [contentjsx, setContentjsx] = useState<JSX.Element>(<></>);
 
   const handleGetAuthor = async (content: Post | Comment) => {
@@ -45,6 +50,8 @@ const ReportCard = ({content, reporters}: {content: Post | Comment | User, repor
 
   return (
     <HStack justifyContent='space-evenly'>
+      <ConfirmationPopup content={content} open={confirmationOpen} 
+        setOpen={setConfirmationOpen} type={moderationAction}/>
       {contentjsx}
       <ArrowForwardIcon size='lg' alignSelf='center' color='white'/>
       <Text variant='body' alignSelf='center' color='white'>
@@ -63,7 +70,10 @@ const ReportCard = ({content, reporters}: {content: Post | Comment | User, repor
       </Text>
       <HStack alignSelf='center' space={1}>
         <Button>
-          <Text variant='button'>Absolve</Text>
+          <Text variant='button' onPress={() => {
+            setModerationAction(ModerationAction.Absolve);
+            setConfirmationOpen(true);
+          }}>Absolve</Text>
         </Button>
         <Button>
           <Text variant='button'>Delete</Text>
@@ -73,6 +83,55 @@ const ReportCard = ({content, reporters}: {content: Post | Comment | User, repor
         </Button>
       </HStack>
     </HStack>
+  );
+};
+
+
+const ConfirmationPopup = ({content, open, setOpen,  type}: 
+  {content: Post | Comment | User, open: boolean, setOpen: (arg0: boolean) => void, type: ModerationAction}) => {
+  
+  const authContext = useContext(AuthContext);
+
+  if (type === ModerationAction.None)
+    return <></>;
+  
+  if (authContext.user === null)
+    return <></>;
+
+  return (
+    <Popup modal open={open} onClose={() => setOpen(false)}>
+      <Box p={4} bg='white' rounded='md'>
+        <Text variant='header' color='black' bold alignSelf='center'>
+          Confirm
+        </Text>
+        <Text variant='body' color='black'>
+          Are you sure you want to {
+            type === ModerationAction.Absolve ? 'absolve' :
+              type === ModerationAction.Delete ? 'delete' :
+                'ban'
+          }?
+        </Text>
+        <HStack justifyContent='center' mt={4}>
+          <Button onPress={() => {
+            setOpen(false);
+          }}>
+            <Text variant='button'>Cancel</Text>
+          </Button>
+          <Button onPress={() => {
+            if (type === ModerationAction.Absolve)
+            {
+              authContext.user?.userObject.clearAllReports(content).then(() => {
+                queryClient.invalidateQueries('reports', {refetchActive: true, refetchInactive: true});
+                setOpen(false);
+              });
+            }
+          }}>
+            <Text variant='button'>Confirm</Text>
+          </Button>
+        </HStack>
+
+      </Box>
+    </Popup>
   );
 };
 

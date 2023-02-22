@@ -17,6 +17,13 @@ import { constructReportPageData, getIQParams_Reports } from '../xplat/queries';
   * Reported content will be grouped by content, will be sorted by date, and will show a list of reporters.
 */
 
+export enum ModerationAction {
+  None,
+  Absolve, 
+  Delete, 
+  Ban
+}
+
 function UserAlreadyInReported(user: User, reporters: User[]): boolean
 {
   let res = false;
