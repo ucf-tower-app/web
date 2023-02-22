@@ -5,8 +5,8 @@ import { getIQParams_ModHistory } from '../xplat/queries/modHistory';
 import { useInfiniteQuery } from 'react-query';
 import ReportCard from '../components/Reports/ReportCard';
 import { NavBar } from '../components/NavigationBar';
-import { User, Post, Comment, FetchedUser, FetchedComment, FetchedPost } from '../xplat/types';
-import { constructPageData, constructReportPageData, getIQParams_Reports, ReportedContent } from '../xplat/queries';
+import { User, Post, Comment} from '../xplat/types';
+import { constructReportPageData, getIQParams_Reports } from '../xplat/queries';
 
 /*
   * Users can report content that they believe should not be hosted on the Tower app.
@@ -17,6 +17,20 @@ import { constructPageData, constructReportPageData, getIQParams_Reports, Report
   * Reported content will be grouped by content, will be sorted by date, and will show a list of reporters.
 */
 
+function UserAlreadyInReported(user: User, reporters: User[]): boolean
+{
+  let res = false;
+  reporters.forEach( (reporter) => {
+    //console.log(user.getId() + ' ' + reporter.getId());
+    if (reporter.getId() === user.getId())
+    {
+      res = true;
+      return;
+    }
+  });
+  return res;
+}
+
 type ReportMap = Map<string, {content: User | Post | Comment, reporters: User[]}>;
 
 const Reports = () => {
@@ -26,7 +40,8 @@ const Reports = () => {
   const updateMap = (content: User | Post | Comment, reporter: User) => {
     const fetchedReport = reportedContent.get(content.getId());
     const fetchedReporters = fetchedReport === undefined ? [] : fetchedReport.reporters;
-    fetchedReporters.push(reporter);
+    if (!UserAlreadyInReported(reporter, fetchedReporters))
+      fetchedReporters.push(reporter);
     setReportedContent(new Map(reportedContent.set(content.getId(), {content: content, reporters: fetchedReporters})));
   };
 
@@ -55,10 +70,12 @@ const Reports = () => {
 
 
     const _reports = reports.data.pages.flatMap( page => constructReportPageData(page));
-    console.log(_reports);
+    //console.log(_reports);
     _reports.forEach( report => {
       updateMap(report.content, report.reporter);
     });
+
+    //console.log(_reports);
   }, [reports.data]);
   
 
@@ -67,7 +84,6 @@ const Reports = () => {
     <VStack>
       <Box height='50px' marginBottom={1}><NavBar/></Box>
       <Text fontSize='3xl' bold alignSelf='center'>Reported Content</Text>
-
       <HStack>
         <Box flexDir='column' minW='15%' maxW='30%'>
           <Text variant='header'textAlign='center' bold>Mod Action History</Text>
@@ -76,19 +92,26 @@ const Reports = () => {
           </Button>
         </Box>
         <Divider h='70vh' orientation='vertical'/>
-        <FlatList
-          data={Array.from(reportedContent)}
-          renderItem={({ item }) => (
-            <ReportCard content={item[1].content} reporters={item[1].reporters}/>
-          )}
-          keyExtractor={(item, index) => {
-            if (item[0] === undefined)
-              return index.toString();
-            return item[1].content.getId();
-          }}
-          onEndReached={loadNewReports}
-          onEndReachedThreshold={0.9}
-        />
+        <Box marginX='auto' minW='50%' maxW='80%'>
+          <FlatList
+            marginTop={1}
+            data={Array.from(reportedContent)}
+            renderItem={({ item, index }) => (
+              <Box bg={index % 2 == 0 ? 'red.500' : 'red.400'}
+                rounded='md' marginY={1}>
+                <ReportCard content={item[1].content} reporters={Array.from(item[1].reporters)}/>
+              </Box>
+          
+            )}
+            keyExtractor={(item, index) => {
+              if (item[0] === undefined)
+                return index.toString();
+              return item[1].content.getId();
+            }}
+            onEndReached={loadNewReports}
+            onEndReachedThreshold={0.9}
+          />
+        </Box>
       </HStack>
     </VStack>
     

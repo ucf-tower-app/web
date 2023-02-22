@@ -1,0 +1,8 @@
+
+.reporter-handle {
+  text-decoration: underline;
+}
+
+.reporter-handle:hover {
+  cursor: pointer;
+}
