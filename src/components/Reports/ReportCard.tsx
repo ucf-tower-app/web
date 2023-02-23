@@ -87,12 +87,15 @@ const ReportCard = ({content, reporters}: {content: Post | Comment | User, repor
   );
 };
 
+type ConfirmationPopupProps = {
+  content: Post | Comment | User, 
+  author: User,
+  open: boolean, 
+  setOpen: (arg0: boolean) => void, 
+  type: ModerationAction
+};
 
-const ConfirmationPopup = ({content, author, open, setOpen,  type}: 
-  {
-    content: Post | Comment | User, author: User,
-    open: boolean, setOpen: (arg0: boolean) => void, type: ModerationAction
-  }) => {
+const ConfirmationPopup = ({content, author, open, setOpen,  type}: ConfirmationPopupProps) => {
   const [modReason, setModReason] = useState('');
   const [password, setPassword] = useState('');
   const authContext = useContext(AuthContext);
@@ -126,7 +129,7 @@ const ConfirmationPopup = ({content, author, open, setOpen,  type}:
             if (type === ModerationAction.Absolve)
             {
               authContext.user?.userObject.clearAllReports(content).then(() => {
-                queryClient.invalidateQueries(['reports']);
+                queryClient.invalidateQueries({queryKey: ['reports']});
                 setOpen(false);
               });
             }
@@ -134,7 +137,7 @@ const ConfirmationPopup = ({content, author, open, setOpen,  type}:
             if (type === ModerationAction.Ban)
             {
               authContext.user?.userObject.banUser(author, modReason, password).then( () => {
-                queryClient.invalidateQueries(['reports']);
+                queryClient.invalidateQueries({queryKey: ['reports']});
                 setOpen(false);
               });
             }

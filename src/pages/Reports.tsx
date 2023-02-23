@@ -43,12 +43,16 @@ const Reports = () => {
   const [reportedContent, setReportedContent] = 
     useState<ReportMap>(new Map<string, {content: User | Post | Comment, reporters: User[]}>());
 
-  const updateMap = (content: User | Post | Comment, reporter: User) => {
-    const fetchedReport = reportedContent.get(content.getId());
-    const fetchedReporters = fetchedReport === undefined ? [] : fetchedReport.reporters;
-    if (!UserAlreadyInReported(reporter, fetchedReporters))
-      fetchedReporters.push(reporter);
-    setReportedContent(new Map(reportedContent.set(content.getId(), {content: content, reporters: fetchedReporters})));
+  const setNewMap = (reports: {content: User | Post | Comment, reporter: User}[] ) => {
+    const newMap = new Map<string, {content: User | Post | Comment, reporters: User[]}>();
+    reports.forEach( report => {
+      const fetchedReport = newMap.get(report.content.getId());
+      const fetchedReporters = fetchedReport === undefined ? [] : fetchedReport.reporters;
+      if (!UserAlreadyInReported(report.reporter, fetchedReporters))
+        fetchedReporters.push(report.reporter);
+      newMap.set(report.content.getId(), {content: report.content, reporters: fetchedReporters});
+    });
+    setReportedContent(newMap);
   };
 
   async function loadNewReports()
@@ -74,14 +78,8 @@ const Reports = () => {
     if (reports.data === undefined)
       return;
 
-
     const _reports = reports.data.pages.flatMap( page => constructReportPageData(page));
-    //console.log(_reports);
-    _reports.forEach( report => {
-      updateMap(report.content, report.reporter);
-    });
-
-    //console.log(_reports);
+    setNewMap(_reports);
   }, [reports.data]);
   
 
