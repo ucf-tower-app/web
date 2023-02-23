@@ -1,6 +1,5 @@
 import { Text, Box, VStack, HStack, FlatList, Divider, Button } from 'native-base';
 import { useEffect, useState } from 'react';
-import { queryClient } from '../App';
 import { getIQParams_ModHistory } from '../xplat/queries/modHistory';
 import { useInfiniteQuery } from 'react-query';
 import ReportCard from '../components/Reports/ReportCard';
@@ -105,7 +104,7 @@ const Reports = () => {
             data={Array.from(reportedContent)}
             renderItem={({ item, index }) => (
               <Box bg={index % 2 == 0 ? 'red.500' : 'red.400'}
-                rounded='md' marginY={1}>
+                rounded='md' marginY={1} p={1}>
                 <ReportCard content={item[1].content} reporters={Array.from(item[1].reporters)}/>
               </Box>
           

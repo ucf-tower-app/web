@@ -1,6 +1,6 @@
-import { Post, FetchedPost, User} from '../../xplat/types';
+import { Post, FetchedPost} from '../../xplat/types';
 import { useQuery } from 'react-query';
-import { Box, Text, HStack, FavouriteIcon, Pressable, ArrowForwardIcon, VStack } from 'native-base';
+import { Box, Text, HStack, FavouriteIcon, Pressable } from 'native-base';
 import AuthorHandle from '../User/AuthorHandle';
 import PostMedia from '../Post/PostMedia';
 
@@ -15,7 +15,7 @@ const ReportedPost = ({post}: {post: Post}) => {
     return <></>;
 
   return (
-    <Box p={1} m={1} background={'primary.200'} 
+    <Box p={1} background={'primary.200'} 
       width='40%' borderRadius={'md'} borderWidth={1} alignSelf={'center'}>
       <AuthorHandle author={data.author}/>
       <Text flexWrap={'wrap'} noOfLines={4} p={1} fontSize='md'>{data.textContent}</Text>

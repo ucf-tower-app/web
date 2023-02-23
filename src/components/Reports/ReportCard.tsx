@@ -47,11 +47,12 @@ const ReportCard = ({content, reporters}: {content: Post | Comment | User, repor
     }
   }, []);
     
+  
 
   return (
     <HStack justifyContent='space-evenly'>
-      <ConfirmationPopup content={content} open={confirmationOpen} 
-        setOpen={setConfirmationOpen} type={moderationAction}/>
+      {author !== undefined && <ConfirmationPopup content={content} open={confirmationOpen} 
+        setOpen={setConfirmationOpen} type={moderationAction} author={author}/>}
       {contentjsx}
       <ArrowForwardIcon size='lg' alignSelf='center' color='white'/>
       <Text variant='body' alignSelf='center' color='white'>
@@ -87,9 +88,13 @@ const ReportCard = ({content, reporters}: {content: Post | Comment | User, repor
 };
 
 
-const ConfirmationPopup = ({content, open, setOpen,  type}: 
-  {content: Post | Comment | User, open: boolean, setOpen: (arg0: boolean) => void, type: ModerationAction}) => {
-  
+const ConfirmationPopup = ({content, author, open, setOpen,  type}: 
+  {
+    content: Post | Comment | User, author: User,
+    open: boolean, setOpen: (arg0: boolean) => void, type: ModerationAction
+  }) => {
+  const [modReason, setModReason] = useState('');
+  const [password, setPassword] = useState('');
   const authContext = useContext(AuthContext);
 
   if (type === ModerationAction.None)
@@ -121,7 +126,15 @@ const ConfirmationPopup = ({content, open, setOpen,  type}:
             if (type === ModerationAction.Absolve)
             {
               authContext.user?.userObject.clearAllReports(content).then(() => {
-                queryClient.invalidateQueries('reports', {refetchActive: true, refetchInactive: true});
+                queryClient.invalidateQueries(['reports']);
+                setOpen(false);
+              });
+            }
+            else
+            if (type === ModerationAction.Ban)
+            {
+              authContext.user?.userObject.banUser(author, modReason, password).then( () => {
+                queryClient.invalidateQueries(['reports']);
                 setOpen(false);
               });
             }
