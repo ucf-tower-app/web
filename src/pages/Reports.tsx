@@ -97,24 +97,34 @@ const Reports = () => {
         </Box>
         <Divider h='70vh' orientation='vertical'/>
         <Box marginX='auto' w='60%'>
-          <FlatList
-            marginTop={1}
-            data={Array.from(reportedContent)}
-            renderItem={({ item, index }) => (
-              <Box bg={index % 2 == 0 ? 'red.500' : 'red.400'}
-                rounded='md' marginY={1} p={1}>
-                <ReportCard content={item[1].content} reporters={Array.from(item[1].reporters)}/>
-              </Box>
+          {reportedContent.size === 0 ? 
+            <Box position='absolute' alignSelf='center' justifyContent='center'>
+              <Text alignSelf='center' variant='header'>No reported content.</Text>
+              <Button onPress={() => reports.refetch()}>
+                <Text variant='button'>
+                  Refresh
+                </Text>
+              </Button>
+            </Box>
+            :
+            <FlatList
+              marginTop={1}
+              data={Array.from(reportedContent)}
+              renderItem={({ item, index }) => (
+                <Box bg={index % 2 == 0 ? 'red.500' : 'red.400'}
+                  rounded='md' marginY={1} p={1}>
+                  <ReportCard content={item[1].content} reporters={Array.from(item[1].reporters)}/>
+                </Box>
           
-            )}
-            keyExtractor={(item, index) => {
-              if (item[0] === undefined)
-                return index.toString();
-              return item[1].content.getId();
-            }}
-            onEndReached={loadNewReports}
-            onEndReachedThreshold={0.9}
-          />
+              )}
+              keyExtractor={(item, index) => {
+                if (item[0] === undefined)
+                  return index.toString();
+                return item[1].content.getId();
+              }}
+              onEndReached={loadNewReports}
+              onEndReachedThreshold={0.9}
+            />}
         </Box>
       </HStack>
     </VStack>

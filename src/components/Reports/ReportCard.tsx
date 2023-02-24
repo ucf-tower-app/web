@@ -2,7 +2,7 @@ import { Post, User, Comment } from '../../xplat/types';
 import ReportedComment from './ReportedComment';
 import ReportedPost from './ReportedPost';
 import ReportedUser from './ReportedUser';
-import { ArrowForwardIcon, HStack, Text, Button, Box } from 'native-base';
+import { ArrowForwardIcon, HStack, Text, Button, Box, Input } from 'native-base';
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../../utils/AuthContext';
 import { queryClient } from '../../App';
@@ -46,6 +46,13 @@ const ReportCard = ({content, reporters}: {content: Post | Comment | User, repor
       handleGetAuthor(content);
     }
   }, []);
+
+  useEffect( () => {
+    if (confirmationOpen === false)
+    {
+      setModerationAction(ModerationAction.None);
+    }
+  }, [confirmationOpen]);
     
   
 
@@ -70,16 +77,22 @@ const ReportCard = ({content, reporters}: {content: Post | Comment | User, repor
         </Popup>
       </Text>
       <HStack alignSelf='center' space={1}>
-        <Button>
-          <Text variant='button' onPress={() => {
-            setModerationAction(ModerationAction.Absolve);
-            setConfirmationOpen(true);
-          }}>Absolve</Text>
+        <Button onPress={() => {
+          setModerationAction(ModerationAction.Absolve);
+          setConfirmationOpen(true);
+        }}>
+          <Text variant='button' >Absolve</Text>
         </Button>
-        <Button>
+        <Button onPress={() => {
+          setModerationAction(ModerationAction.Delete);
+          setConfirmationOpen(true);
+        }}>
           <Text variant='button'>Delete</Text>
         </Button>
-        <Button>
+        <Button onPress={() => {
+          setModerationAction(ModerationAction.Ban);
+          setConfirmationOpen(true);
+        }}>
           <Text variant='button'>Ban</Text>
         </Button>
       </HStack>
@@ -100,6 +113,14 @@ const ConfirmationPopup = ({content, author, open, setOpen,  type}: Confirmation
   const [password, setPassword] = useState('');
   const authContext = useContext(AuthContext);
 
+  useEffect( () => {
+    if (open === false)
+    {
+      setPassword('');
+      setModReason('');
+    }
+  }, [open]);
+
   if (type === ModerationAction.None)
     return <></>;
   
@@ -112,13 +133,21 @@ const ConfirmationPopup = ({content, author, open, setOpen,  type}: Confirmation
         <Text variant='header' color='black' bold alignSelf='center'>
           Confirm
         </Text>
-        <Text variant='body' color='black'>
+        <Text variant='body' color='black' alignSelf='center'>
           Are you sure you want to {
-            type === ModerationAction.Absolve ? 'absolve' :
-              type === ModerationAction.Delete ? 'delete' :
-                'ban'
-          }?
+            type === ModerationAction.Absolve ? 'absolve this content' :
+              type === ModerationAction.Delete ? 'delete this content' :
+                'ban this user'
+          }? <Text variant='body' color='black' bold>This cannot be undone</Text>
         </Text>
+        {(type === ModerationAction.Ban || type === ModerationAction.Delete) &&
+          <Input onChangeText={setModReason} multiline w='50%' alignSelf='center' placeholder='Reason for ban' mt={4}/>
+        }
+        {
+          type === ModerationAction.Ban && 
+          <Input type='password' placeholder='Password'
+            alignSelf='center' w='50%' marginTop={1} onChangeText={setPassword}/>
+        }
         <HStack justifyContent='center' mt={4}>
           <Button onPress={() => {
             setOpen(false);
@@ -139,13 +168,21 @@ const ConfirmationPopup = ({content, author, open, setOpen,  type}: Confirmation
               authContext.user?.userObject.banUser(author, modReason, password).then( () => {
                 queryClient.invalidateQueries({queryKey: ['reports']});
                 setOpen(false);
+              }).catch( (reason) => {
+                alert(reason);
+              });
+            }
+            else // Delete
+            {
+              authContext.user?.userObject.deleteReportedContent(content, modReason).then(() => {
+                queryClient.invalidateQueries({queryKey: ['reports']});
+                setOpen(false);
               });
             }
           }}>
             <Text variant='button'>Confirm</Text>
           </Button>
         </HStack>
-
       </Box>
     </Popup>
   );
