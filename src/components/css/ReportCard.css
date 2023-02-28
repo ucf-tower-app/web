@@ -1,4 +1,3 @@
-
 .reporter-handle {
   text-decoration: underline;
   color: white;
@@ -6,4 +5,20 @@
 
 .reporter-handle:hover {
   cursor: pointer;
+}
+
+.modaction-container {
+  width: 100%;
+  overflow: hidden;
+  height: calc(100vh - 125px);
+  justify-content: center;
+}
+
+.modaction-panel {
+  width: 100%;
+  height: inherit;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scroll-snap-align: start;
+  padding: 0 10px;
 }

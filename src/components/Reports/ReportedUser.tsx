@@ -8,7 +8,7 @@ const ReportedUser = ({user}: {user: User}) => {
   if (isLoading)
   {
     return (
-      <Box>
+      <Box bg='primary.200' p={1} rounded='md' w='40%' borderColor='black' borderWidth='1'>
         <Text>
           Loading user details
         </Text>
@@ -19,7 +19,7 @@ const ReportedUser = ({user}: {user: User}) => {
   if (data === undefined || isError)
   {
     return (
-      <Box>
+      <Box bg='primary.200' p={1} rounded='md' w='40%' borderColor='black' borderWidth='1'>
         <Text>
           Error loading user details.
         </Text>
