@@ -73,7 +73,7 @@ const RouteView = () => {
         <NavBar />
         <Flex flexDir='column' justifyContent='center' top='70px' width='100%' position='fixed'>
           <Center><Text fontSize='2xl' bold>{routeQuery.data.name}</Text></Center>
-          <Flex flexDir='row' justifyContent='center' width='100%'>
+          <Flex flexDir='row' justifyContent='center' width='100%' marginTop={1}>
             <Button onPress={navToRouteFeed}>
               <Text variant='button'>View Route Feed</Text>
             </Button>
@@ -85,31 +85,33 @@ const RouteView = () => {
               null
             }
           </Flex>
-          <Flex flexDir='row' justifyContent='center' width='100%'>
+          <Flex flexDir='row' justifyContent='center' width='100%' marginTop={3}>
             {/* TODO: make this image size properly */}
             <Box width='30%' height='30%'>
               <img src={routeQuery.data.thumbnailUrl ?? placeholder_image} className='route-avatar' alt='route' />
             </Box>
-            <Flex flexDir='column' backgroundColor='#F1F1F1'>
-              <Text> Status: {RouteStatus[routeQuery.data.status]} </Text>
-              <Text> Type: {routeQuery.data.classifier.type} </Text>
-              <Text> Color: {routeQuery.data.color} </Text>
-              <Text> Grade: {routeQuery.data.gradeDisplayString} </Text>
-              <Text> Natural Rules: {
-                routeQuery.data.naturalRules ? NaturalRules[routeQuery.data.naturalRules] : notAssigned
-              } </Text>
-              <Text> Tags: {routeQuery.data.stringifiedTags} </Text>
-              <Text> Rope: {routeQuery.data.rope ?? notAssigned} </Text>
-              <Text> Setter: {routeQuery.data.setterRawName ?? notAssigned} </Text>
-              {/* TODO: make this a readable date format? Also it is not even accurate atm */}
-              <Text> Date Set: {routeQuery.data.timestamp?.toDateString() ?? notAssigned} </Text>
-              <Text> Sends: {routeQuery.data.numSends} </Text>
-              <Text> Likes: {routeQuery.data.likes.length} </Text>
-              {authContext.user.status >= UserStatus.Manager ?
-                <Text> Rating: {routeQuery.data.starRating ?? 5} stars </Text>
-                :
-                null
-              }
+            <Flex backgroundColor='gray.300' rounded='md' p='1' marginLeft={3}>
+              <Flex flexDir='column' margin={2}>
+                <Text> <Text bold>Status: </Text>{RouteStatus[routeQuery.data.status]}</Text>
+                <Text> <Text bold>Type: </Text>{routeQuery.data.classifier.type} </Text>
+                <Text> <Text bold>Color: </Text>{routeQuery.data.color} </Text>
+                <Text> <Text bold>Grade: </Text>{routeQuery.data.gradeDisplayString} </Text>
+                <Text> <Text bold>Natural Rules: </Text>{
+                  routeQuery.data.naturalRules ? NaturalRules[routeQuery.data.naturalRules] : notAssigned
+                } </Text>
+                <Text> <Text bold>Tags: </Text>{routeQuery.data.stringifiedTags} </Text>
+                <Text> <Text bold>Rope: </Text>{routeQuery.data.rope ?? notAssigned} </Text>
+                <Text> <Text bold>Setter: </Text>{routeQuery.data.setterRawName ?? notAssigned} </Text>
+                {/* TODO: make this a readable date format? Also it is not even accurate atm */}
+                <Text> <Text bold>Date Set: </Text>{routeQuery.data.timestamp?.toDateString() ?? notAssigned} </Text>
+                <Text> <Text bold>Sends: </Text>{routeQuery.data.numSends} </Text>
+                <Text> <Text bold>Likes: </Text>{routeQuery.data.likes.length} </Text>
+                {authContext.user.status >= UserStatus.Manager ?
+                  <Text> <Text bold>Rating: </Text>{routeQuery.data.starRating ?? 5} stars </Text>
+                  :
+                  null
+                }
+              </Flex>
             </Flex>
           </Flex>
         </Flex>
