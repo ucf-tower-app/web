@@ -1,4 +1,4 @@
-import { Box, Button, Center, Flex, Text, VStack } from 'native-base';
+import { Box, Button, Center, Flex, HStack, Text, VStack } from 'native-base';
 import { NavBar } from '../components/NavigationBar';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { getRouteById } from '../xplat/api';
@@ -86,36 +86,31 @@ const RouteView = () => {
               null
             }
           </Flex>
-          <Flex flexDir='row' justifyContent='center' width='100%' marginTop={3}>
-            {/* TODO: make this image size properly */}
-            <Box width='30%' height='30%'>
-              <img src={data.thumbnailUrl ?? placeholder_image} className='route-avatar' alt='route' />
-            </Box>
-            <Flex backgroundColor='gray.300' rounded='md' p='1' marginLeft={3}>
-              <Flex flexDir='column' margin={2}>
-                <Text><Text bold>Status: </Text>{RouteStatus[data.status]}</Text>
-                <Text><Text bold>Type: </Text>{data.classifier.type}</Text>
-                <Text><Text bold>Color: </Text>{data.color}</Text>
-                <Text><Text bold>Grade: </Text>{data.gradeDisplayString}</Text>
-                <Text><Text bold>Natural Rules: </Text>{
-                  data.naturalRules ? NaturalRules[data.naturalRules] : notAssigned
-                }</Text>
-                <Text><Text bold>Tags: </Text>{
-                  data.stringifiedTags === '' ? notAssigned : data.stringifiedTags
-                }</Text>
-                <Text><Text bold>Rope: </Text>{data.rope ?? notAssigned}</Text>
-                <Text><Text bold>Setter: </Text>{data.setterRawName ?? notAssigned}</Text>
-                <Text><Text bold>Date Set: </Text>{data.timestamp?.toLocaleDateString() ?? notAssigned}</Text>
-                <Text><Text bold>Sends: </Text>{data.numSends}</Text>
-                <Text><Text bold>Likes: </Text>{data.likes.length}</Text>
-                {authContext.user.status >= UserStatus.Manager ?
-                  <Text><Text bold>Rating: </Text>{(data.starRating ?? 5).toFixed(1)} stars </Text>
-                  :
-                  null
-                }
-              </Flex>
+          <HStack justifyContent='center' alignSelf='center' marginTop={3}>
+            <img src={data.thumbnailUrl ?? placeholder_image} className='route-view-avatar' alt='route' />
+            <Flex backgroundColor='gray.300' flexDir='column' rounded='md' p='2' marginLeft={3}>
+              <Text><Text bold>Status: </Text>{RouteStatus[data.status]}</Text>
+              <Text><Text bold>Type: </Text>{data.classifier.type}</Text>
+              <Text><Text bold>Color: </Text>{data.color}</Text>
+              <Text><Text bold>Grade: </Text>{data.gradeDisplayString}</Text>
+              <Text><Text bold>Natural Rules: </Text>{
+                data.naturalRules ? NaturalRules[data.naturalRules] : notAssigned
+              }</Text>
+              <Text><Text bold>Tags: </Text>{
+                data.stringifiedTags === '' ? notAssigned : data.stringifiedTags
+              }</Text>
+              <Text><Text bold>Rope: </Text>{data.rope ?? notAssigned}</Text>
+              <Text><Text bold>Setter: </Text>{data.setterRawName ?? notAssigned}</Text>
+              <Text><Text bold>Date Set: </Text>{data.timestamp?.toLocaleDateString() ?? notAssigned}</Text>
+              <Text><Text bold>Sends: </Text>{data.numSends}</Text>
+              <Text><Text bold>Likes: </Text>{data.likes.length}</Text>
+              {authContext.user.status >= UserStatus.Manager ?
+                <Text><Text bold>Rating: </Text>{(data.starRating ?? 5).toFixed(1)} stars </Text>
+                :
+                null
+              }
             </Flex>
-          </Flex>
+          </HStack>
         </Flex>
       </VStack>
     </Box>
