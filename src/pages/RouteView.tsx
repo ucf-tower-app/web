@@ -105,8 +105,7 @@ const RouteView = () => {
                 }</Text>
                 <Text><Text bold>Rope: </Text>{data.rope ?? notAssigned}</Text>
                 <Text><Text bold>Setter: </Text>{data.setterRawName ?? notAssigned}</Text>
-                {/* TODO: make this a readable date format? Also it is not even accurate atm */}
-                <Text><Text bold>Date Set: </Text>{data.timestamp?.toDateString() ?? notAssigned}</Text>
+                <Text><Text bold>Date Set: </Text>{data.timestamp?.toLocaleDateString() ?? notAssigned}</Text>
                 <Text><Text bold>Sends: </Text>{data.numSends}</Text>
                 <Text><Text bold>Likes: </Text>{data.likes.length}</Text>
                 {authContext.user.status >= UserStatus.Manager ?
