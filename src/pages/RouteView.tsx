@@ -18,8 +18,8 @@ const RouteView = () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const routeUID: string = (hasRouteUID ? params.get('uid')! : '');
 
-  const routeQuery = useQuery(
-    ['routes', routeUID],
+  const { isLoading, isError, error, data } = useQuery(
+    routeUID,
     Route.buildFetcherFromDocRefId(routeUID),
     {
       enabled: hasRouteUID,
@@ -32,12 +32,12 @@ const RouteView = () => {
     return null;
   }
 
-  if (routeQuery.isLoading) {
+  if (isLoading) {
     return null;
   }
 
-  if (routeQuery.isError || routeQuery.data === undefined) {
-    console.error(routeQuery.error);
+  if (isError || data === undefined) {
+    console.error(error);
     return null;
   }
 
@@ -61,7 +61,7 @@ const RouteView = () => {
       // important to invalidate doc ref id first before invalidating the query
       // so it can run with knowledge of invalidated doc ref id
       invalidateDocRefId(routeUID);
-      queryClient.invalidateQueries({ queryKey: ['routes', routeUID] });
+      queryClient.invalidateQueries({ queryKey: routeUID });
     });
   };
 
@@ -72,12 +72,13 @@ const RouteView = () => {
       <VStack>
         <NavBar />
         <Flex flexDir='column' justifyContent='center' top='70px' width='100%' position='fixed'>
-          <Center><Text fontSize='2xl' bold>{routeQuery.data.name}</Text></Center>
+          <Center><Text fontSize='2xl' bold>{data.name}</Text></Center>
           <Flex flexDir='row' justifyContent='center' width='100%' marginTop={1}>
             <Button onPress={navToRouteFeed}>
               <Text variant='button'>View Route Feed</Text>
             </Button>
-            {routeQuery.data.status === RouteStatus.Active ?
+            {/* TODO: make a 'confirm archive?' popup */}
+            {data.status === RouteStatus.Active ?
               <Button onPress={archiveThisRoute}>
                 <Text variant='button'>Archive This Route</Text>
               </Button>
@@ -88,28 +89,28 @@ const RouteView = () => {
           <Flex flexDir='row' justifyContent='center' width='100%' marginTop={3}>
             {/* TODO: make this image size properly */}
             <Box width='30%' height='30%'>
-              <img src={routeQuery.data.thumbnailUrl ?? placeholder_image} className='route-avatar' alt='route' />
+              <img src={data.thumbnailUrl ?? placeholder_image} className='route-avatar' alt='route' />
             </Box>
             <Flex backgroundColor='gray.300' rounded='md' p='1' marginLeft={3}>
               <Flex flexDir='column' margin={2}>
-                <Text><Text bold>Status: </Text>{RouteStatus[routeQuery.data.status]}</Text>
-                <Text><Text bold>Type: </Text>{routeQuery.data.classifier.type}</Text>
-                <Text><Text bold>Color: </Text>{routeQuery.data.color}</Text>
-                <Text><Text bold>Grade: </Text>{routeQuery.data.gradeDisplayString}</Text>
+                <Text><Text bold>Status: </Text>{RouteStatus[data.status]}</Text>
+                <Text><Text bold>Type: </Text>{data.classifier.type}</Text>
+                <Text><Text bold>Color: </Text>{data.color}</Text>
+                <Text><Text bold>Grade: </Text>{data.gradeDisplayString}</Text>
                 <Text><Text bold>Natural Rules: </Text>{
-                  routeQuery.data.naturalRules ? NaturalRules[routeQuery.data.naturalRules] : notAssigned
+                  data.naturalRules ? NaturalRules[data.naturalRules] : notAssigned
                 }</Text>
                 <Text><Text bold>Tags: </Text>{
-                  routeQuery.data.stringifiedTags === '' ? notAssigned : routeQuery.data.stringifiedTags
+                  data.stringifiedTags === '' ? notAssigned : data.stringifiedTags
                 }</Text>
-                <Text><Text bold>Rope: </Text>{routeQuery.data.rope ?? notAssigned}</Text>
-                <Text><Text bold>Setter: </Text>{routeQuery.data.setterRawName ?? notAssigned}</Text>
+                <Text><Text bold>Rope: </Text>{data.rope ?? notAssigned}</Text>
+                <Text><Text bold>Setter: </Text>{data.setterRawName ?? notAssigned}</Text>
                 {/* TODO: make this a readable date format? Also it is not even accurate atm */}
-                <Text><Text bold>Date Set: </Text>{routeQuery.data.timestamp?.toDateString() ?? notAssigned}</Text>
-                <Text><Text bold>Sends: </Text>{routeQuery.data.numSends}</Text>
-                <Text><Text bold>Likes: </Text>{routeQuery.data.likes.length}</Text>
+                <Text><Text bold>Date Set: </Text>{data.timestamp?.toDateString() ?? notAssigned}</Text>
+                <Text><Text bold>Sends: </Text>{data.numSends}</Text>
+                <Text><Text bold>Likes: </Text>{data.likes.length}</Text>
                 {authContext.user.status >= UserStatus.Manager ?
-                  <Text><Text bold>Rating: </Text>{(routeQuery.data.starRating ?? 5).toFixed(1)} stars </Text>
+                  <Text><Text bold>Rating: </Text>{(data.starRating ?? 5).toFixed(1)} stars </Text>
                   :
                   null
                 }
