@@ -102,6 +102,10 @@ const theme = extendTheme({
           fontSize: 'md',
           color: 'black'
         },
+        subtext: {
+          fontSize: 'sm',
+          color: 'gray.600'
+        },
         default: {
           color: 'inherit'
         }
