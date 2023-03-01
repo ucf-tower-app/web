@@ -92,22 +92,24 @@ const RouteView = () => {
             </Box>
             <Flex backgroundColor='gray.300' rounded='md' p='1' marginLeft={3}>
               <Flex flexDir='column' margin={2}>
-                <Text> <Text bold>Status: </Text>{RouteStatus[routeQuery.data.status]}</Text>
-                <Text> <Text bold>Type: </Text>{routeQuery.data.classifier.type} </Text>
-                <Text> <Text bold>Color: </Text>{routeQuery.data.color} </Text>
-                <Text> <Text bold>Grade: </Text>{routeQuery.data.gradeDisplayString} </Text>
-                <Text> <Text bold>Natural Rules: </Text>{
+                <Text><Text bold>Status: </Text>{RouteStatus[routeQuery.data.status]}</Text>
+                <Text><Text bold>Type: </Text>{routeQuery.data.classifier.type}</Text>
+                <Text><Text bold>Color: </Text>{routeQuery.data.color}</Text>
+                <Text><Text bold>Grade: </Text>{routeQuery.data.gradeDisplayString}</Text>
+                <Text><Text bold>Natural Rules: </Text>{
                   routeQuery.data.naturalRules ? NaturalRules[routeQuery.data.naturalRules] : notAssigned
-                } </Text>
-                <Text> <Text bold>Tags: </Text>{routeQuery.data.stringifiedTags} </Text>
-                <Text> <Text bold>Rope: </Text>{routeQuery.data.rope ?? notAssigned} </Text>
-                <Text> <Text bold>Setter: </Text>{routeQuery.data.setterRawName ?? notAssigned} </Text>
+                }</Text>
+                <Text><Text bold>Tags: </Text>{
+                  routeQuery.data.stringifiedTags === '' ? notAssigned : routeQuery.data.stringifiedTags
+                }</Text>
+                <Text><Text bold>Rope: </Text>{routeQuery.data.rope ?? notAssigned}</Text>
+                <Text><Text bold>Setter: </Text>{routeQuery.data.setterRawName ?? notAssigned}</Text>
                 {/* TODO: make this a readable date format? Also it is not even accurate atm */}
-                <Text> <Text bold>Date Set: </Text>{routeQuery.data.timestamp?.toDateString() ?? notAssigned} </Text>
-                <Text> <Text bold>Sends: </Text>{routeQuery.data.numSends} </Text>
-                <Text> <Text bold>Likes: </Text>{routeQuery.data.likes.length} </Text>
+                <Text><Text bold>Date Set: </Text>{routeQuery.data.timestamp?.toDateString() ?? notAssigned}</Text>
+                <Text><Text bold>Sends: </Text>{routeQuery.data.numSends}</Text>
+                <Text><Text bold>Likes: </Text>{routeQuery.data.likes.length}</Text>
                 {authContext.user.status >= UserStatus.Manager ?
-                  <Text> <Text bold>Rating: </Text>{routeQuery.data.starRating ?? 5} stars </Text>
+                  <Text><Text bold>Rating: </Text>{(routeQuery.data.starRating ?? 5).toFixed(1)} stars </Text>
                   :
                   null
                 }
