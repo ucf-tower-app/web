@@ -1,9 +1,18 @@
-import { UserStatus } from '../xplat/types/common';
-import { User, QueryCursor, Post, Route,
-  Forum, RouteStatus, Comment, RouteType, Send } from '../xplat/types';
-import { INITIAL_CURSOR_SIZE } from './constants';
-import { getRouteById } from '../xplat/api/route';
 import { getActiveRoutesCursor, getArchivedRoutesCursor, getUserById } from '../xplat/api';
+import { getRouteById } from '../xplat/api/route';
+import {
+  Comment,
+  Forum,
+  Post,
+  QueryCursor,
+  Route,
+  RouteStatus,
+  RouteType,
+  Send,
+  User
+} from '../xplat/types';
+import { UserStatus } from '../xplat/types/common';
+import { INITIAL_CURSOR_SIZE } from './constants';
 
 // TODO: delete this file
 
