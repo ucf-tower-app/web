@@ -8,9 +8,10 @@ type Props = {
   route: Route;
 };
 export const RouteRow = ({ route }: Props) => {
-  const { isLoading, isError, error, data } = useQuery(route.docRef!.id, route.buildFetcher());
-
   const navigate = useNavigate();
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const { isLoading, isError, error, data } = useQuery(route.docRef!.id, route.buildFetcher());
 
   if (isLoading) {
     return null;
@@ -24,6 +25,7 @@ export const RouteRow = ({ route }: Props) => {
   const navToRoute = () => {
     navigate({
       pathname: '/routeview',
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       search: `?${createSearchParams({ uid: route.docRef!.id })}`
     });
   };
