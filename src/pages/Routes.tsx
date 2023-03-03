@@ -1,13 +1,13 @@
 import { NavBar } from '../components/NavigationBar';
 import { Box, Divider, Flex, Text, VStack, Button } from 'native-base';
 import { useState, useEffect } from 'react';
-import { Route } from '../xplat/types/route';
+import { Route, RouteType } from '../xplat/types/route';
 import { RouteRow } from '../components/RouteRow';
-import { QueryCursor } from '../xplat/types';
+import { QueryCursor, invalidateDocRefId } from '../xplat/types';
 import { queryClient } from '../App';
-import { isError, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 import { buildRouteListFetcher } from '../utils/queries';
-import { CURSOR_INCREMENT, INITIAL_CURSOR_SIZE } from '../utils/constants';
+import { CURSOR_INCREMENT } from '../utils/constants';
 import CreateRoute from '../components/Route/CreateRoute';
 
 const Routes = () => {
@@ -22,6 +22,7 @@ const Routes = () => {
       const newRoutes: Route[] = [];
       let hasNext = await archivedCursor.hasNext();
       while (hasNext && newRoutes.length < CURSOR_INCREMENT) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         newRoutes.push((await archivedCursor.pollNext())!);
         hasNext = await archivedCursor.hasNext();
       }
@@ -43,6 +44,18 @@ const Routes = () => {
       setHasMore(data.hasNext);
     }
   }, [data]);
+
+  const archiveAllOfType = async (type: RouteType) => {
+    data?.activeRoutes.forEach(async (route: Route) => {
+      if (await route.getType() == type) {
+        route.upgradeStatus().then(() => {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          invalidateDocRefId(route.docRef!.id);
+          queryClient.invalidateQueries('routes');
+        });
+      }
+    });
+  };
 
   if (isLoading) {
     return (
@@ -110,7 +123,7 @@ const Routes = () => {
             }
           </Flex>
         </Flex>
-        <Divider orientation='vertical' height={'75vh'} position='fixed' />
+        <Divider orientation='vertical' height={'65vh'} position='fixed' />
         <Flex flexDirection='row' justifyContent='center' width='30%'>
           <Flex flexDirection='column' alignItems='center' width='100%'>
             <Text bold fontSize='lg'>Archived Routes</Text>
@@ -126,10 +139,22 @@ const Routes = () => {
           </Flex>
         </Flex>
       </Flex>
+      {/* TODO: add 'are you sure?' popup to buttons */}
+      <Flex flexDir='row' justifyContent='center' width='100%' height='50px' bottom='10px' position='fixed'>
+        <Button onPress={() => archiveAllOfType(RouteType.Boulder)}>
+          <Text variant='button'>Archive All Boulders</Text>
+        </Button>
+        <Button onPress={() => archiveAllOfType(RouteType.Traverse)}>
+          <Text variant='button'>Archive All Traverses</Text>
+        </Button>
+        <Button onPress={() => archiveAllOfType(RouteType.Toprope)}>
+          <Text variant='button'>Archive All Top Ropes</Text>
+        </Button>
+      </Flex>
 
       <CreateRoute refreshRoutes={() => queryClient.invalidateQueries('routes')}
         isOpen={createRoutePopup} setIsOpen={setCreateRoutePopup} />
-    </VStack>
+    </VStack >
   );
 };
 
