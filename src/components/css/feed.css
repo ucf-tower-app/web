@@ -35,6 +35,25 @@
     justify-content: center;
 }
 
+.hidden-input {
+    display: none;
+}
+
+.native-button {
+    background-color: #0891B2;
+    color: white;
+    border: none;
+    width: fit-content;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
 .comment-panel {
     width: 100%;
     height: inherit;
@@ -55,4 +74,12 @@
     width: 100%;
     height: auto;
     align-self: center;
+}
+
+.route-view-avatar {
+    max-height: calc(100vh - 200px);
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 6px;
 }

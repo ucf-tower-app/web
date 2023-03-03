@@ -17,9 +17,9 @@ const RouteFeed = () => {
   const [routeForum, setRouteForum] = useState<Forum>();
   const [params] = useSearchParams();
   const [selectedPost, setSelectedPost] = useState<Post | undefined>();
-  const { isLoading, data } = 
-        useQuery(['routeObject', {id: params.get('uid')}], buildEmptyRouteByID(params.get('uid')));
-        
+  const { isLoading, data } =
+    useQuery(['routeObject', { id: params.get('uid') }], buildEmptyRouteByID(params.get('uid')));
+
 
   function setPostToView(passedPost: Post) {
     if (passedPost !== selectedPost)
@@ -30,13 +30,11 @@ const RouteFeed = () => {
 
   // runs on query resolve
   useEffect(() => {
-    if (data !== undefined) 
-    {
+    if (data !== undefined) {
       setRoute(data);
     }
   }, [data]);
-  if (isLoading)
-  {
+  if (isLoading) {
     return (
       <Box>
         <VStack>
@@ -54,12 +52,12 @@ const RouteFeed = () => {
       <VStack>
         <NavBar />
         <HStack top='50px' width={'100%'}>
-          {route !== undefined && <RouteDetailsPanel route={route} forumSetter={setRouteForum}/>}
+          {route !== undefined && <RouteDetailsPanel route={route} forumSetter={setRouteForum} />}
           <Divider orientation='vertical' top={'100px'} left={'25%'} height={'75vh'} position='fixed' />
           <Box flexDir={'column'} left={'25%'} width={'50%'} top={'5vh'}>
             <Center>
-              {routeForum !== undefined && 
-                                <RouteFeedDisplay forum={routeForum} setPostInParent={setPostToView} />}
+              {routeForum !== undefined &&
+                <RouteFeedDisplay forum={routeForum} setPostInParent={setPostToView} />}
             </Center>
           </Box>
           <Divider orientation='vertical' top={'100px'} right={'25%'} height={'75vh'} position='fixed' />
