@@ -10,16 +10,17 @@ import FirebaseAuthContext from './utils/AuthContext';
 import ProtectedRoute from './utils/ProtectedRoute';
 
 const ComponentTesting = lazy(() => import('./pages/ComponentTesting'));
-const RouteFeed = lazy(() => import('./pages/RouteFeed'));
 const RoutesPage = lazy(() => import('./pages/Routes'));
+const RouteView = lazy(() => import('./pages/RouteView'));
+const RouteFeed = lazy(() => import('./pages/RouteFeed'));
 // const Signup = lazy(() => import('./pages/Signup')); // we're not doing signup on web anymore, but it's subject to change.
 const Profile = lazy(() => import('./pages/Profile'));
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5*(60*1000), // 5 mins
-      cacheTime: 10*(60*1000), // 10 mins
+      staleTime: 5 * (60 * 1000), // 5 mins
+      cacheTime: 10 * (60 * 1000), // 10 mins
     },
   },
 });
@@ -33,22 +34,23 @@ const App = () => {
           <FirebaseAuthContext>
             <BrowserRouter>
               <Routes>
-                <Route path='/' element={<Login/>}/>
-                {/* <Route path='/signup' element={<Signup/>}/> */}
-                <Route path='/' element={<ProtectedRoute redirectTo='/'/>}>
-                  <Route path='/routes' element={<RoutesPage/>}/>
-                  <Route path='/profile' element={<Profile/>}/>
-                  <Route path='/route' element={<RouteFeed/>}/>
+                <Route path='/' element={<Login />} />
+                {/* <Route path='/signup' element={<Signup />} /> */}
+                <Route path='/' element={<ProtectedRoute redirectTo='/' />}>
+                  <Route path='/routes' element={<RoutesPage />} />
+                  <Route path='/routeview' element={<RouteView />} />
+                  <Route path='/routefeed' element={<RouteFeed />} />
+                  <Route path='/profile' element={<Profile />} />
                 </Route>
                 {window.location.hostname === 'localhost' &&
-                  <Route path='/component' element={<ComponentTesting/>}/>}
-                <Route path='*' element={<PageNotFound/>}/>
+                  <Route path='/component' element={<ComponentTesting />} />}
+                <Route path='*' element={<PageNotFound />} />
               </Routes>
-            </BrowserRouter>
-          </FirebaseAuthContext>
-        </NativeBaseProvider>
-      </Suspense>
-    </QueryClientProvider>
+            </BrowserRouter >
+          </FirebaseAuthContext >
+        </NativeBaseProvider >
+      </Suspense >
+    </QueryClientProvider >
   );
 };
 

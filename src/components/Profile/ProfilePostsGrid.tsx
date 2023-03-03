@@ -7,24 +7,21 @@ import PostInFeed from '../Post/PostInFeed';
 type setPostCallback = (post: Post) => void;
 const ROW_LENGTH = 4;
 
-const ProfilePostsGrid = ({posts, setSelectedPost}: 
-    {posts: Post[], setSelectedPost: setPostCallback}) => {
+const ProfilePostsGrid = ({ posts, setSelectedPost }:
+  { posts: Post[], setSelectedPost: setPostCallback }) => {
   const [postGrid, setPostGrid] = useState<Post[][]>([]);
 
   useEffect(() => {
     const grid: Post[][] = [];
     let row: Post[] = [];
-    for (let i = 0; i < posts.length; i++)
-    {
+    for (let i = 0; i < posts.length; i++) {
       row.push(posts[i]);
-      if (row.length === ROW_LENGTH)
-      {
+      if (row.length === ROW_LENGTH) {
         grid.push(row);
         row = [];
       }
     }
-    if (row.length > 0)
-    {
+    if (row.length > 0) {
       grid.push(row);
     }
     setPostGrid(grid);
@@ -40,7 +37,7 @@ const ProfilePostsGrid = ({posts, setSelectedPost}:
               return (
                 <Box key={post.docRef!.id} width='24%'>
                   <Pressable onPress={() => setSelectedPost(post)}>
-                    <PostInFeed post={post}/>
+                    <PostInFeed post={post} />
                   </Pressable>
                 </Box>
               );

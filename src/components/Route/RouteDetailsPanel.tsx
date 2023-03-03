@@ -5,8 +5,8 @@ import placeholder_image from '../../placeholder_image.jpg';
 import { Route, Forum } from '../../xplat/types';
 import { buildRouteFetcher } from '../../utils/queries';
 
-const RouteDetailsPanel = ({ route, forumSetter }: { route: Route, forumSetter: (forum: Forum) => void}) => {
-  const {isLoading, isError, data} = useQuery(['route', {id: route.docRef!.id}], buildRouteFetcher(route));
+const RouteDetailsPanel = ({ route, forumSetter }: { route: Route, forumSetter: (forum: Forum) => void }) => {
+  const { isLoading, isError, data } = useQuery(['route', { id: route.docRef!.id }], buildRouteFetcher(route));
 
   useEffect(() => {
     if (data !== undefined) {
@@ -14,8 +14,7 @@ const RouteDetailsPanel = ({ route, forumSetter }: { route: Route, forumSetter: 
     }
   }, [data]);
 
-  if (isLoading)
-  {
+  if (isLoading) {
     return (
       <Box flexDir={'column'} width={'25%'} top={'100px'} position='fixed'>
         <Center>
@@ -25,8 +24,7 @@ const RouteDetailsPanel = ({ route, forumSetter }: { route: Route, forumSetter: 
     );
   }
 
-  if (isError || data === undefined)
-  {
+  if (isError || data === undefined) {
     return (
       <Box flexDir={'column'} width={'25%'} top={'100px'} position='fixed'>
         <Center>
