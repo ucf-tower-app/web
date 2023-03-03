@@ -15,17 +15,15 @@ const Profile = () => {
   const [hasMorePosts, setHasMorePosts] = useState(false);
   const [selectedPost, setSelectedPost] = useState<Post | undefined>();
   const [searchParams] = useSearchParams();
-  const {isLoading, isError, data} = 
-        useQuery(['userprofile', {uid:  searchParams.get('uid')}], 
-          buildUserByIDFetcher(searchParams.get('uid')!));
+  const { isLoading, isError, data } =
+    useQuery(['userprofile', { uid: searchParams.get('uid') }],
+      buildUserByIDFetcher(searchParams.get('uid')!));
 
   const handlePostClick = (post: Post) => {
-    if (post === selectedPost)
-    {
+    if (post === selectedPost) {
       setSelectedPost(undefined);
     }
-    else
-    {
+    else {
       setSelectedPost(post);
     }
   };
@@ -36,7 +34,7 @@ const Profile = () => {
     }
     const tempPosts: Post[] = [];
     let hasNext = await postCursor.hasNext();
-    while(hasNext && tempPosts.length < CURSOR_INCREMENT){
+    while (hasNext && tempPosts.length < CURSOR_INCREMENT) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const next = await postCursor.pollNext()!;
       tempPosts.push(next);
@@ -48,30 +46,27 @@ const Profile = () => {
 
 
   useEffect(() => {
-    if (data !== undefined)
-    {
+    if (data !== undefined) {
       setPostCursor(data.postCursor);
       setPosts(data.posts);
       setHasMorePosts(data.hasMorePosts);
     }
   }, [data]);
 
-  if (isLoading)
-  {
+  if (isLoading) {
     return (
       <VStack>
-        <NavBar/>
-        <Skeleton top='50px' width='100%' height='200px'/>
-        <Divider orientation='horizontal' top='45px'/>
+        <NavBar />
+        <Skeleton top='50px' width='100%' height='200px' />
+        <Divider orientation='horizontal' top='45px' />
         <Box p='2' top='50px' justifyItems='center' alignContent='center'>
-          <Skeleton height='100px' width='100%'/>
+          <Skeleton height='100px' width='100%' />
         </Box>
       </VStack>
     );
   }
 
-  if (isError || data === undefined)
-  {
+  if (isError || data === undefined) {
     return (
       <Box flexDir={'column'} margin={2} position='fixed' width={'22%'}>
         <Text>Error loading user</Text>
@@ -81,13 +76,13 @@ const Profile = () => {
   return (
     <>
       <VStack>
-        <NavBar/>
+        <NavBar />
         <Box top='50px' width='100%'>
-          <ProfileBanner user={data}/>
+          <ProfileBanner user={data} />
         </Box>
-        <Divider orientation='horizontal' top='45px'/>
+        <Divider orientation='horizontal' top='45px' />
         <Box p='2' top='50px' justifyItems='center' alignContent='center'>
-          <ProfilePostsGrid posts={posts} setSelectedPost={setSelectedPost}/>
+          <ProfilePostsGrid posts={posts} setSelectedPost={setSelectedPost} />
           {hasMorePosts && <Button onPress={getMorePosts}><Text variant='button'>Load More</Text></Button>}
         </Box>
       </VStack>

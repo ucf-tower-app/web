@@ -18,22 +18,18 @@ const Routes = () => {
   const { isLoading, isError, data } = useQuery('routes', buildRouteListFetcher());
 
   async function fetchMoreArchivedRoutes() {
-    if (archivedCursor)
-    {
+    if (archivedCursor) {
       const newRoutes: Route[] = [];
       let hasNext = await archivedCursor.hasNext();
-      while (hasNext && newRoutes.length < CURSOR_INCREMENT)
-      {
+      while (hasNext && newRoutes.length < CURSOR_INCREMENT) {
         newRoutes.push((await archivedCursor.pollNext())!);
         hasNext = await archivedCursor.hasNext();
       }
       setHasMore(hasNext);
-      if (archivedRoutes)
-      {
+      if (archivedRoutes) {
         setArchivedRoutes([...archivedRoutes, ...newRoutes]);
       }
-      else
-      {
+      else {
         setArchivedRoutes(newRoutes);
       }
     }
@@ -41,16 +37,14 @@ const Routes = () => {
 
 
   useEffect(() => {
-    if (data !== undefined)
-    {
+    if (data !== undefined) {
       setArchivedCursor(data.archivedCursor);
       setArchivedRoutes(data.archivedRoutes);
       setHasMore(data.hasNext);
     }
   }, [data]);
 
-  if (isLoading)
-  {
+  if (isLoading) {
     return (
       <Box flexDir={'column'}>
         <Box height={'50px'} marginBottom={1}><NavBar /></Box>
@@ -73,8 +67,7 @@ const Routes = () => {
     );
   }
 
-  if (isError || data === undefined)
-  {
+  if (isError || data === undefined) {
     return (
       <Box flexDir={'column'}>
         <Box height={'50px'} marginBottom={1}><NavBar /></Box>
@@ -99,7 +92,7 @@ const Routes = () => {
   return (
     <VStack height='100%'>
       <Box height={'50px'} marginBottom={1}><NavBar /></Box>
-      <Button onPress={() => setCreateRoutePopup(true)} 
+      <Button onPress={() => setCreateRoutePopup(true)}
         position='sticky' m={1}>
         <Text variant='button'>Create route</Text>
       </Button>
@@ -121,7 +114,7 @@ const Routes = () => {
         <Flex flexDirection='row' justifyContent='center' width='30%'>
           <Flex flexDirection='column' alignItems='center' width='100%'>
             <Text bold fontSize='lg'>Archived Routes</Text>
-            { isLoading ? <Text>Loading...</Text> :
+            {isLoading ? <Text>Loading...</Text> :
               archivedRoutes.map((currRoute: Route) => (
                 <VStack key={currRoute.docRef?.id} width='100%'>
                   <Divider orientation='horizontal' height='2px' />
@@ -129,13 +122,13 @@ const Routes = () => {
                 </VStack>
               ))
             }
-            { hasMore ? <Text onPress={fetchMoreArchivedRoutes}>Load More</Text> : null }
+            {hasMore ? <Text onPress={fetchMoreArchivedRoutes}>Load More</Text> : null}
           </Flex>
         </Flex>
       </Flex>
-      
-      <CreateRoute refreshRoutes={() => queryClient.invalidateQueries('routes')} 
-        isOpen={createRoutePopup} setIsOpen={setCreateRoutePopup}/>
+
+      <CreateRoute refreshRoutes={() => queryClient.invalidateQueries('routes')}
+        isOpen={createRoutePopup} setIsOpen={setCreateRoutePopup} />
     </VStack>
   );
 };
