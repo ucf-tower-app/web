@@ -16,7 +16,6 @@ import {
   User,
   Post,
   Comment,
-  ModAction,
   ModActionCollection,
 } from '../xplat/types';
 import {
@@ -138,7 +137,7 @@ const Reports = () => {
               <div className='modaction-panel'>
                 <FlatList
                   data={modHistoryCollections}
-                  renderItem={({ item, index }) => {
+                  renderItem={({ item }) => {
                     return <ModCollectionCard data={item} />;
                   }}
                   keyExtractor={(item, index) => index.toString()}
