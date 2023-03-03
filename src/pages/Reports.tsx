@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { getIQParams_ModHistory } from '../xplat/queries/modHistory';
 import { useInfiniteQuery } from 'react-query';
 import ReportCard from '../components/Reports/ReportCard';
-import ModActionCard from '../components/Reports/ModActionCard';
+import ModActionCard from '../components/Reports/ModAction/ModActionCard';
 import { NavBar } from '../components/NavigationBar';
 import {
   User,
@@ -26,6 +26,7 @@ import {
   getIQParams_Reports,
 } from '../xplat/queries';
 import '../components/css/ReportCard.css';
+import ModCollectionCard from '../components/Reports/ModAction/ModCollectionCard';
 
 /*
  * Users can report content that they believe should not be hosted on the Tower app.
@@ -63,6 +64,7 @@ type ReportMap = Map<
 const Reports = () => {
   const [showModHistory, setShowModHistory] = useState(false);
   const [modHistoryList, setModHistoryList] = useState<ModAction[]>([]);
+  const [modHistoryCollections, setModHistoryCollections] = useState<ModActionCollection[]>([]);
   const [reportedContent, setReportedContent] = useState<ReportMap>(
     new Map<string, { content: User | Post | Comment; reporters: User[] }>()
   );
@@ -104,6 +106,7 @@ const Reports = () => {
       console.log(page);
       return constructPageData(ModActionCollection, page);
     });
+    setModHistoryCollections(_modHistory);
     const tempModHistoryList: ModAction[] = [];
     _modHistory.forEach((modActionC) => {
       modActionC.modActions.forEach((modAction) => {
@@ -143,9 +146,9 @@ const Reports = () => {
             <div className='modaction-container'>
               <div className='modaction-panel'>
                 <FlatList
-                  data={modHistoryList}
+                  data={modHistoryCollections}
                   renderItem={({ item, index }) => {
-                    return <ModActionCard action={item} index={index} />;
+                    return <ModCollectionCard data={item} />;
                   }}
                   keyExtractor={(item, index) => index.toString()}
                 />

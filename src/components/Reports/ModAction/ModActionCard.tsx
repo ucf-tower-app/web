@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { ModAction } from '../../xplat/types';
+import { ModAction } from '../../../xplat/types';
 import { Box, Divider, Text, Link } from 'native-base';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 
@@ -45,10 +45,9 @@ const ModActionCard = ({
       borderWidth={2}
     >
       <Text variant='header' bold>
-        {data.timestamp.toLocaleDateString()}
+        {data.timestamp.toLocaleTimeString()}
       </Text>
       <Divider orientation='horizontal' color='black' />
-      <Text variant='body'>{data.modReason}</Text>
       <Text variant='body'>
         User moderated:{' '}
         <Link
@@ -71,6 +70,7 @@ const ModActionCard = ({
           {data.moderatorUsername}
         </Link>
       </Text>
+      <Text variant='body'>Reason: {data.modReason}</Text>
     </Box>
   );
 };
