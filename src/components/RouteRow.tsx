@@ -7,24 +7,24 @@ import { Pressable } from 'react-native';
 import { buildRouteFetcher } from '../utils/queries';
 
 type Props = {
-    route: Route;
+  route: Route;
 };
 export const RouteRow = ({ route }: Props) => {
   const [name, setName] = useState<string>('');
   const [grade, setGrade] = useState<string>('');
-  const {isLoading, data} = useQuery(['route-row', {id: route.docRef!.id}], buildRouteFetcher(route));
+  const { isLoading, data } = useQuery(['route-row', { id: route.docRef!.id }], buildRouteFetcher(route));
 
   const navigate = useNavigate();
   const exampleSearchParams = { uid: route.docRef!.id };
   const navToRoute = () => {
     navigate({
-      pathname: '/route',
+      pathname: '/routeview',
       search: `?${createSearchParams(exampleSearchParams)}`
     });
   };
 
   useEffect(() => {
-    if (data !== undefined ) {
+    if (data !== undefined) {
       setName(data.name);
       setGrade(data.grade);
     }
