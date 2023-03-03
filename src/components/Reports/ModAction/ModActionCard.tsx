@@ -56,7 +56,7 @@ const ModActionCard = ({
             navToProfile(data.userModerated.getId());
           }}
         >
-          {data.userModeratedUsername}
+          @{data.userModeratedUsername}
         </Link>
       </Text>
       <Text variant='body'>
@@ -67,7 +67,7 @@ const ModActionCard = ({
             navToProfile(data.moderator.getId());
           }}
         >
-          {data.moderatorUsername}
+          @{data.moderatorUsername}
         </Link>
       </Text>
       <Text variant='body'>Reason: {data.modReason}</Text>

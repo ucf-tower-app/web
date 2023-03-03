@@ -60,7 +60,6 @@ type ReportMap = Map<
 >;
 
 const Reports = () => {
-  const [showModHistory, setShowModHistory] = useState(false);
   const [modHistoryCollections, setModHistoryCollections] = useState<ModActionCollection[]>([]);
   const [reportedContent, setReportedContent] = useState<ReportMap>(
     new Map<string, { content: User | Post | Comment; reporters: User[] }>()
@@ -128,23 +127,17 @@ const Reports = () => {
           <Text variant='header' textAlign='center' bold height='25px'>
             Mod Action History
           </Text>
-          {!showModHistory ? (
-            <Button alignSelf='center' onPress={() => setShowModHistory(true)}>
-              <Text variant='button'>Show History</Text>
-            </Button>
-          ) : (
-            <div className='modaction-container'>
-              <div className='modaction-panel'>
-                <FlatList
-                  data={modHistoryCollections}
-                  renderItem={({ item }) => {
-                    return <ModCollectionCard data={item} />;
-                  }}
-                  keyExtractor={(item, index) => index.toString()}
-                />
-              </div>
+          <div className='modaction-container'>
+            <div className='modaction-panel'>
+              <FlatList
+                data={modHistoryCollections}
+                renderItem={({ item }) => {
+                  return <ModCollectionCard data={item} />;
+                }}
+                keyExtractor={(item, index) => index.toString()}
+              />
             </div>
-          )}
+          </div>
         </Box>
         <Divider h='70vh' orientation='vertical' />
         <Box marginX='auto' w='60%'>
