@@ -11,7 +11,6 @@ import { useEffect, useState } from 'react';
 import { getIQParams_ModHistory } from '../xplat/queries/modHistory';
 import { useInfiniteQuery } from 'react-query';
 import ReportCard from '../components/Reports/ReportCard';
-import ModActionCard from '../components/Reports/ModAction/ModActionCard';
 import { NavBar } from '../components/NavigationBar';
 import {
   User,
@@ -63,7 +62,6 @@ type ReportMap = Map<
 
 const Reports = () => {
   const [showModHistory, setShowModHistory] = useState(false);
-  const [modHistoryList, setModHistoryList] = useState<ModAction[]>([]);
   const [modHistoryCollections, setModHistoryCollections] = useState<ModActionCollection[]>([]);
   const [reportedContent, setReportedContent] = useState<ReportMap>(
     new Map<string, { content: User | Post | Comment; reporters: User[] }>()
@@ -107,13 +105,6 @@ const Reports = () => {
       return constructPageData(ModActionCollection, page);
     });
     setModHistoryCollections(_modHistory);
-    const tempModHistoryList: ModAction[] = [];
-    _modHistory.forEach((modActionC) => {
-      modActionC.modActions.forEach((modAction) => {
-        tempModHistoryList.push(modAction);
-      });
-    });
-    setModHistoryList(tempModHistoryList);
   }, [modHistory.data]);
 
   useEffect(() => {
