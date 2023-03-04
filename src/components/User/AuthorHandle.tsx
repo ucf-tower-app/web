@@ -35,7 +35,7 @@ const AuthorHandle = ({ author }: { author: User }) => {
       <HStack space={1}>
         <Skeleton borderRadius={'100'} width='8%' isLoaded={false} />
         <Skeleton.Text lines={1} width='60%' alignSelf={'center'} />
-        <Skeleton.Text lines={1} width='60%' alignSelf={'center'} />
+        <Skeleton.Text lines={1} width='20%' alignSelf={'center'} />
       </HStack>
     );
   }
