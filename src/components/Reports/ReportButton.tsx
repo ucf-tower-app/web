@@ -13,7 +13,7 @@ const ReportButton = ({content}: {content: Post | Comment | User}) => {
       return;
     if (!reported)
       authContext.user.userObject.addReport(content).then(() => setReported(true));
-    else if (content instanceof Post || content instanceof Comment)
+    else
       authContext.user.userObject.removeReport(content).then(() => setReported(false));
   }
 
