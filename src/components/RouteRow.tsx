@@ -3,46 +3,40 @@ import { Route } from '../xplat/types/route';
 import { useQuery } from 'react-query';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Pressable } from 'react-native';
-import { buildRouteFetcher } from '../utils/queries';
 
 type Props = {
   route: Route;
 };
 export const RouteRow = ({ route }: Props) => {
-  const { isLoading, isError, error, data } = useQuery(route.docRef!.id, buildRouteFetcher(route));
-
   const navigate = useNavigate();
-  const navToRoute = () => {
-    const searchParams = { uid: route.docRef!.id };
-    navigate({
-      pathname: '/route',
-      search: `?${createSearchParams(searchParams)}`
-    });
-  };
 
-  console.log('renderin route row');
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const { isLoading, isError, error, data } = useQuery(route.docRef!.id, route.buildFetcher());
 
   if (isLoading) {
-    return (
-      <Box width='100%'>
-        <Text>Loading...</Text>
-      </Box>
-    );
-  }
-
-  if (isError || data === undefined) {
-    console.log(error);
     return null;
   }
 
-  console.log('full render');
+  if (isError || data === undefined) {
+    console.error(error);
+    return null;
+  }
+
+  const navToRoute = () => {
+    const searchParams = { uid: route.docRef!.id };
+    navigate({
+      pathname: '/routeview',
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      search: `?${createSearchParams({ uid: route.docRef!.id })}`
+    });
+  };
 
   return (
     <Box width='100%'>
       <Pressable onPress={navToRoute} >
         <Flex flexDirection="row" justifyContent="space-between" >
           <Text>{data.name}</Text>
-          <Text>{data.grade}</Text>
+          <Text>{data.gradeDisplayString}</Text>
         </Flex>
       </Pressable>
     </Box>

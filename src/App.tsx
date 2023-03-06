@@ -1,7 +1,7 @@
 import { NativeBaseProvider } from 'native-base';
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import theme from './components/NativeBaseStyling';
 import './index.css';
 import Login from './pages/Login';
@@ -10,11 +10,13 @@ import FirebaseAuthContext from './utils/AuthContext';
 import ProtectedRoute from './utils/ProtectedRoute';
 
 const ComponentTesting = lazy(() => import('./pages/ComponentTesting'));
-const RouteFeed = lazy(() => import('./pages/RouteFeed'));
+// const Signup = lazy(() => import('./pages/Signup')); // we're not doing signup on web anymore, but it's subject to change.
 const RoutesPage = lazy(() => import('./pages/Routes'));
-const Search = lazy(() => import('./pages/Search'));
-const Signup = lazy(() => import('./pages/Signup'));
+const RouteView = lazy(() => import('./pages/RouteView'));
+const RouteFeed = lazy(() => import('./pages/RouteFeed'));
 const Profile = lazy(() => import('./pages/Profile'));
+const Reports = lazy(() => import('./pages/Reports'));
+const Search = lazy(() => import('./pages/Search'));
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,22 +37,24 @@ const App = () => {
             <BrowserRouter>
               <Routes>
                 <Route path='/' element={<Login />} />
-                <Route path='/signup' element={<Signup />} />
+                {/* <Route path='/signup' element={<Signup />} /> */}
                 <Route path='/' element={<ProtectedRoute redirectTo='/' />}>
                   <Route path='/routes' element={<RoutesPage />} />
+                  <Route path='/routeview' element={<RouteView />} />
+                  <Route path='/routefeed' element={<RouteFeed />} />
                   <Route path='/profile' element={<Profile />} />
-                  <Route path='/route' element={<RouteFeed />} />
+                  <Route path='/reports' element={<Reports />} />
                   <Route path='/search' element={<Search />} />
                 </Route>
                 {window.location.hostname === 'localhost' &&
                   <Route path='/component' element={<ComponentTesting />} />}
                 <Route path='*' element={<PageNotFound />} />
               </Routes>
-            </BrowserRouter>
-          </FirebaseAuthContext>
-        </NativeBaseProvider>
-      </Suspense>
-    </QueryClientProvider>
+            </BrowserRouter >
+          </FirebaseAuthContext >
+        </NativeBaseProvider >
+      </Suspense >
+    </QueryClientProvider >
   );
 };
 

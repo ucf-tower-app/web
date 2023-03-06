@@ -6,6 +6,7 @@ import '../css/feed.css';
 import { FetchedUserProfile } from '../../utils/queries';
 import { AuthContext } from '../../utils/AuthContext';
 import { UserStatus } from '../../xplat/types';
+import ReportButton from '../Reports/ReportButton';
 
 const ProfileBanner = ({user}: {user: FetchedUserProfile | undefined}) => {
   const [promoteOrDemote, setPromoteOrDemote] = useState<string>('promote');
@@ -119,6 +120,7 @@ const ProfileBanner = ({user}: {user: FetchedUserProfile | undefined}) => {
             <Text variant='button'>Edit User Permissions</Text>
           </Button>}
         </VStack>
+        <ReportButton content={user.userObject}/>
       </HStack>
     </>
   );
