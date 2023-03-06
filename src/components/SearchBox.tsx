@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Input, Text, VStack } from 'native-base';
+import { Box, Button, Divider, Flex, Input, Text, VStack } from 'native-base';
 import { useEffect, useState } from 'react';
 import {
   UserSearchResult,
@@ -7,7 +7,8 @@ import {
   getRouteByName,
   getUserCache
 } from '../xplat/api';
-import { Route, SubstringMatcher } from '../xplat/types';
+import { User, Route, SubstringMatcher } from '../xplat/types';
+import { UserRow } from './UserRow';
 import { RouteRow } from './RouteRow';
 
 const enum SearchView {
@@ -24,6 +25,7 @@ const SearchBox = () => {
 
   const [userMatcher, setUserMatcher] = useState<SubstringMatcher<UserSearchResult[]>>();
   const [userSearchResults, setUserSearchResults] = useState<UserSearchResult[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   const [archivedRoutesMatcher, setArchivedRoutesMatcher] = useState<SubstringMatcher<string>>();
   const [archivedRoutesSearchResults, setArchivedRoutesSearchResults] = useState<string[]>([]);
@@ -48,6 +50,16 @@ const SearchBox = () => {
     fetchRoutes();
   }, [archivedRoutesSearchResults]);
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const users: User[] = await Promise.all(userSearchResults.map((userSearchResult: UserSearchResult) => {
+        return userSearchResult.user;
+      }));
+      setUsers(users);
+    };
+    fetchUsers();
+  }, [userSearchResults]);
+
   const updateSearchResults = async () => {
     if (!gotMatchers) {
       return;
@@ -65,19 +77,21 @@ const SearchBox = () => {
 
   const results =
     view === SearchView.Users
-      ? userSearchResults.map((userSearchResult: UserSearchResult) => {
+      ? users.map((currUser: User) => {
         return (
-          <Box key={userSearchResult.user.docRef!.id}>
-            <Text>{userSearchResult.username}</Text>
-          </Box>
+          <VStack key={currUser.docRef!.id} width='30%'>
+            <Divider orientation='horizontal' />
+            <UserRow user={currUser} />
+          </VStack>
         );
       })
       : view === SearchView.ArchivedRoutes
         ? archivedRoutes.map((currRoute: Route) => {
           return (
-            <Box key={currRoute.docRef!.id} width='30%'>
+            <VStack key={currRoute.docRef!.id} width='30%'>
+              <Divider orientation='horizontal' />
               <RouteRow route={currRoute} />
-            </Box>
+            </VStack>
           );
         })
         : [];
