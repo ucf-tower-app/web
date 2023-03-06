@@ -1,10 +1,13 @@
 import { Box, Button, Flex, Input, Text, VStack } from 'native-base';
 import { useEffect, useState } from 'react';
 import {
-  UserSearchResult, buildUserSubstringMatcher,
-  getArchivedRoutesSubstringMatcher, getRouteByName, getUserCache
+  UserSearchResult,
+  buildUserSubstringMatcher,
+  getArchivedRoutesSubstringMatcher,
+  getRouteByName,
+  getUserCache
 } from '../xplat/api';
-import { Route, SubstringMatcher, User } from '../xplat/types';
+import { Route, SubstringMatcher } from '../xplat/types';
 import { RouteRow } from './RouteRow';
 
 const enum SearchView {
@@ -23,6 +26,7 @@ const SearchBox = () => {
   const [userSearchResults, setUserSearchResults] = useState<UserSearchResult[]>([]);
 
   const [archivedRoutesMatcher, setArchivedRoutesMatcher] = useState<SubstringMatcher<string>>();
+  const [archivedRoutesSearchResults, setArchivedRoutesSearchResults] = useState<string[]>([]);
   const [archivedRoutes, setArchivedRoutes] = useState<Route[]>([]);
 
   useEffect(() => {
@@ -36,8 +40,13 @@ const SearchBox = () => {
     }
   }, []);
 
-  console.log(gotMatchers);
-  console.log(archivedRoutes.length);
+  useEffect(() => {
+    const fetchRoutes = async () => {
+      const routes: Route[] = await Promise.all(archivedRoutesSearchResults.map(getRouteByName));
+      setArchivedRoutes(routes);
+    };
+    fetchRoutes();
+  }, [archivedRoutesSearchResults]);
 
   const updateSearchResults = async () => {
     if (!gotMatchers) {
@@ -50,26 +59,7 @@ const SearchBox = () => {
     }
     else if (view === SearchView.ArchivedRoutes) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const routeNames = await archivedRoutesMatcher!.getMatches(inputText);
-      console.log('routeNames (item count = ' + routeNames.length + '):');
-      routeNames.forEach((routeName: string) => console.log(routeName));
-
-      const routes: Route[] = [];
-      for (const routeName in routeNames) {
-        const currRoute: Route | undefined = await getRouteByName(routeName);
-        console.log('grabbed it async?');
-        if (currRoute !== undefined) {
-          console.log('pushin it on?');
-          routes.push(currRoute);
-        }
-      }
-      console.log('created routes array of length ' + routes.length);
-      setArchivedRoutes(routes);
-
-      console.log('just updated archived routes');
-
-
-      // setArchivedRoutesSearchResults(archivedRoutesMatcher!.getMatches(inputText));
+      setArchivedRoutesSearchResults(archivedRoutesMatcher!.getMatches(inputText));
     }
   };
 
@@ -77,7 +67,7 @@ const SearchBox = () => {
     view === SearchView.Users
       ? userSearchResults.map((userSearchResult: UserSearchResult) => {
         return (
-          <Box key={userSearchResult.user.getId()}>
+          <Box key={userSearchResult.user.docRef!.id}>
             <Text>{userSearchResult.username}</Text>
           </Box>
         );
@@ -85,7 +75,9 @@ const SearchBox = () => {
       : view === SearchView.ArchivedRoutes
         ? archivedRoutes.map((currRoute: Route) => {
           return (
-            <RouteRow key={currRoute.docRef!.id} route={currRoute} />
+            <Box key={currRoute.docRef!.id} width='30%'>
+              <RouteRow route={currRoute} />
+            </Box>
           );
         })
         : [];
@@ -119,7 +111,7 @@ const SearchBox = () => {
           >
             <Text>Archived Routes</Text>
           </Button>
-        </Box >
+        </Box>
       </Flex>
       <Flex flexDir='row' justifyContent='center'>
         <Input
