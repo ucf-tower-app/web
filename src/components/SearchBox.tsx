@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Flex, Input, Text, VStack } from 'native-base';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   UserSearchResult,
   buildUserSubstringMatcher,
@@ -26,33 +26,13 @@ const SearchBox = () => {
     'userMatcher',
     async () => buildUserSubstringMatcher(await getUserCache())
   );
-  const [userSearchResults, setUserSearchResults] = useState<UserSearchResult[]>([]);
   const [users, setUsers] = useState<User[]>([]);
 
   const archivedRouteMatcherQuery = useQuery(
     'archivedRouteMatcher',
     async () => getArchivedRoutesSubstringMatcher()
   );
-  const [archivedRoutesSearchResults, setArchivedRoutesSearchResults] = useState<string[]>([]);
   const [archivedRoutes, setArchivedRoutes] = useState<Route[]>([]);
-
-  useEffect(() => {
-    const fetchRoutes = async () => {
-      const routes: Route[] = await Promise.all(archivedRoutesSearchResults.map(getRouteByName));
-      setArchivedRoutes(routes);
-    };
-    fetchRoutes();
-  }, [archivedRoutesSearchResults]);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const users: User[] = await Promise.all(userSearchResults.map((userSearchResult: UserSearchResult) =>
-        userSearchResult.user
-      ));
-      setUsers(users);
-    };
-    fetchUsers();
-  }, [userSearchResults]);
 
   if (userMatcherQuery.isLoading || archivedRouteMatcherQuery.isLoading) {
     return null;
@@ -70,10 +50,16 @@ const SearchBox = () => {
 
   const updateSearchResults = async () => {
     if (view === SearchView.Users) {
-      setUserSearchResults(userMatcherQuery.data.getMatches(inputText));
+      const userSearchResults: UserSearchResult[] = userMatcherQuery.data.getMatches(inputText);
+      const users: User[] = await Promise.all(userSearchResults.map((userSearchResult: UserSearchResult) =>
+        userSearchResult.user
+      ));
+      setUsers(users);
     }
     else if (view === SearchView.ArchivedRoutes) {
-      setArchivedRoutesSearchResults(archivedRouteMatcherQuery.data.getMatches(inputText));
+      const archivedRouteSearchResults: string[] = archivedRouteMatcherQuery.data.getMatches(inputText);
+      const archiveRoutes: Route[] = await Promise.all(archivedRouteSearchResults.map(getRouteByName));
+      setArchivedRoutes(archiveRoutes);
     }
   };
 
