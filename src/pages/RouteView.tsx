@@ -8,6 +8,7 @@ import { queryClient } from '../App';
 import placeholder_image from '../placeholder_image.jpg';
 import { useContext } from 'react';
 import { AuthContext } from '../utils/AuthContext';
+import EditRoute from '../components/Route/EditRoute';
 
 const RouteView = () => {
   const [params] = useSearchParams();
@@ -110,6 +111,7 @@ const RouteView = () => {
                 null
               }
             </Flex>
+            <EditRoute route={data}/>
           </HStack>
         </Flex>
       </VStack>

@@ -48,10 +48,11 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 15px;
+    font-size: 12pt;
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 5px;
+    padding: 12px 10px;
 }
 
 .comment-panel {
