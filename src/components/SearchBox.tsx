@@ -48,6 +48,14 @@ const SearchBox = () => {
     return null;
   }
 
+  const changeView = async (newView: SearchView) => {
+    if (newView === view) {
+      return;
+    }
+    setView(newView);
+    setInputText('');
+  };
+
   const updateSearchResults = async () => {
     if (view === SearchView.Users) {
       const userSearchResults: UserSearchResult[] = userMatcherQuery.data.getMatches(inputText);
@@ -91,7 +99,7 @@ const SearchBox = () => {
       <Flex flexDir='row' justifyContent='center'>
         <Box>
           <Button
-            onPress={() => setView(SearchView.Users)}
+            onPress={() => changeView(SearchView.Users)}
             variant={view === SearchView.Users ? 'solid' : 'outline'}
             rounded="full"
           >
@@ -100,7 +108,7 @@ const SearchBox = () => {
         </Box >
         {/* <Box>
           <Button
-            onPress={() => setView(SearchView.ActiveRoutes)}
+            onPress={() => changeView(SearchView.ActiveRoutes)}
             variant={view === SearchView.ActiveRoutes ? 'solid' : 'outline'}
             rounded="full"
           >
@@ -109,7 +117,7 @@ const SearchBox = () => {
         </Box > */}
         <Box>
           <Button
-            onPress={() => setView(SearchView.ArchivedRoutes)}
+            onPress={() => changeView(SearchView.ArchivedRoutes)}
             variant={view === SearchView.ArchivedRoutes ? 'solid' : 'outline'}
             rounded="full"
           >
