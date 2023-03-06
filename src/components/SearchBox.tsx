@@ -3,11 +3,12 @@ import { useState } from 'react';
 import {
   UserSearchResult,
   buildUserSubstringMatcher,
+  getActiveRoutesCursor,
   getArchivedRoutesSubstringMatcher,
   getRouteByName,
   getUserCache
 } from '../xplat/api';
-import { User, Route } from '../xplat/types';
+import { User, Route, SubstringMatcher } from '../xplat/types';
 import { UserRow } from './UserRow';
 import { RouteRow } from './RouteRow';
 import { useQuery } from 'react-query';
@@ -28,18 +29,33 @@ const SearchBox = () => {
   );
   const [users, setUsers] = useState<User[]>([]);
 
+  const activeRouteQuery = useQuery(
+    'activeRouteMatcher',
+    async () => {
+      const activeRoutes: Route[] = await getActiveRoutesCursor().________getAll_CLOWNTOWN_LOTS_OF_READS();
+      const routeNames: string[] = await Promise.all(activeRoutes.map((route: Route) => route.getName()));
+      return new SubstringMatcher<string>(routeNames);
+    }
+  );
+  const [activeRoutes, setActiveRoutes] = useState<Route[]>([]);
+
   const archivedRouteMatcherQuery = useQuery(
     'archivedRouteMatcher',
     async () => getArchivedRoutesSubstringMatcher()
   );
   const [archivedRoutes, setArchivedRoutes] = useState<Route[]>([]);
 
-  if (userMatcherQuery.isLoading || archivedRouteMatcherQuery.isLoading) {
+  if (userMatcherQuery.isLoading || activeRouteQuery.isLoading || archivedRouteMatcherQuery.isLoading) {
     return null;
   }
 
   if (userMatcherQuery.isError || userMatcherQuery.data === undefined) {
     console.error(userMatcherQuery.error);
+    return null;
+  }
+
+  if (activeRouteQuery.isError || activeRouteQuery.data === undefined) {
+    console.error(activeRouteQuery.error);
     return null;
   }
 
@@ -64,6 +80,11 @@ const SearchBox = () => {
       ));
       setUsers(users);
     }
+    else if (view == SearchView.ActiveRoutes) {
+      const activeRouteSearchResults: string[] = activeRouteQuery.data.getMatches(inputText);
+      const activeRoutes: Route[] = await Promise.all(activeRouteSearchResults.map(getRouteByName));
+      setActiveRoutes(activeRoutes);
+    }
     else if (view === SearchView.ArchivedRoutes) {
       const archivedRouteSearchResults: string[] = archivedRouteMatcherQuery.data.getMatches(inputText);
       const archiveRoutes: Route[] = await Promise.all(archivedRouteSearchResults.map(getRouteByName));
@@ -71,28 +92,36 @@ const SearchBox = () => {
     }
   };
 
-  const results =
-    view === SearchView.Users
-      ? users.map((currUser: User) => {
-        return (
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          <VStack key={currUser.docRef!.id} width='30%'>
-            <Divider orientation='horizontal' />
-            <UserRow user={currUser} />
-          </VStack>
-        );
-      })
-      : view === SearchView.ArchivedRoutes
-        ? archivedRoutes.map((currRoute: Route) => {
-          return (
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            <VStack key={currRoute.docRef!.id} width='30%'>
-              <Divider orientation='horizontal' />
-              <RouteRow route={currRoute} />
-            </VStack>
-          );
-        })
-        : [];
+  const getResults = () => {
+    if (view === SearchView.Users) {
+      return users.map((currUser: User) =>
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        <VStack key={currUser.docRef!.id} width='30%'>
+          <Divider orientation='horizontal' />
+          <UserRow user={currUser} />
+        </VStack>
+      );
+    }
+    if (view === SearchView.ActiveRoutes) {
+      return activeRoutes.map((currRoute: Route) =>
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        <VStack key={currRoute.docRef!.id} width='30%'>
+          <Divider orientation='horizontal' />
+          <RouteRow route={currRoute} />
+        </VStack>
+      );
+    }
+    if (view === SearchView.ArchivedRoutes) {
+      return archivedRoutes.map((currRoute: Route) =>
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        <VStack key={currRoute.docRef!.id} width='30%'>
+          <Divider orientation='horizontal' />
+          <RouteRow route={currRoute} />
+        </VStack>
+      );
+    }
+    return [];
+  };
 
   return (
     <VStack>
@@ -105,16 +134,16 @@ const SearchBox = () => {
           >
             <Text>Users</Text>
           </Button>
-        </Box >
-        {/* <Box>
+        </Box>
+        <Box>
           <Button
             onPress={() => changeView(SearchView.ActiveRoutes)}
             variant={view === SearchView.ActiveRoutes ? 'solid' : 'outline'}
             rounded="full"
           >
-            <Text>Activedick Routes</Text>
+            <Text>Active Routes</Text>
           </Button>
-        </Box > */}
+        </Box>
         <Box>
           <Button
             onPress={() => changeView(SearchView.ArchivedRoutes)}
@@ -138,7 +167,7 @@ const SearchBox = () => {
         </Button>
       </Flex>
       <Flex flexDir='column' alignItems='center'>
-        {results}
+        {getResults()}
       </Flex>
     </VStack>
   );
