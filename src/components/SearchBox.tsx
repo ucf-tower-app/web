@@ -22,12 +22,12 @@ const enum SearchView {
 const SearchBox = () => {
   const [view, setView] = useState<SearchView>(SearchView.Users);
   const [inputText, setInputText] = useState<string>('');
+  const [results, setResults] = useState<JSX.Element[]>([]);
 
   const userMatcherQuery = useQuery(
     'userMatcher',
     async () => buildUserSubstringMatcher(await getUserCache())
   );
-  const [users, setUsers] = useState<User[]>([]);
 
   const activeRouteQuery = useQuery(
     'activeRouteMatcher',
@@ -37,13 +37,11 @@ const SearchBox = () => {
       return new SubstringMatcher<string>(routeNames);
     }
   );
-  const [activeRoutes, setActiveRoutes] = useState<Route[]>([]);
 
   const archivedRouteMatcherQuery = useQuery(
     'archivedRouteMatcher',
     async () => getArchivedRoutesSubstringMatcher()
   );
-  const [archivedRoutes, setArchivedRoutes] = useState<Route[]>([]);
 
   if (userMatcherQuery.isLoading || activeRouteQuery.isLoading || archivedRouteMatcherQuery.isLoading) {
     return null;
@@ -68,59 +66,48 @@ const SearchBox = () => {
     if (newView === view) {
       return;
     }
-    setView(newView);
     setInputText('');
+    setResults([]);
+    setView(newView);
   };
 
   const updateSearchResults = async () => {
     if (view === SearchView.Users) {
       const userSearchResults: UserSearchResult[] = userMatcherQuery.data.getMatches(inputText);
-      const users: User[] = await Promise.all(userSearchResults.map((userSearchResult: UserSearchResult) =>
-        userSearchResult.user
-      ));
-      setUsers(users);
-    }
-    else if (view == SearchView.ActiveRoutes) {
-      const activeRouteSearchResults: string[] = activeRouteQuery.data.getMatches(inputText);
-      const activeRoutes: Route[] = await Promise.all(activeRouteSearchResults.map(getRouteByName));
-      setActiveRoutes(activeRoutes);
-    }
-    else if (view === SearchView.ArchivedRoutes) {
-      const archivedRouteSearchResults: string[] = archivedRouteMatcherQuery.data.getMatches(inputText);
-      const archiveRoutes: Route[] = await Promise.all(archivedRouteSearchResults.map(getRouteByName));
-      setArchivedRoutes(archiveRoutes);
-    }
-  };
+      const users: User[] = userSearchResults.map((userSearchResult: UserSearchResult) => userSearchResult.user);
 
-  const getResults = () => {
-    if (view === SearchView.Users) {
-      return users.map((currUser: User) =>
+      setResults(users.map((currUser: User) =>
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         <VStack key={currUser.docRef!.id} width='30%'>
           <Divider orientation='horizontal' />
           <UserRow user={currUser} />
         </VStack>
-      );
+      ));
     }
-    if (view === SearchView.ActiveRoutes) {
-      return activeRoutes.map((currRoute: Route) =>
+    else if (view == SearchView.ActiveRoutes) {
+      const activeRouteSearchResults: string[] = activeRouteQuery.data.getMatches(inputText);
+      const activeRoutes: Route[] = await Promise.all(activeRouteSearchResults.map(getRouteByName));
+
+      setResults(activeRoutes.map((currRoute: Route) =>
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         <VStack key={currRoute.docRef!.id} width='30%'>
           <Divider orientation='horizontal' />
           <RouteRow route={currRoute} />
         </VStack>
-      );
+      ));
     }
-    if (view === SearchView.ArchivedRoutes) {
-      return archivedRoutes.map((currRoute: Route) =>
+    else if (view === SearchView.ArchivedRoutes) {
+      const archivedRouteSearchResults: string[] = archivedRouteMatcherQuery.data.getMatches(inputText);
+      const archivedRoutes: Route[] = await Promise.all(archivedRouteSearchResults.map(getRouteByName));
+
+      setResults(archivedRoutes.map((currRoute: Route) =>
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         <VStack key={currRoute.docRef!.id} width='30%'>
           <Divider orientation='horizontal' />
           <RouteRow route={currRoute} />
         </VStack>
-      );
+      ));
     }
-    return [];
   };
 
   return (
@@ -167,7 +154,7 @@ const SearchBox = () => {
         </Button>
       </Flex>
       <Flex flexDir='column' alignItems='center'>
-        {getResults()}
+        {results}
       </Flex>
     </VStack>
   );
