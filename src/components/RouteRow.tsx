@@ -23,7 +23,6 @@ export const RouteRow = ({ route }: Props) => {
   }
 
   const navToRoute = () => {
-    const searchParams = { uid: route.docRef!.id };
     navigate({
       pathname: '/routeview',
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
