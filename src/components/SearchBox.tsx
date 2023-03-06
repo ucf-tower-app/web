@@ -7,9 +7,10 @@ import {
   getRouteByName,
   getUserCache
 } from '../xplat/api';
-import { User, Route, SubstringMatcher } from '../xplat/types';
+import { User, Route } from '../xplat/types';
 import { UserRow } from './UserRow';
 import { RouteRow } from './RouteRow';
+import { useQuery } from 'react-query';
 
 const enum SearchView {
   Users,
@@ -21,26 +22,19 @@ const SearchBox = () => {
   const [view, setView] = useState<SearchView>(SearchView.Users);
   const [inputText, setInputText] = useState<string>('');
 
-  const [gotMatchers, setGotMatchers] = useState<boolean>(false);
-
-  const [userMatcher, setUserMatcher] = useState<SubstringMatcher<UserSearchResult[]>>();
+  const userMatcherQuery = useQuery(
+    'userMatcher',
+    async () => buildUserSubstringMatcher(await getUserCache())
+  );
   const [userSearchResults, setUserSearchResults] = useState<UserSearchResult[]>([]);
   const [users, setUsers] = useState<User[]>([]);
 
-  const [archivedRoutesMatcher, setArchivedRoutesMatcher] = useState<SubstringMatcher<string>>();
+  const archivedRouteMatcherQuery = useQuery(
+    'archivedRouteMatcher',
+    async () => getArchivedRoutesSubstringMatcher()
+  );
   const [archivedRoutesSearchResults, setArchivedRoutesSearchResults] = useState<string[]>([]);
   const [archivedRoutes, setArchivedRoutes] = useState<Route[]>([]);
-
-  useEffect(() => {
-    const fetchMatchers = async () => {
-      setUserMatcher(buildUserSubstringMatcher(await getUserCache()));
-      setArchivedRoutesMatcher(await getArchivedRoutesSubstringMatcher());
-      setGotMatchers(true);
-    };
-    if (!gotMatchers) {
-      fetchMatchers();
-    }
-  }, []);
 
   useEffect(() => {
     const fetchRoutes = async () => {
@@ -52,26 +46,34 @@ const SearchBox = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const users: User[] = await Promise.all(userSearchResults.map((userSearchResult: UserSearchResult) => {
-        return userSearchResult.user;
-      }));
+      const users: User[] = await Promise.all(userSearchResults.map((userSearchResult: UserSearchResult) =>
+        userSearchResult.user
+      ));
       setUsers(users);
     };
     fetchUsers();
   }, [userSearchResults]);
 
-  const updateSearchResults = async () => {
-    if (!gotMatchers) {
-      return;
-    }
+  if (userMatcherQuery.isLoading || archivedRouteMatcherQuery.isLoading) {
+    return null;
+  }
 
+  if (userMatcherQuery.isError || userMatcherQuery.data === undefined) {
+    console.error(userMatcherQuery.error);
+    return null;
+  }
+
+  if (archivedRouteMatcherQuery.isError || archivedRouteMatcherQuery.data === undefined) {
+    console.error(archivedRouteMatcherQuery.error);
+    return null;
+  }
+
+  const updateSearchResults = async () => {
     if (view === SearchView.Users) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      setUserSearchResults(userMatcher!.getMatches(inputText));
+      setUserSearchResults(userMatcherQuery.data.getMatches(inputText));
     }
     else if (view === SearchView.ArchivedRoutes) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      setArchivedRoutesSearchResults(archivedRoutesMatcher!.getMatches(inputText));
+      setArchivedRoutesSearchResults(archivedRouteMatcherQuery.data.getMatches(inputText));
     }
   };
 
@@ -79,6 +81,7 @@ const SearchBox = () => {
     view === SearchView.Users
       ? users.map((currUser: User) => {
         return (
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           <VStack key={currUser.docRef!.id} width='30%'>
             <Divider orientation='horizontal' />
             <UserRow user={currUser} />
@@ -88,6 +91,7 @@ const SearchBox = () => {
       : view === SearchView.ArchivedRoutes
         ? archivedRoutes.map((currRoute: Route) => {
           return (
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             <VStack key={currRoute.docRef!.id} width='30%'>
               <Divider orientation='horizontal' />
               <RouteRow route={currRoute} />
