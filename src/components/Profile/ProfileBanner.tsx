@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { Box, HStack, Text, Input, VStack, Skeleton, Select, Button, Radio } from 'native-base';
+import { Box, HStack, Text, Input, VStack, Skeleton, Select, Button, Radio, SunIcon} from 'native-base';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import '../css/feed.css';
@@ -95,13 +95,13 @@ const ProfileBanner = ({user}: {user: FetchedUserProfile | undefined}) => {
           }
           <Input type='text' multiline placeholder='Reason for action' marginY='1' numberOfLines={3}
             onChangeText={(text) => setActionDescription(text)} />
-          <Input type={showPassword ? 'text' : 'password'}  placeholder="Enter your password" marginY='1'
+          <Input type={showPassword ? 'text' : 'password'} placeholder="Enter your password" marginY='1'
             onChangeText={(text) => setPasswordCheck(text)}
             InputRightElement={
-              <Button size="xs" onPress={handleClick}>
-                {showPassword ? 'Hide' : 'Show'}
+              <Button backgroundColor={'transparent'} onPress={handleClick}>
+                {<SunIcon color={showPassword ? 'blue.500' : 'black'}/>}
               </Button>
-            } />
+            }/>
           <HStack>
             <Button onPress={() => setEditPermissionModal(false)} marginTop='1'>
               <Text variant='button'>Cancel</Text>
