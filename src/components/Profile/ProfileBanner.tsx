@@ -14,6 +14,9 @@ const ProfileBanner = ({user}: {user: FetchedUserProfile | undefined}) => {
   const [newPermission, setNewPermission] = useState<number>(0);
   const [actionDescription, setActionDescription] = useState<string>('');
   const [passwordCheck, setPasswordCheck] = useState<string>('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClick = () => setShowPassword(!showPassword);
 
   const handleEditPermission = () => {
     setEditPermissionModal(false);
@@ -21,7 +24,8 @@ const ProfileBanner = ({user}: {user: FetchedUserProfile | undefined}) => {
     if (user != undefined) {
       console.log('will change permission to ' + UserStatus[newPermission]);
       authContext.user?.userObject.editOtherStatus(passwordCheck, user?.userObject, newPermission, actionDescription);
-    } 
+      user.status = newPermission;
+    }
   };
 
   const getStatusTitle = (status: number) => {
@@ -91,8 +95,13 @@ const ProfileBanner = ({user}: {user: FetchedUserProfile | undefined}) => {
           }
           <Input type='text' multiline placeholder='Reason for action' marginY='1' numberOfLines={3}
             onChangeText={(text) => setActionDescription(text)} />
-          <Input type='text' multiline placeholder='Enter your password' marginY='1' numberOfLines={1}
-            onChangeText={(text) => setPasswordCheck(text)} />
+          <Input type={showPassword ? 'text' : 'password'}  placeholder="Enter your password" marginY='1'
+            onChangeText={(text) => setPasswordCheck(text)}
+            InputRightElement={
+              <Button size="xs" onPress={handleClick}>
+                {showPassword ? 'Hide' : 'Show'}
+              </Button>
+            } />
           <HStack>
             <Button onPress={() => setEditPermissionModal(false)} marginTop='1'>
               <Text variant='button'>Cancel</Text>
