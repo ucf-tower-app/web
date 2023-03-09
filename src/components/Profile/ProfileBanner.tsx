@@ -7,6 +7,10 @@ import { FetchedUserProfile } from '../../utils/queries';
 import { AuthContext } from '../../utils/AuthContext';
 import { UserStatus } from '../../xplat/types';
 
+const getStatusTitle = (status: number) => {
+  return UserStatus[status];
+};
+
 const ProfileBanner = ({user}: {user: FetchedUserProfile | undefined}) => {
   const [promoteOrDemote, setPromoteOrDemote] = useState<string>('promote');
   const [editPermissionModal, setEditPermissionModal] = useState<boolean>(false);
@@ -26,10 +30,6 @@ const ProfileBanner = ({user}: {user: FetchedUserProfile | undefined}) => {
       authContext.user?.userObject.editOtherStatus(passwordCheck, user?.userObject, newPermission, actionDescription);
       user.status = newPermission;
     }
-  };
-
-  const getStatusTitle = (status: number) => {
-    return UserStatus[status];
   };
 
   if (user === undefined)
