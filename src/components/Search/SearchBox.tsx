@@ -21,8 +21,9 @@ export const enum SearchView {
 
 type Props = {
   view: SearchView;
+  onSelect: (docRefID: string) => void;
 };
-export const SearchBox = ({ view }: Props) => {
+export const SearchBox = ({ view, onSelect }: Props) => {
   const [inputText, setInputText] = useState<string>('');
   const [results, setResults] = useState<JSX.Element[]>([]);
 
@@ -82,7 +83,7 @@ export const SearchBox = ({ view }: Props) => {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         <VStack key={currUser.docRef!.id} width='100%'>
           <Divider orientation='horizontal' />
-          <UserRow user={currUser} />
+          <UserRow user={currUser} onPress={onSelect} />
         </VStack>
       ));
     }
@@ -95,7 +96,7 @@ export const SearchBox = ({ view }: Props) => {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         <VStack key={currRoute.docRef!.id} width='100%'>
           <Divider orientation='horizontal' />
-          <RouteRow route={currRoute} />
+          <RouteRow route={currRoute} onPress={onSelect} />
         </VStack>
       ));
     }
@@ -108,7 +109,7 @@ export const SearchBox = ({ view }: Props) => {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         <VStack key={currRoute.docRef!.id} width='100%'>
           <Divider orientation='horizontal' />
-          <RouteRow route={currRoute} />
+          <RouteRow route={currRoute} onPress={onSelect} />
         </VStack>
       ));
     }

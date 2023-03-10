@@ -2,9 +2,28 @@ import { Box, Button, Flex, VStack, Text, Center } from 'native-base';
 import { NavBar } from '../components/NavigationBar';
 import { SearchBox, SearchView } from '../components/Search/SearchBox';
 import { useState } from 'react';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 
 const Search = () => {
   const [view, setView] = useState<SearchView>(SearchView.Users);
+
+  const navigate = useNavigate();
+
+  const navToProfile = (docRefID: string) => {
+    navigate({
+      pathname: '/profile',
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      search: `?${createSearchParams({ uid: docRefID })}`
+    });
+  };
+
+  const navToRoute = (docRefID: string) => {
+    navigate({
+      pathname: '/routeview',
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      search: `?${createSearchParams({ uid: docRefID })}`
+    });
+  };
 
   return (
     <Flex flexDir='column' justifyContent='center' width='100%'>
@@ -41,7 +60,7 @@ const Search = () => {
         </Flex>
         <Center>
           <Box width='30%'>
-            <SearchBox view={view} />
+            <SearchBox view={view} onSelect={view === SearchView.Users ? navToProfile : navToRoute} />
           </Box>
         </Center>
       </VStack>

@@ -1,17 +1,17 @@
 import { Box, Flex, Text } from 'native-base';
 import { User } from '../xplat/types/user';
 import { useQuery } from 'react-query';
-import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Pressable } from 'react-native';
 
 type Props = {
   user: User;
+  onPress: (docRefID: string) => void;
 };
-export const UserRow = ({ user }: Props) => {
-  const navigate = useNavigate();
-
+export const UserRow = ({ user, onPress }: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { isLoading, isError, error, data } = useQuery(user.docRef!.id, user.buildFetcher());
+  const myUID = user.docRef!.id;
+
+  const { isLoading, isError, error, data } = useQuery(myUID, user.buildFetcher());
 
   if (isLoading) {
     return null;
@@ -22,17 +22,9 @@ export const UserRow = ({ user }: Props) => {
     return null;
   }
 
-  const navToProfile = () => {
-    navigate({
-      pathname: '/profile',
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      search: `?${createSearchParams({ uid: user.docRef!.id })}`
-    });
-  };
-
   return (
     <Box width='100%'>
-      <Pressable onPress={navToProfile} >
+      <Pressable onPress={() => onPress(myUID)} >
         <Flex flexDirection="row" justifyContent="space-between" >
           <Text>{data.displayName}</Text>
           <Text>{data.username}</Text>
