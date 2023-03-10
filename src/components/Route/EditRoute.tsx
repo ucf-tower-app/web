@@ -1,6 +1,5 @@
-import { LazyStaticImage, Route, RouteClassifier, 
-  RouteColor, RouteStatus, User, NaturalRules, FetchedRoute, invalidateDocRefId } from '../../xplat/types';
-import { Box, Text, HStack, Input, VStack, Radio, Button, Select } from 'native-base';
+import { RouteColor, User, NaturalRules, FetchedRoute, invalidateDocRefId } from '../../xplat/types';
+import { Text, HStack, Input, VStack, Radio, Button, Select } from 'native-base';
 import {compressImage} from '../../utils/CompressImage';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
@@ -12,8 +11,8 @@ const Ropes = [
   '1', '2', '3', '4', '5', '6', '7', '8', '9'
 ];
 
-const EditRoute = ({route}: {route: FetchedRoute}) => {
-  const [showPopup, setShowPopup] = useState<boolean>(false);
+const EditRoute = ({route, open, setOpen}: 
+  {route: FetchedRoute, open: boolean, setOpen: (arg0: boolean) => void}) => {
   const [description, setDescription] = useState(route.description);
   const [setter, setSetter] = useState<User | undefined>(route.setter);
   const [rope, setRope] = useState<number | undefined>(route.rope);
@@ -70,7 +69,9 @@ const EditRoute = ({route}: {route: FetchedRoute}) => {
       console.log('route edited');
       invalidateDocRefId(route.routeObject.getId());
       queryClient.invalidateQueries({queryKey: route.routeObject.getId()});
-      queryClient.invalidateQueries({queryKey: ['route', {id: route.routeObject.getId()}], exact: true});
+      queryClient.invalidateQueries(
+        {queryKey: ['route', {id: route.routeObject.getId()}], exact: true}
+      );
     }).catch((err) => {
       console.log('failed to edit route');
       console.log(err);
@@ -78,12 +79,11 @@ const EditRoute = ({route}: {route: FetchedRoute}) => {
   }
 
   return (
-    <Popup trigger={<button className='native-button' style=
-      {{height: 'fit-content', top: 0}}>Edit Route</button>} open={showPopup} onOpen={() => setShowPopup(true)} 
-    modal nested onClose={() => {
-      setShowPopup(false); 
-      resetStates();
-    }}>
+    <Popup open={open} onOpen={() => setOpen(true)} 
+      modal nested onClose={() => {
+        setOpen(false); 
+        resetStates();
+      }}>
       <VStack width='100%' space={1} maxH='90vh' overflowY='scroll' p={1}>
         <Text bold alignSelf='center' variant='header'>{route.name}</Text>
         <Text alignSelf='center'>
@@ -99,8 +99,8 @@ const EditRoute = ({route}: {route: FetchedRoute}) => {
               { // show compression text if image is being compressed
                 thumbnail !== undefined && 
                 <>
-                  <img src={thumbnail} alt='thumbnail' width='200px'/>
-                  <HStack space='2'>
+                  <img src={thumbnail} alt='thumbnail' className='route-popup-avatar'/>
+                  <HStack alignItems='center'space={2}>
                     <Text variant='subtext'>Thumbnail preview</Text>
                     <input className='hidden-input' type='file' id="file" accept='image/*'
                       onChange={handleFileSelect} />
@@ -120,7 +120,7 @@ const EditRoute = ({route}: {route: FetchedRoute}) => {
                     <Text variant='subtext'>Compressing image...</Text>
                     :
                     <>
-                      <img src={URL.createObjectURL(thumbnailFile)} alt='thumbnail' width='200px'/>
+                      <img src={URL.createObjectURL(thumbnailFile)} alt='thumbnail' className='route-popup-avatar'/>
                       <button className='native-button' onClick={() => {
                         setShowStoredThumbnail(true);
                         setThumbnailFile(undefined);
@@ -139,14 +139,14 @@ const EditRoute = ({route}: {route: FetchedRoute}) => {
               }
             </>
         }
-        <HStack width='100%'>
-          <Text bold width='10%'>Description: </Text>
-          <Input type='text' value={description} onChangeText={setDescription} width='90%' multiline />
+        <HStack alignItems='center'space={1}width='100%'>
+          <Text bold >Description: </Text>
+          <Input type='text' value={description} onChangeText={setDescription} width='75%' multiline />
         </HStack>
-        <HStack width='100%'>
-          <Text bold width='10%'>Setter: </Text>
+        <HStack alignItems='center'space={1}width='100%'>
+          <Text bold >Setter: </Text>
           <Radio.Group name='Setter' defaultValue='User' onChange={(nextVal) => setSetterType(nextVal)}>
-            <HStack space={2}>
+            <HStack alignItems='center'space={2}>
               <Radio value='User'>User</Radio>
               <Radio value='Custom'>Custom</Radio>
             </HStack>
@@ -156,10 +156,16 @@ const EditRoute = ({route}: {route: FetchedRoute}) => {
           setterType === 'User' ?
             <Text>This will be a user search component</Text>
             :
-            <Input left='10%' type='text' value={setterRawName} onChangeText={setSetterRawName} width='90%' />
+            <Input 
+              type='text' 
+              value={setterRawName} 
+              placeholder='Non-user setter' 
+              onChangeText={setSetterRawName} 
+              width='50%' 
+            />
         }
         <HStack>
-          <Text bold width='10%'>Natural Rules: </Text>
+          <Text bold >Natural Rules: </Text>
           <Select placeholder='Natural Rules' onValueChange={(rulesString) => {
             const rules = rulesString as NaturalRules;
             setNaturalRules(rules);
@@ -169,8 +175,8 @@ const EditRoute = ({route}: {route: FetchedRoute}) => {
             })}
           </Select>
         </HStack>
-        <HStack width='100%'>
-          <Text bold width='10%'>Rope: </Text>
+        <HStack alignItems='center'space={1}width='100%'>
+          <Text bold >Rope: </Text>
           <Select defaultValue={rope === undefined ? '1' : rope.toString()} 
             minWidth='90%' onValueChange={(itemValue) => setRope(parseInt(itemValue))}>
             {Ropes.map((rope) => {
@@ -178,8 +184,8 @@ const EditRoute = ({route}: {route: FetchedRoute}) => {
             })}
           </Select>
         </HStack>
-        <HStack width='100%'>
-          <Text bold width='10%'>Color: </Text>
+        <HStack alignItems='center'space={1}width='100%'>
+          <Text bold >Color: </Text>
           <Select defaultValue={color}
             minWidth='90%' onValueChange={(itemValue) => setColor(itemValue)}>
             {Object.values(RouteColor).map((color) => {
@@ -187,13 +193,22 @@ const EditRoute = ({route}: {route: FetchedRoute}) => {
             })}
           </Select>
         </HStack>
-        <Button onPress={() => {
-          handleSubmit().finally( () => {
-            setShowPopup(false);
-          });
-        }} alignSelf='center'>
-          <Text variant='button'>Submit Changes</Text>
-        </Button>
+        <HStack justifyContent='center' space={2}>
+          <Button onPress={() => {
+            setOpen(false);
+          }}>
+            <Text variant='button'>
+              Cancel
+            </Text>
+          </Button>
+          <Button onPress={() => {
+            handleSubmit().finally( () => {
+              setOpen(false);
+            });
+          }} alignSelf='center'>
+            <Text variant='button'>Submit Changes</Text>
+          </Button>
+        </HStack>
       </VStack>
     </Popup>
   );
