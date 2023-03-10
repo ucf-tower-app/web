@@ -80,7 +80,7 @@ const EditRoute = ({route, open, setOpen}:
 
   return (
     <Popup open={open} onOpen={() => setOpen(true)} 
-      modal nested onClose={() => {
+      modal onClose={() => {
         setOpen(false); 
         resetStates();
       }}>
@@ -141,7 +141,8 @@ const EditRoute = ({route, open, setOpen}:
         }
         <HStack alignItems='center'space={1}width='100%'>
           <Text bold >Description: </Text>
-          <Input type='text' value={description} onChangeText={setDescription} width='75%' multiline />
+          <Input type='text' value={description} onChangeText={setDescription} width='75%' 
+            multiline numberOfLines={2} />
         </HStack>
         <HStack alignItems='center'space={1}width='100%'>
           <Text bold >Setter: </Text>
