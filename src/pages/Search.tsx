@@ -1,4 +1,4 @@
-import { Box, Button, Flex, VStack, Text } from 'native-base';
+import { Box, Button, Flex, VStack, Text, Center } from 'native-base';
 import { NavBar } from '../components/NavigationBar';
 import { SearchBox, SearchView } from '../components/Search/SearchBox';
 import { useState } from 'react';
@@ -39,7 +39,11 @@ const Search = () => {
             </Button>
           </Box>
         </Flex>
-        <SearchBox view={view} />
+        <Center>
+          <Box width='30%'>
+            <SearchBox view={view} />
+          </Box>
+        </Center>
       </VStack>
     </Flex>
   );

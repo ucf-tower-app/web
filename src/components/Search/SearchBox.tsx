@@ -26,68 +26,42 @@ export const SearchBox = ({ view }: Props) => {
   const [inputText, setInputText] = useState<string>('');
   const [results, setResults] = useState<JSX.Element[]>([]);
 
-  const matcherQuery = useQuery(
-    [view, 'matcher'],
-    async () => {
-      if (view === SearchView.Users) {
-        return buildUserSubstringMatcher(await getUserCache());
-      }
-      else if (view === SearchView.ActiveRoutes) {
-        const activeRoutes: Route[] = await getActiveRoutesCursor().________getAll_CLOWNTOWN_LOTS_OF_READS();
-        const routeNames: string[] = await Promise.all(activeRoutes.map((route: Route) => route.getName()));
-        return new SubstringMatcher<string>(routeNames);
-      }
-      else {
-        return getArchivedRoutesSubstringMatcher();
-      }
+  const userMatcherQuery = useQuery(
+    [SearchView.Users, 'matcher'],
+    async () => buildUserSubstringMatcher(await getUserCache()),
+    {
+      enabled: view === SearchView.Users,
     }
   );
 
+  const activeRouteMatcherQuery = useQuery(
+    [SearchView.ActiveRoutes, 'matcher'],
+    async () => {
+      const activeRoutes: Route[] = await getActiveRoutesCursor().________getAll_CLOWNTOWN_LOTS_OF_READS();
+      const routeNames: string[] = await Promise.all(activeRoutes.map((route: Route) => route.getName()));
+      return new SubstringMatcher<string>(routeNames);
+    },
+    {
+      enabled: view === SearchView.ActiveRoutes,
+    }
+  );
+
+  const archivedRouteQuery = useQuery(
+    [SearchView.ArchivedRoutes, 'matcher'],
+    async () => getArchivedRoutesSubstringMatcher(),
+    {
+      enabled: view === SearchView.ArchivedRoutes,
+    }
+  );
+
+  // reset results for when our view prop changes
   useEffect(() => {
-    const fetchResults = async () => {
-      if (matcherQuery.isLoading || matcherQuery.data === undefined) {
-        return;
-      }
+    setResults([]);
+  }, [view]);
 
-      if (view === SearchView.Users) {
-        const userSearchResults: UserSearchResult[] = matcherQuery.data.getMatches(inputText);
-        const users: User[] = userSearchResults.map((userSearchResult: UserSearchResult) => userSearchResult.user);
-
-        setResults(users.map((currUser: User) =>
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          <VStack key={currUser.docRef!.id} width='30%'>
-            <Divider orientation='horizontal' />
-            <UserRow user={currUser} />
-          </VStack>
-        ));
-      }
-      else if (view == SearchView.ActiveRoutes) {
-        const activeRouteSearchResults: string[] = matcherQuery.data.getMatches(inputText);
-        const activeRoutes: Route[] = await Promise.all(activeRouteSearchResults.map(getRouteByName));
-
-        setResults(activeRoutes.map((currRoute: Route) =>
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          <VStack key={currRoute.docRef!.id} width='30%'>
-            <Divider orientation='horizontal' />
-            <RouteRow route={currRoute} />
-          </VStack>
-        ));
-      }
-      else if (view === SearchView.ArchivedRoutes) {
-        const archivedRouteSearchResults: string[] = matcherQuery.data.getMatches(inputText);
-        const archivedRoutes: Route[] = await Promise.all(archivedRouteSearchResults.map(getRouteByName));
-
-        setResults(archivedRoutes.map((currRoute: Route) =>
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          <VStack key={currRoute.docRef!.id} width='30%'>
-            <Divider orientation='horizontal' />
-            <RouteRow route={currRoute} />
-          </VStack>
-        ));
-      }
-    };
-    fetchResults();
-  }, [matcherQuery]);
+  // get which matcher query we are referring to for checking for loading and errors
+  const matcherQuery = (view === SearchView.Users ? userMatcherQuery :
+    (view === SearchView.ActiveRoutes ? activeRouteMatcherQuery : archivedRouteQuery));
 
   if (matcherQuery.isLoading) {
     return null;
@@ -100,36 +74,39 @@ export const SearchBox = ({ view }: Props) => {
 
   const updateSearchResults = async () => {
     if (view === SearchView.Users) {
-      const userSearchResults: UserSearchResult[] = userMatcherQuery.data.getMatches(inputText);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const userSearchResults: UserSearchResult[] = userMatcherQuery.data!.getMatches(inputText);
       const users: User[] = userSearchResults.map((userSearchResult: UserSearchResult) => userSearchResult.user);
 
       setResults(users.map((currUser: User) =>
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        <VStack key={currUser.docRef!.id} width='30%'>
+        <VStack key={currUser.docRef!.id} width='100%'>
           <Divider orientation='horizontal' />
           <UserRow user={currUser} />
         </VStack>
       ));
     }
     else if (view == SearchView.ActiveRoutes) {
-      const activeRouteSearchResults: string[] = activeRouteQuery.data.getMatches(inputText);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const activeRouteSearchResults: string[] = activeRouteMatcherQuery.data!.getMatches(inputText);
       const activeRoutes: Route[] = await Promise.all(activeRouteSearchResults.map(getRouteByName));
 
       setResults(activeRoutes.map((currRoute: Route) =>
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        <VStack key={currRoute.docRef!.id} width='30%'>
+        <VStack key={currRoute.docRef!.id} width='100%'>
           <Divider orientation='horizontal' />
           <RouteRow route={currRoute} />
         </VStack>
       ));
     }
     else if (view === SearchView.ArchivedRoutes) {
-      const archivedRouteSearchResults: string[] = archivedRouteMatcherQuery.data.getMatches(inputText);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const archivedRouteSearchResults: string[] = archivedRouteQuery.data!.getMatches(inputText);
       const archivedRoutes: Route[] = await Promise.all(archivedRouteSearchResults.map(getRouteByName));
 
       setResults(archivedRoutes.map((currRoute: Route) =>
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        <VStack key={currRoute.docRef!.id} width='30%'>
+        <VStack key={currRoute.docRef!.id} width='100%'>
           <Divider orientation='horizontal' />
           <RouteRow route={currRoute} />
         </VStack>
