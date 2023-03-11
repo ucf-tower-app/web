@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { User } from '../../xplat/types/user';
 import { HStack, Text, Pressable, Skeleton } from 'native-base';
 import { useQuery } from 'react-query';
@@ -7,7 +6,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { buildUserFetcher } from '../../utils/queries';
 
-const AuthorHandle = ({author}: {author: User}) => {
+const AuthorHandle = ({ author }: { author: User }) => {
   const { isLoading, isError, data } = useQuery(author.docRef!.id, buildUserFetcher(author));
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -15,31 +14,28 @@ const AuthorHandle = ({author}: {author: User}) => {
     const path = window.location.href.split('?')[0];
     if (path.endsWith('/profile') && searchParams.get('uid') === author?.docRef?.id)
       return;
-    if (author)
-    {
-      navigate(`/profile?${createSearchParams({uid: author.docRef!.id})}`);
+    if (author) {
+      navigate(`/profile?${createSearchParams({ uid: author.docRef!.id })}`);
     }
   };
 
 
-  if (isLoading)
-  {
+  if (isLoading) {
     return (
       <HStack space={1}>
-        <Skeleton borderRadius={'100'} width='8%' isLoaded={false}/>
-        <Skeleton.Text lines={1} width='60%' alignSelf={'center'}/>
-        <Skeleton.Text lines={1} width='60%' alignSelf={'center'}/>
+        <Skeleton borderRadius={'100'} width='8%' isLoaded={false} />
+        <Skeleton.Text lines={1} width='60%' alignSelf={'center'} />
+        <Skeleton.Text lines={1} width='60%' alignSelf={'center'} />
       </HStack>
     );
   }
 
-  if (isError || data === undefined)
-  {
+  if (isError || data === undefined) {
     return (
       <HStack space={1}>
-        <Skeleton borderRadius={'100'} width='8%' isLoaded={false}/>
-        <Skeleton.Text lines={1} width='60%' alignSelf={'center'}/>
-        <Skeleton.Text lines={1} width='60%' alignSelf={'center'}/>
+        <Skeleton borderRadius={'100'} width='8%' isLoaded={false} />
+        <Skeleton.Text lines={1} width='60%' alignSelf={'center'} />
+        <Skeleton.Text lines={1} width='20%' alignSelf={'center'} />
       </HStack>
     );
   }
@@ -47,7 +43,7 @@ const AuthorHandle = ({author}: {author: User}) => {
   return (
     <Pressable onPress={navigateToProfile}>
       <HStack space={1}>
-        <img className='avatar' src={data.avatarUrl} alt='avatar'/>
+        <img className='avatar' src={data.avatarUrl} alt='avatar' />
         <Text variant='displayname'>{data.displayName}</Text>
         <Text variant='handle'>@{data.username}</Text>
       </HStack>
