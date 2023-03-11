@@ -6,14 +6,16 @@ import { useQuery } from 'react-query';
 import { NaturalRules, Route, RouteStatus, UserStatus, invalidateDocRefId } from '../xplat/types';
 import { queryClient } from '../App';
 import placeholder_image from '../placeholder_image.jpg';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../utils/AuthContext';
+import EditRoute from '../components/Route/EditRoute';
 
 const RouteView = () => {
   const [params] = useSearchParams();
+  const [showEditPopup, setShowEditPopup] = useState(false);
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
-
+  
   const hasRouteUID: boolean = params.has('uid');
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const routeUID: string = (hasRouteUID ? params.get('uid')! : '');
@@ -79,9 +81,15 @@ const RouteView = () => {
             </Button>
             {/* TODO: make a 'confirm archive?' popup */}
             {data.status === RouteStatus.Active ?
-              <Button onPress={archiveThisRoute}>
-                <Text variant='button'>Archive This Route</Text>
-              </Button>
+              <>
+                <Button onPress={archiveThisRoute}>
+                  <Text variant='button'>Archive This Route</Text>
+                </Button>
+                <Button onPress={() => setShowEditPopup(true)}>
+                  <Text variant='button'>Edit Route</Text>
+                  <EditRoute route={data} open={showEditPopup} setOpen={setShowEditPopup}/>
+                </Button>
+              </>
               :
               null
             }

@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { Box, Center, Text } from 'native-base';
-import placeholder_image from '../../placeholder_image.jpg';
 import { Route, Forum } from '../../xplat/types';
 import { buildRouteFetcher } from '../../utils/queries';
 
 const RouteDetailsPanel = ({ route, forumSetter }: { route: Route, forumSetter: (forum: Forum) => void }) => {
-  const { isLoading, isError, data } = useQuery(['route', { id: route.docRef!.id }], buildRouteFetcher(route));
+  const { isLoading, isError, data } = useQuery(['route', { id: route.getId() }], buildRouteFetcher(route));
 
   useEffect(() => {
     if (data !== undefined) {
@@ -39,6 +38,7 @@ const RouteDetailsPanel = ({ route, forumSetter }: { route: Route, forumSetter: 
       <Center>
         <Text fontSize={'2xl'} bold>{data.name}</Text>
         {data.image !== undefined && <img src={data.image} className='route-avatar' alt='route' />}
+        {data.description !== undefined && <Text>{data.description}</Text>}
         {data.setter !== undefined && <Text> Set by {data.setter.string}</Text>}
       </Center>
     </Box>
