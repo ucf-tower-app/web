@@ -35,15 +35,23 @@ export const SearchBox = ({ view, onSelect }: Props) => {
     }
   );
 
+  const activeRoutesQuery = useQuery(
+    'activeRoutes',
+    async () => getActiveRoutesCursor().________getAll_CLOWNTOWN_LOTS_OF_READS(),
+    {
+      enabled: view === SearchView.ActiveRoutes,
+    }
+  );
   const activeRouteMatcherQuery = useQuery(
     [SearchView.ActiveRoutes, 'matcher'],
     async () => {
-      const activeRoutes: Route[] = await getActiveRoutesCursor().________getAll_CLOWNTOWN_LOTS_OF_READS();
-      const routeNames: string[] = await Promise.all(activeRoutes.map((route: Route) => route.getName()));
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const routeNames: string[] = await Promise.all(activeRoutesQuery.data!.map((route: Route) => route.getName()));
       return new SubstringMatcher<string>(routeNames);
     },
     {
-      enabled: view === SearchView.ActiveRoutes,
+      enabled: view === SearchView.ActiveRoutes &&
+        !activeRoutesQuery.isLoading && !activeRoutesQuery.isError && activeRoutesQuery.data !== undefined,
     }
   );
 
