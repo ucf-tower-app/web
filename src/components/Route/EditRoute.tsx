@@ -139,12 +139,12 @@ const EditRoute = ({route, open, setOpen}:
               }
             </>
         }
-        <HStack alignItems='center'space={1}width='100%'>
+        <HStack alignItems='center'space={1} width='100%'>
           <Text bold >Description: </Text>
           <Input type='text' value={description} onChangeText={setDescription} width='75%' 
             multiline numberOfLines={2} />
         </HStack>
-        <HStack alignItems='center'space={1}width='100%'>
+        <HStack alignItems='center'space={1} width='100%'>
           <Text bold >Setter: </Text>
           <Radio.Group name='Setter' defaultValue='User' onChange={(nextVal) => setSetterType(nextVal)}>
             <HStack alignItems='center'space={2}>
@@ -165,7 +165,7 @@ const EditRoute = ({route, open, setOpen}:
               width='50%' 
             />
         }
-        <HStack>
+        <HStack alignItems='center'space={1} width='100%'>
           <Text bold >Natural Rules: </Text>
           <Select placeholder='Natural Rules' onValueChange={(rulesString) => {
             const rules = rulesString as NaturalRules;
@@ -176,7 +176,7 @@ const EditRoute = ({route, open, setOpen}:
             })}
           </Select>
         </HStack>
-        <HStack alignItems='center'space={1}width='100%'>
+        <HStack alignItems='center'space={1} width='100%'>
           <Text bold >Rope: </Text>
           <Select defaultValue={rope === undefined ? '1' : rope.toString()} 
             minWidth='90%' onValueChange={(itemValue) => setRope(parseInt(itemValue))}>
@@ -185,7 +185,7 @@ const EditRoute = ({route, open, setOpen}:
             })}
           </Select>
         </HStack>
-        <HStack alignItems='center'space={1}width='100%'>
+        <HStack alignItems='center'space={1} width='100%'>
           <Text bold >Color: </Text>
           <Select defaultValue={color}
             minWidth='90%' onValueChange={(itemValue) => setColor(itemValue)}>
