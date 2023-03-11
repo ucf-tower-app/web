@@ -29,8 +29,8 @@ const Search = () => {
     <Flex flexDir='column' justifyContent='center' width='100%'>
       <NavBar />
       <VStack top='50px'>
-        <Flex flexDir='row' justifyContent='center'>
-          <Box>
+        <Flex flexDir='row' justifyContent='center' marginTop='2'>
+          <Box padding='1'>
             <Button
               onPress={() => setView(SearchView.Users)}
               variant={view === SearchView.Users ? 'solid' : 'outline'}
@@ -39,7 +39,7 @@ const Search = () => {
               <Text>Users</Text>
             </Button>
           </Box>
-          <Box>
+          <Box padding='1'>
             <Button
               onPress={() => setView(SearchView.ActiveRoutes)}
               variant={view === SearchView.ActiveRoutes ? 'solid' : 'outline'}
@@ -48,7 +48,7 @@ const Search = () => {
               <Text>Active Routes</Text>
             </Button>
           </Box>
-          <Box>
+          <Box padding='1'>
             <Button
               onPress={() => setView(SearchView.ArchivedRoutes)}
               variant={view === SearchView.ArchivedRoutes ? 'solid' : 'outline'}
@@ -59,12 +59,12 @@ const Search = () => {
           </Box>
         </Flex>
         <Center>
-          <Box width='30%'>
+          <Box width='30%' marginTop='2'>
             <SearchBox view={view} onSelect={view === SearchView.Users ? navToProfile : navToRoute} />
           </Box>
         </Center>
-      </VStack>
-    </Flex>
+      </VStack >
+    </Flex >
   );
 };
 

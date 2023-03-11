@@ -137,7 +137,7 @@ export const SearchBox = ({ view, onSelect }: Props) => {
           <Text variant='button'>Search!</Text>
         </Button>
       </Flex>
-      <Flex flexDir='column' alignItems='center'>
+      <Flex flexDir='column' alignItems='center' marginTop='1'>
         {results}
       </Flex>
     </VStack>
