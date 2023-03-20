@@ -26,8 +26,8 @@ export const UserRow = ({ user, onPress }: Props) => {
     <Box width='100%'>
       <Pressable onPress={() => onPress(myUID)} >
         <Flex flexDirection="row" justifyContent="space-between" >
-          <Text>{data.displayName}</Text>
-          <Text>{data.username}</Text>
+          <Text variant='displayname'>{data.displayName}</Text>
+          <Box><Text variant='handle'>@{data.username}</Text></Box>
         </Flex>
       </Pressable>
     </Box>
