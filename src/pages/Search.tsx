@@ -36,7 +36,7 @@ const Search = () => {
               variant={view === SearchView.Users ? 'solid' : 'outline'}
               rounded="full"
             >
-              <Text>Users</Text>
+              <Text color={view === SearchView.Users ? 'white' : 'black'}>Users</Text>
             </Button>
           </Box>
           <Box padding='1'>
@@ -45,7 +45,7 @@ const Search = () => {
               variant={view === SearchView.ActiveRoutes ? 'solid' : 'outline'}
               rounded="full"
             >
-              <Text>Active Routes</Text>
+              <Text color={view === SearchView.ActiveRoutes ? 'white' : 'black'}>Active Routes</Text>
             </Button>
           </Box>
           <Box padding='1'>
@@ -54,7 +54,7 @@ const Search = () => {
               variant={view === SearchView.ArchivedRoutes ? 'solid' : 'outline'}
               rounded="full"
             >
-              <Text>Archived Routes</Text>
+              <Text color={view === SearchView.ArchivedRoutes ? 'white' : 'black'}>Archived Routes</Text>
             </Button>
           </Box>
         </Flex>
