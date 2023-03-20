@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { Box, HStack, Text, Input, VStack, Skeleton, Select, Button, Radio } from 'native-base';
+import { Box, HStack, Text, Input, VStack, Skeleton, Select, Button, Radio, SunIcon} from 'native-base';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import '../css/feed.css';
@@ -8,20 +8,29 @@ import { AuthContext } from '../../utils/AuthContext';
 import { UserStatus } from '../../xplat/types';
 import ReportButton from '../Reports/ReportButton';
 
+const getStatusTitle = (status: number) => {
+  return UserStatus[status];
+};
+
 const ProfileBanner = ({user}: {user: FetchedUserProfile | undefined}) => {
   const [promoteOrDemote, setPromoteOrDemote] = useState<string>('promote');
   const [editPermissionModal, setEditPermissionModal] = useState<boolean>(false);
   const authContext = useContext(AuthContext);
   const [newPermission, setNewPermission] = useState<number>(0);
   const [actionDescription, setActionDescription] = useState<string>('');
+  const [passwordCheck, setPasswordCheck] = useState<string>('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClick = () => setShowPassword(!showPassword);
 
   const handleEditPermission = () => {
     setEditPermissionModal(false);
-    console.log('will change permission to ' + newPermission);
-  };
 
-  const managerSwap = () => {
-    console.log('Will make this user manager and remove manager status from current manager');
+    if (user != undefined) {
+      console.log('will change permission to ' + UserStatus[newPermission]);
+      authContext.user?.userObject.editOtherStatus(passwordCheck, user?.userObject, newPermission, actionDescription);
+      user.status = newPermission;
+    }
   };
 
   if (user === undefined)
@@ -48,12 +57,8 @@ const ProfileBanner = ({user}: {user: FetchedUserProfile | undefined}) => {
         onClose={() => setEditPermissionModal(false)} modal>
         <Box p={4} w='100%' h='100%' borderRadius='sm'>
           <Text alignSelf='center' bold fontSize='lg'>Edit user permission level</Text>
-          { user.status == UserStatus.Employee && authContext.user.status >= UserStatus.Manager
-            && 
-            <Button onPress={managerSwap} marginTop='1' m='3'>
-              <Text variant='button'>Make Manager</Text>
-            </Button>
-          }
+          <Text alignSelf='center' fontSize='sm' marginBottom='1'>
+            Current permission level: {getStatusTitle(user.status)}</Text>
           <Radio.Group name='Permission' value={promoteOrDemote} 
             onChange={(nextValue) => setPromoteOrDemote(nextValue)}>
             <Radio value='promote'>Promote</Radio>
@@ -64,25 +69,40 @@ const ProfileBanner = ({user}: {user: FetchedUserProfile | undefined}) => {
             promoteOrDemote === 'promote' && user.status > UserStatus.Banned ?
               <Select placeholder='Select permission level' 
                 onValueChange={(valueString) => setNewPermission(parseInt(valueString))}>
+                {user.status < UserStatus.Manager && authContext.user.status >= UserStatus.Manager &&
+                  <Select.Item label='Manager' value='4' />}
                 {user.status < UserStatus.Employee && authContext.user.status >= UserStatus.Manager &&
-                <Select.Item label='Employee' value='3' />}
-                {user.status < UserStatus.Approved && <Select.Item label='Approved (can post)' value='2' />}
-                {user.status < UserStatus.Verified && 
+                  <Select.Item label='Employee' value='3' />}
+                {user.status < UserStatus.Approved &&
+                  <Select.Item label='Approved (can post)' value='2' />}
+                {user.status < UserStatus.Verified &&
                   <Select.Item label='Verified (can login, cannot post)' value='1' />}
-                {user.status < UserStatus.Unverified && <Select.Item label='Unverified (cannot login)' value='0' />}
+                {user.status < UserStatus.Unverified &&
+                  <Select.Item label='Unverified (cannot login)' value='0' />}
               </Select>
               :
               /*Demote the user profile*/
               <Select placeholder='Select permission level'
                 onValueChange={(valueString) => setNewPermission(parseInt(valueString))}>
-                {user.status > UserStatus.Approved && <Select.Item label='Approved (can post)' value='2' />}
-                {user.status > UserStatus.Verified && 
+                {user.status > UserStatus.Employee && authContext.user.status >= UserStatus.Manager &&
+                  <Select.Item label='Employee' value='3' />}
+                {user.status > UserStatus.Approved &&
+                  <Select.Item label='Approved (can post)' value='2' />}
+                {user.status > UserStatus.Verified &&
                   <Select.Item label='Verified (can login, cannot post)' value='1' />}
-                {user.status > UserStatus.Unverified && <Select.Item label='Unverified (cannot login)' value='0' />}
+                {user.status > UserStatus.Unverified &&
+                  <Select.Item label='Unverified (cannot login)' value='0' />}
               </Select>
           }
           <Input type='text' multiline placeholder='Reason for action' marginY='1' numberOfLines={3}
             onChangeText={(text) => setActionDescription(text)} />
+          <Input type={showPassword ? 'text' : 'password'} placeholder="Enter your password" marginY='1'
+            onChangeText={(text) => setPasswordCheck(text)}
+            InputRightElement={
+              <Button backgroundColor={'transparent'} onPress={handleClick}>
+                {<SunIcon color={showPassword ? 'blue.500' : 'black'}/>}
+              </Button>
+            }/>
           <HStack>
             <Button onPress={() => setEditPermissionModal(false)} marginTop='1'>
               <Text variant='button'>Cancel</Text>
