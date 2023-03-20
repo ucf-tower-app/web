@@ -1,17 +1,17 @@
 import { Box, Flex, Text } from 'native-base';
-import { User } from '../xplat/types/user';
+import { Route } from '../../xplat/types/route';
 import { useQuery } from 'react-query';
 import { Pressable } from 'react-native';
 
 type Props = {
-  user: User;
+  route: Route;
   onPress: (docRefID: string) => void;
 };
-export const UserRow = ({ user, onPress }: Props) => {
+export const RouteRow = ({ route, onPress }: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const myUID = user.docRef!.id;
+  const myUID: string = route.docRef!.id;
 
-  const { isLoading, isError, error, data } = useQuery(myUID, user.buildFetcher());
+  const { isLoading, isError, error, data } = useQuery(myUID, route.buildFetcher());
 
   if (isLoading) {
     return null;
@@ -26,8 +26,8 @@ export const UserRow = ({ user, onPress }: Props) => {
     <Box width='100%'>
       <Pressable onPress={() => onPress(myUID)} >
         <Flex flexDirection="row" justifyContent="space-between" >
-          <Text variant='displayname'>{data.displayName}</Text>
-          <Box><Text variant='handle'>@{data.username}</Text></Box>
+          <Text>{data.name}</Text>
+          <Text>{data.gradeDisplayString}</Text>
         </Flex>
       </Pressable>
     </Box>

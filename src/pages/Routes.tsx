@@ -2,7 +2,7 @@ import { NavBar } from '../components/NavigationBar';
 import { Box, Divider, Flex, Text, VStack, Button } from 'native-base';
 import { useState, useEffect } from 'react';
 import { Route, RouteType } from '../xplat/types/route';
-import { RouteRow } from '../components/RouteRow';
+import { RouteRow } from '../components/Route/RouteRow';
 import { QueryCursor, invalidateDocRefId } from '../xplat/types';
 import { queryClient } from '../App';
 import { useQuery } from 'react-query';

@@ -9,8 +9,8 @@ import {
   getUserCache
 } from '../../xplat/api';
 import { User, Route, SubstringMatcher } from '../../xplat/types';
-import { UserRow } from '../UserRow';
-import { RouteRow } from '../RouteRow';
+import { UserRow } from '../User/UserRow';
+import { RouteRow } from '../Route/RouteRow';
 import { useQuery } from 'react-query';
 
 export const enum SearchView {
