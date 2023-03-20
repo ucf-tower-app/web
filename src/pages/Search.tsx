@@ -58,10 +58,8 @@ const Search = () => {
             </Button>
           </Box>
         </Flex>
-        <Center>
-          <Box width='30%' marginTop='2'>
-            <SearchBox view={view} onSelect={view === SearchView.Users ? navToProfile : navToRoute} />
-          </Box>
+        <Center marginTop='2'>
+          <SearchBox view={view} width='30%' onSelect={view === SearchView.Users ? navToProfile : navToRoute} />
         </Center>
       </VStack >
     </Flex >

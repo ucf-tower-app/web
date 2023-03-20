@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, Input, Text, VStack, ScrollView } from 'native-base';
+import { Button, Divider, Flex, Input, Text, VStack, ScrollView, Box } from 'native-base';
 import { useEffect, useState } from 'react';
 import {
   UserSearchResult,
@@ -21,9 +21,10 @@ export const enum SearchView {
 
 type Props = {
   view: SearchView;
+  width: string;
   onSelect: (docRefID: string) => void;
 };
-export const SearchBox = ({ view, onSelect }: Props) => {
+export const SearchBox = ({ view, width, onSelect }: Props) => {
   const [inputText, setInputText] = useState<string>('');
   const [results, setResults] = useState<JSX.Element[]>([]);
 
@@ -124,24 +125,26 @@ export const SearchBox = ({ view, onSelect }: Props) => {
   };
 
   return (
-    <VStack>
-      <Flex flexDir='row' justifyContent='center'>
-        <Input
-          value={inputText}
-          onChangeText={setInputText}
-          backgroundColor="white"
-          autoCorrect={false}
-          autoComplete="off"
-        />
-        <Button onPress={updateSearchResults}>
-          <Text variant='button'>Search!</Text>
-        </Button>
-      </Flex>
-      <Flex flexDir='column' alignItems='center' marginTop='1'>
-        <ScrollView width='100%'>
-          {results}
-        </ScrollView>
-      </Flex>
-    </VStack>
+    <Box width={width}>
+      <VStack>
+        <Flex flexDir='row' justifyContent='center'>
+          <Input
+            value={inputText}
+            onChangeText={setInputText}
+            backgroundColor="white"
+            autoCorrect={false}
+            autoComplete="off"
+          />
+          <Button onPress={updateSearchResults}>
+            <Text variant='button'>Search!</Text>
+          </Button>
+        </Flex>
+        <Flex flexDir='column' alignItems='center' marginTop='1'>
+          <ScrollView width='100%'>
+            {results}
+          </ScrollView>
+        </Flex>
+      </VStack>
+    </Box>
   );
 };
