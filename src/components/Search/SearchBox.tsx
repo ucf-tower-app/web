@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, Input, Text, VStack } from 'native-base';
+import { Button, Divider, Flex, Input, Text, VStack, ScrollView } from 'native-base';
 import { useEffect, useState } from 'react';
 import {
   UserSearchResult,
@@ -138,7 +138,9 @@ export const SearchBox = ({ view, onSelect }: Props) => {
         </Button>
       </Flex>
       <Flex flexDir='column' alignItems='center' marginTop='1'>
-        {results}
+        <ScrollView width='100%'>
+          {results}
+        </ScrollView>
       </Flex>
     </VStack>
   );
