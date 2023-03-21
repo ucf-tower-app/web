@@ -92,8 +92,7 @@ export const SearchBox = ({ view, width, maxHeight, onSelect }: Props) => {
       const users: User[] = userSearchResults.map((userSearchResult: UserSearchResult) => userSearchResult.user);
 
       setResults(users.map((currUser: User) =>
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        <VStack key={currUser.docRef!.id} width='100%'>
+        <VStack key={currUser.getId()} width='100%'>
           <Divider orientation='horizontal' />
           <UserRow user={currUser} onPress={onSelect} />
         </VStack>
@@ -105,8 +104,7 @@ export const SearchBox = ({ view, width, maxHeight, onSelect }: Props) => {
       const activeRoutes: Route[] = await Promise.all(activeRouteSearchResults.map(getRouteByName));
 
       setResults(activeRoutes.map((currRoute: Route) =>
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        <VStack key={currRoute.docRef!.id} width='100%'>
+        <VStack key={currRoute.getId()} width='100%'>
           <Divider orientation='horizontal' />
           <RouteRow route={currRoute} onPress={onSelect} />
         </VStack>
@@ -118,8 +116,7 @@ export const SearchBox = ({ view, width, maxHeight, onSelect }: Props) => {
       const archivedRoutes: Route[] = await Promise.all(archivedRouteSearchResults.map(getRouteByName));
 
       setResults(archivedRoutes.map((currRoute: Route) =>
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        <VStack key={currRoute.docRef!.id} width='100%'>
+        <VStack key={currRoute.getId()} width='100%'>
           <Divider orientation='horizontal' />
           <RouteRow route={currRoute} onPress={onSelect} />
         </VStack>
