@@ -22,9 +22,10 @@ export const enum SearchView {
 type Props = {
   view: SearchView;
   width: string;
+  maxHeight?: string;
   onSelect: (docRefID: string) => void;
 };
-export const SearchBox = ({ view, width, onSelect }: Props) => {
+export const SearchBox = ({ view, width, maxHeight, onSelect }: Props) => {
   const [inputText, setInputText] = useState<string>('');
   const [results, setResults] = useState<JSX.Element[]>([]);
 
@@ -125,7 +126,7 @@ export const SearchBox = ({ view, width, onSelect }: Props) => {
   };
 
   return (
-    <Box width={width}>
+    <Box width={width} maxH={maxHeight ?? 'auto'} paddingRight={maxHeight !== undefined ? '1' : '0'}>
       <VStack>
         <Flex flexDir='row' justifyContent='center'>
           <Input
