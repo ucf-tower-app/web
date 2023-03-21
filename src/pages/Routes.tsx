@@ -9,12 +9,14 @@ import { useQuery } from 'react-query';
 import { buildRouteListFetcher } from '../utils/queries';
 import { CURSOR_INCREMENT } from '../utils/constants';
 import CreateRoute from '../components/Route/CreateRoute';
+import { ConfirmationPopup } from '../components/ConfirmationPopup';
 
 const Routes = () => {
   const [archivedRoutes, setArchivedRoutes] = useState<Route[]>([]);
   const [archivedCursor, setArchivedCursor] = useState<QueryCursor<Route> | undefined>();
   const [hasMore, setHasMore] = useState(false);
   const [createRoutePopup, setCreateRoutePopup] = useState(false);
+  const [archiveAllPopup, setArchiveAllPopup] = useState<RouteType | undefined>(undefined);
   const { isLoading, isError, data } = useQuery('routes', buildRouteListFetcher());
 
   async function fetchMoreArchivedRoutes() {
@@ -45,7 +47,8 @@ const Routes = () => {
     }
   }, [data]);
 
-  const archiveAllOfType = async (type: RouteType) => {
+  const onConfirmOfType = (type: RouteType) => {
+    // archive routes of this type
     data?.activeRoutes.forEach(async (route: Route) => {
       if (await route.getType() == type) {
         route.upgradeStatus().then(() => {
@@ -55,6 +58,8 @@ const Routes = () => {
         });
       }
     });
+    // close popup
+    setArchiveAllPopup(undefined);
   };
 
   if (isLoading) {
@@ -139,15 +144,29 @@ const Routes = () => {
           </Flex>
         </Flex>
       </Flex>
-      {/* TODO: add 'are you sure?' popup to buttons */}
       <Flex flexDir='row' justifyContent='center' width='100%' height='50px' bottom='10px' position='fixed'>
-        <Button onPress={() => archiveAllOfType(RouteType.Boulder)}>
+        <Button onPress={() => setArchiveAllPopup(RouteType.Boulder)}>
+          <ConfirmationPopup
+            open={archiveAllPopup === RouteType.Boulder}
+            onCancel={() => setArchiveAllPopup(undefined)}
+            onConfirm={() => onConfirmOfType(RouteType.Boulder)}
+          />
           <Text variant='button'>Archive All Boulders</Text>
         </Button>
-        <Button onPress={() => archiveAllOfType(RouteType.Traverse)}>
+        <Button onPress={() => setArchiveAllPopup(RouteType.Traverse)}>
+          <ConfirmationPopup
+            open={archiveAllPopup === RouteType.Traverse}
+            onCancel={() => setArchiveAllPopup(undefined)}
+            onConfirm={() => onConfirmOfType(RouteType.Traverse)}
+          />
           <Text variant='button'>Archive All Traverses</Text>
         </Button>
-        <Button onPress={() => archiveAllOfType(RouteType.Toprope)}>
+        <Button onPress={() => setArchiveAllPopup(RouteType.Toprope)}>
+          <ConfirmationPopup
+            open={archiveAllPopup === RouteType.Toprope}
+            onCancel={() => setArchiveAllPopup(undefined)}
+            onConfirm={() => onConfirmOfType(RouteType.Toprope)}
+          />
           <Text variant='button'>Archive All Top Ropes</Text>
         </Button>
       </Flex>

@@ -6,13 +6,16 @@ import { useQuery } from 'react-query';
 import { NaturalRules, Route, RouteStatus, UserStatus, invalidateDocRefId } from '../xplat/types';
 import { queryClient } from '../App';
 import placeholder_image from '../placeholder_image.jpg';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../utils/AuthContext';
+import { ConfirmationPopup } from '../components/ConfirmationPopup';
 
 const RouteView = () => {
   const [params] = useSearchParams();
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
+
+  const [archivePopupOpen, setArchivePopupOpen] = useState<boolean>(false);
 
   const hasRouteUID: boolean = params.has('uid');
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -79,7 +82,15 @@ const RouteView = () => {
             </Button>
             {/* TODO: make a 'confirm archive?' popup */}
             {data.status === RouteStatus.Active ?
-              <Button onPress={archiveThisRoute}>
+              <Button onPress={() => setArchivePopupOpen(true)}>
+                <ConfirmationPopup
+                  open={archivePopupOpen}
+                  onCancel={() => setArchivePopupOpen(false)}
+                  onConfirm={() => {
+                    archiveThisRoute();
+                    setArchivePopupOpen(false);
+                  }}
+                />
                 <Text variant='button'>Archive This Route</Text>
               </Button>
               :
