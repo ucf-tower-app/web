@@ -57,7 +57,7 @@ export const SearchBox = ({ view, width, maxHeight, onSelect }: Props) => {
     }
   );
 
-  const archivedRouteQuery = useQuery(
+  const archivedRouteMatcherQuery = useQuery(
     [SearchView.ArchivedRoutes, 'matcher'],
     async () => getArchivedRoutesSubstringMatcher(),
     {
@@ -71,8 +71,10 @@ export const SearchBox = ({ view, width, maxHeight, onSelect }: Props) => {
   }, [view]);
 
   // get which matcher query we are referring to for checking for loading and errors
-  const matcherQuery = (view === SearchView.Users ? userMatcherQuery :
-    (view === SearchView.ActiveRoutes ? activeRouteMatcherQuery : archivedRouteQuery));
+  const matcherQuery = (
+    view === SearchView.Users ? userMatcherQuery :
+      (view === SearchView.ActiveRoutes ? activeRouteMatcherQuery :
+        archivedRouteMatcherQuery));
 
   if (matcherQuery.isLoading) {
     return null;
@@ -112,7 +114,7 @@ export const SearchBox = ({ view, width, maxHeight, onSelect }: Props) => {
     }
     else if (view === SearchView.ArchivedRoutes) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const archivedRouteSearchResults: string[] = archivedRouteQuery.data!.getMatches(inputText);
+      const archivedRouteSearchResults: string[] = archivedRouteMatcherQuery.data!.getMatches(inputText);
       const archivedRoutes: Route[] = await Promise.all(archivedRouteSearchResults.map(getRouteByName));
 
       setResults(archivedRoutes.map((currRoute: Route) =>
