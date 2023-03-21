@@ -10,6 +10,7 @@ import FirebaseAuthContext from './utils/AuthContext';
 import ProtectedRoute from './utils/ProtectedRoute';
 
 const ComponentTesting = lazy(() => import('./pages/ComponentTesting'));
+const Reports = lazy(() => import('./pages/Reports'));
 const RoutesPage = lazy(() => import('./pages/Routes'));
 const RouteView = lazy(() => import('./pages/RouteView'));
 const RouteFeed = lazy(() => import('./pages/RouteFeed'));
@@ -41,6 +42,7 @@ const App = () => {
                   <Route path='/routeview' element={<RouteView />} />
                   <Route path='/routefeed' element={<RouteFeed />} />
                   <Route path='/profile' element={<Profile />} />
+                  <Route path='/reports' element={<Reports />} />
                 </Route>
                 {window.location.hostname === 'localhost' &&
                   <Route path='/component' element={<ComponentTesting />} />}

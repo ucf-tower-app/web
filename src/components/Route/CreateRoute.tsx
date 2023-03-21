@@ -121,7 +121,7 @@ const CreateRoute = ({ refreshRoutes, isOpen, setIsOpen }: CreateRouteProps) => 
   }
 
   return (
-    <Popup open={isOpen} onClose={() => setIsOpen(false)} closeOnDocumentClick={false} nested modal>
+    <Popup open={isOpen} onClose={() => setIsOpen(false)} nested modal>
       <div>
         <Popup nested modal open={confirmationBoxOpen} onClose={() => setConfirmationBoxOpen(false)}>
           <VStack alignItems='center'>

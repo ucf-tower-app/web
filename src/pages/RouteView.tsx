@@ -9,9 +9,11 @@ import placeholder_image from '../placeholder_image.jpg';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../utils/AuthContext';
 import { ConfirmationPopup } from '../components/ConfirmationPopup';
+import EditRoute from '../components/Route/EditRoute';
 
 const RouteView = () => {
   const [params] = useSearchParams();
+  const [showEditPopup, setShowEditPopup] = useState(false);
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
 
@@ -80,19 +82,24 @@ const RouteView = () => {
             <Button onPress={navToRouteFeed}>
               <Text variant='button'>View Route Feed</Text>
             </Button>
-            {/* TODO: make a 'confirm archive?' popup */}
             {data.status === RouteStatus.Active ?
-              <Button onPress={() => setArchivePopupOpen(true)}>
-                <ConfirmationPopup
-                  open={archivePopupOpen}
-                  onCancel={() => setArchivePopupOpen(false)}
-                  onConfirm={() => {
-                    archiveThisRoute();
-                    setArchivePopupOpen(false);
-                  }}
-                />
-                <Text variant='button'>Archive This Route</Text>
-              </Button>
+              <>
+                <Button onPress={() => setArchivePopupOpen(true)}>
+                  <ConfirmationPopup
+                    open={archivePopupOpen}
+                    onCancel={() => setArchivePopupOpen(false)}
+                    onConfirm={() => {
+                      archiveThisRoute();
+                      setArchivePopupOpen(false);
+                    }}
+                  />
+                  <Text variant='button'>Archive This Route</Text>
+                </Button>
+                <Button onPress={() => setShowEditPopup(true)}>
+                  <Text variant='button'>Edit Route</Text>
+                  <EditRoute route={data} open={showEditPopup} setOpen={setShowEditPopup} />
+                </Button>
+              </>
               :
               null
             }
