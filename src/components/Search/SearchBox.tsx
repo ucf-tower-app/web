@@ -1,5 +1,5 @@
 import { Button, Divider, Flex, Input, Text, VStack, ScrollView, Box } from 'native-base';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   UserSearchResult,
   buildUserSubstringMatcher,
@@ -70,22 +70,7 @@ export const SearchBox = ({ view, width, maxHeight, onSelect }: Props) => {
     setResults([]);
   }, [view]);
 
-  // get which matcher query we are referring to for checking for loading and errors
-  const matcherQuery = (
-    view === SearchView.Users ? userMatcherQuery :
-      (view === SearchView.ActiveRoutes ? activeRouteMatcherQuery :
-        archivedRouteMatcherQuery));
-
-  if (matcherQuery.isLoading) {
-    return null;
-  }
-
-  if (matcherQuery.isError || matcherQuery.data === undefined) {
-    console.error(matcherQuery.error);
-    return null;
-  }
-
-  const updateSearchResults = async () => {
+  const updateSearchResults = useCallback(async () => {
     if (view === SearchView.Users) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const userSearchResults: UserSearchResult[] = userMatcherQuery.data!.getMatches(inputText);
@@ -122,7 +107,22 @@ export const SearchBox = ({ view, width, maxHeight, onSelect }: Props) => {
         </VStack>
       ));
     }
-  };
+  }, [view, userMatcherQuery, activeRouteMatcherQuery, archivedRouteMatcherQuery, inputText]);
+
+  // get which matcher query we are referring to for checking for loading and errors
+  const matcherQuery = (
+    view === SearchView.Users ? userMatcherQuery :
+      (view === SearchView.ActiveRoutes ? activeRouteMatcherQuery :
+        archivedRouteMatcherQuery));
+
+  if (matcherQuery.isLoading) {
+    return null;
+  }
+
+  if (matcherQuery.isError || matcherQuery.data === undefined) {
+    console.error(matcherQuery.error);
+    return null;
+  }
 
   return (
     <Box width={width} maxH={maxHeight ?? 'auto'} paddingRight={maxHeight !== undefined ? '1' : '0'}>
