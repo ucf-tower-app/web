@@ -110,7 +110,7 @@ const Routes = () => {
       </Center>
 
       <Center>
-        <HStack justifyContent='space-around' w='4/6' space='10'>
+        <HStack justifyContent='space-around' w='4/6' space='16'>
           <Box w='1/2' alignItems='center'>
             <Text bold fontSize='5xl'>Active Routes</Text>
             {
