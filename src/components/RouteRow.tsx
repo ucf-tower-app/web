@@ -36,14 +36,14 @@ export const RouteRow = ({ route }: Props) => {
         <HStack justifyContent='space-between'>
           <Text p='2' fontSize={{
             base: 'md',
-            lg: 'xl',
-            xl: '3xl'
+            lg: 'lg',
+            xl: '2xl'
           }}>{data.name}</Text>
           <Box justifyContent='center'>
             <Text p='2' fontSize={{
               base: 'md',
-              lg: 'xl',
-              xl: '3xl'
+              lg: 'lg',
+              xl: '2xl'
             }}>{data.gradeDisplayString}</Text>
           </Box>
         </HStack>
