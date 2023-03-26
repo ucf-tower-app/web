@@ -112,7 +112,11 @@ const Routes = () => {
       <Center>
         <HStack justifyContent='space-around' w='4/6' space='16'>
           <Box w='1/2' alignItems='center'>
-            <Text bold fontSize='5xl'>Active Routes</Text>
+            <Text bold fontSize={{
+              base: 'lg',
+              lg: '2xl',
+              xl: '4xl'
+            }}>Active Routes</Text>
             {
               data.activeRoutes.map((currRoute: Route) => (
                 <VStack key={currRoute.docRef?.id} width='100%'>
@@ -123,7 +127,11 @@ const Routes = () => {
             }
           </Box>
           <Box w='1/2' alignItems='center'>
-            <Text bold fontSize='5xl'>Archived Routes</Text>
+            <Text bold  fontSize={{
+              base: 'lg',
+              lg: '2xl',
+              xl: '4xl'
+            }}>Archived Routes</Text>
             {isLoading ? <Text>Loading...</Text> :
               archivedRoutes.map((currRoute: Route) => (
                 <VStack key={currRoute.docRef?.id} width='100%'>
