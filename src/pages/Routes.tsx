@@ -1,4 +1,3 @@
-import { NavBar } from '../components/NavigationBar';
 import { Box, Divider, Flex, Text, VStack, Button, HStack, Center } from 'native-base';
 import { useState, useEffect } from 'react';
 import { Route, RouteType } from '../xplat/types/route';
@@ -92,7 +91,6 @@ const Routes = () => {
   }
   return (
     <Box>
-      <Box height={'50px'} marginBottom={1}><NavBar /></Box>
       <Center>
         {/* TODO: add 'are you sure?' popup to buttons */}
         <HStack p='3' space='lg'>
