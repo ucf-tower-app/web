@@ -35,13 +35,13 @@ export const RouteRow = ({ route }: Props) => {
       <Pressable onPress={navToRoute}>
         <HStack justifyContent='space-between'>
           <Text p='2' fontSize={{
-            base: 'lg',
+            base: 'md',
             lg: 'xl',
             xl: '3xl'
           }}>{data.name}</Text>
           <Box justifyContent='center'>
             <Text p='2' fontSize={{
-              base: 'lg',
+              base: 'md',
               lg: 'xl',
               xl: '3xl'
             }}>{data.gradeDisplayString}</Text>
