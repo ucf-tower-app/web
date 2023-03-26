@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from 'native-base';
+import { Box, Flex, HStack, Text } from 'native-base';
 import { Route } from '../xplat/types/route';
 import { useQuery } from 'react-query';
 import { createSearchParams, useNavigate } from 'react-router-dom';
@@ -31,12 +31,14 @@ export const RouteRow = ({ route }: Props) => {
   };
 
   return (
-    <Box width='100%'>
-      <Pressable onPress={navToRoute} >
-        <Flex flexDirection="row" justifyContent="space-between" >
-          <Text>{data.name}</Text>
-          <Text>{data.gradeDisplayString}</Text>
-        </Flex>
+    <Box>
+      <Pressable onPress={navToRoute}>
+        <HStack justifyContent='space-between'>
+          <Text p='2' fontSize='4xl'>{data.name}</Text>
+          <Box justifyContent='center'>
+            <Text p='2' fontSize='4xl'>{data.gradeDisplayString}</Text>
+          </Box>
+        </HStack>
       </Pressable>
     </Box>
   );
