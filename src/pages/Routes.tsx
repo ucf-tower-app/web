@@ -1,4 +1,3 @@
-import { NavBar } from '../components/NavigationBar';
 import { Box, Divider, Flex, Text, VStack, Button } from 'native-base';
 import { useState, useEffect } from 'react';
 import { Route, RouteType } from '../xplat/types/route';
@@ -69,7 +68,6 @@ const Routes = () => {
   if (isLoading) {
     return (
       <Box flexDir={'column'}>
-        <Box height={'50px'} marginBottom={1}><NavBar /></Box>
         <Flex flexDirection='row' justifyContent='space-evenly' width='100%' top='50px'>
           <Flex flexDirection='row' justifyContent='center' width='30%'>
             <Flex flexDirection='column' alignItems='center' width='100%'>
@@ -92,7 +90,6 @@ const Routes = () => {
   if (isError || data === undefined) {
     return (
       <Box flexDir={'column'}>
-        <Box height={'50px'} marginBottom={1}><NavBar /></Box>
         <Flex flexDirection='row' justifyContent='space-evenly' width='100%' top='50px'>
           <Flex flexDirection='row' justifyContent='center' width='30%'>
             <Flex flexDirection='column' alignItems='center' width='100%'>
@@ -113,9 +110,7 @@ const Routes = () => {
   }
   return (
     <VStack height='100%'>
-      <Box height={'50px'} marginBottom={1}><NavBar /></Box>
-      <Button onPress={() => setCreateRoutePopup(true)}
-        position='sticky' m={1}>
+      <Button onPress={() => setCreateRoutePopup(true)} mt='20'>
         <Text variant='button'>Create route</Text>
       </Button>
       <Flex flexDirection='row' justifyContent='space-evenly' width='100%' top='50px'>

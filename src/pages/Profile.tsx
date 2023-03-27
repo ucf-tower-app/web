@@ -5,7 +5,6 @@ import { useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import ProfileBanner from '../components/Profile/ProfileBanner';
 import ProfilePostsGrid from '../components/Profile/ProfilePostsGrid';
-import { NavBar } from '../components/NavigationBar';
 import { buildUserByIDFetcher } from '../utils/queries';
 import { CURSOR_INCREMENT } from '../utils/constants';
 
@@ -56,7 +55,6 @@ const Profile = () => {
   if (isLoading) {
     return (
       <VStack>
-        <NavBar />
         <Skeleton top='50px' width='100%' height='200px' />
         <Divider orientation='horizontal' top='45px' />
         <Box p='2' top='50px' justifyItems='center' alignContent='center'>
@@ -76,7 +74,6 @@ const Profile = () => {
   return (
     <>
       <VStack>
-        <NavBar />
         <Box top='50px' width='100%'>
           <ProfileBanner user={data} />
         </Box>
