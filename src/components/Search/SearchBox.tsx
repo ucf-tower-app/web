@@ -125,7 +125,7 @@ export const SearchBox = ({ view, width, maxHeight, onSelect }: Props) => {
   }
 
   return (
-    <Box width={width} maxH={maxHeight ?? 'auto'} paddingRight={maxHeight !== undefined ? '1' : '0'}>
+    <Box width={width}>
       <VStack>
         <Flex flexDir='row' justifyContent='center'>
           <Input
@@ -140,7 +140,7 @@ export const SearchBox = ({ view, width, maxHeight, onSelect }: Props) => {
           </Button>
         </Flex>
         <Flex flexDir='column' alignItems='center' marginTop='1'>
-          <ScrollView width='100%'>
+          <ScrollView width='100%' maxH={maxHeight ?? 'auto'} paddingRight={maxHeight !== undefined ? '1' : '0'}>
             {results}
           </ScrollView>
         </Flex>
