@@ -134,6 +134,11 @@ export const SearchBox = ({ view, width, maxHeight, onSelect }: Props) => {
             backgroundColor="white"
             autoCorrect={false}
             autoComplete="off"
+            onKeyPress={
+              ({ nativeEvent: { key: keyValue } }) => {
+                if (keyValue === 'Enter') updateSearchResults();
+              }
+            }
           />
           <Button onPress={updateSearchResults}>
             <Text variant='button'>Search!</Text>
