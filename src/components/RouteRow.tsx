@@ -37,13 +37,13 @@ export const RouteRow = ({ route }: Props) => {
           <Text p='2' fontSize={{
             base: 'md',
             lg: 'lg',
-            xl: '2xl'
+            xl: 'xl'
           }}>{data.name}</Text>
           <Box justifyContent='center'>
             <Text p='2' fontSize={{
               base: 'md',
               lg: 'lg',
-              xl: '2xl'
+              xl: 'xl'
             }}>{data.gradeDisplayString}</Text>
           </Box>
         </HStack>

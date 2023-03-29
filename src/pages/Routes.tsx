@@ -113,9 +113,9 @@ const Routes = () => {
         <HStack justifyContent='space-around' w='4/6' space='16'>
           <Box w='1/2' alignItems='center'>
             <Text bold fontSize={{
-              base: 'lg',
+              base: 'xl',
               lg: '2xl',
-              xl: '4xl'
+              xl: '3xl'
             }}>Active Routes</Text>
             {
               data.activeRoutes.map((currRoute: Route) => (
@@ -128,9 +128,9 @@ const Routes = () => {
           </Box>
           <Box w='1/2' alignItems='center'>
             <Text bold  fontSize={{
-              base: 'lg',
+              base: 'xl',
               lg: '2xl',
-              xl: '4xl'
+              xl: '3xl'
             }}>Archived Routes</Text>
             {isLoading ? <Text>Loading...</Text> :
               archivedRoutes.map((currRoute: Route) => (
