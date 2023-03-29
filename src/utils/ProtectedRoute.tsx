@@ -17,7 +17,7 @@ export default function ProtectedRoute({redirectTo}:
     else{
       return(
         <>
-          <Box height='50px' zIndex={100}>
+          <Box height='50px' zIndex={100} marginBottom='2'>
             <NavBar />
           </Box>
           <Outlet/>
