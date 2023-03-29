@@ -1,4 +1,4 @@
-import { Box, Divider, Flex, Text, VStack, Button } from 'native-base';
+import { Box, Divider, Text, VStack, Button, HStack, Center } from 'native-base';
 import { useState, useEffect } from 'react';
 import { Route, RouteType } from '../xplat/types/route';
 import { RouteRow } from '../components/Route/RouteRow';
@@ -72,112 +72,112 @@ const Routes = () => {
 
   if (isLoading) {
     return (
-      <Box flexDir={'column'}>
-        <Flex flexDirection='row' justifyContent='space-evenly' width='100%' top='50px'>
-          <Flex flexDirection='row' justifyContent='center' width='30%'>
-            <Flex flexDirection='column' alignItems='center' width='100%'>
-              <Text>Active Routes</Text>
-              <Text>Loading...</Text>
-            </Flex>
-          </Flex>
-          <Divider orientation='vertical' height={'75vh'} position='fixed' />
-          <Flex flexDirection='row' justifyContent='center' width='30%'>
-            <Flex flexDirection='column' alignItems='center' width='100%'>
-              <Text>Archived Routes</Text>
-              <Text>Loading...</Text>
-            </Flex>
-          </Flex>
-        </Flex>
-      </Box>
+      <Center>
+        <HStack justifyContent='space-around' w='4/6' space='10'>
+          <Box w='1/2' alignItems='center'>
+            <Text bold fontSize='5xl'>Active Routes</Text>
+            <Text fontSize='4xl'>Loading...</Text>
+          </Box>
+          <Box w='1/2' alignItems='center'>
+            <Text bold fontSize='5xl'>Archived Routes</Text>
+            <Text fontSize='4xl'>Loading...</Text>
+          </Box>
+        </HStack>
+      </Center>
     );
   }
 
   if (isError || data === undefined) {
     return (
-      <Box flexDir={'column'}>
-        <Flex flexDirection='row' justifyContent='space-evenly' width='100%' top='50px'>
-          <Flex flexDirection='row' justifyContent='center' width='30%'>
-            <Flex flexDirection='column' alignItems='center' width='100%'>
-              <Text>Active Routes</Text>
-              <Text>Error loading routes</Text>
-            </Flex>
-          </Flex>
-          <Divider orientation='vertical' height={'75vh'} position='fixed' />
-          <Flex flexDirection='row' justifyContent='center' width='30%'>
-            <Flex flexDirection='column' alignItems='center' width='100%'>
-              <Text>Archived Routes</Text>
-              <Text>Error loading routes</Text>
-            </Flex>
-          </Flex>
-        </Flex>
-      </Box>
+      <Center>
+        <HStack justifyContent='space-around' w='4/6' space='10'>
+          <Box w='1/2' alignItems='center'>
+            <Text bold fontSize='5xl'>Active Routes</Text>
+            <Text fontSize='4xl'>Error loading routes</Text>
+          </Box>
+          <Box w='1/2' alignItems='center'>
+            <Text bold fontSize='5xl'>Archived Routes</Text>
+            <Text fontSize='4xl'>Error loading routes</Text>
+          </Box>
+        </HStack>
+      </Center>
     );
   }
   return (
-    <VStack height='100%'>
-      <Button onPress={() => setCreateRoutePopup(true)} mt='20'>
-        <Text variant='button'>Create route</Text>
-      </Button>
-      <Flex flexDirection='row' justifyContent='space-evenly' width='100%' top='50px'>
-        <Flex flexDirection='row' justifyContent='center' width='30%'>
-          <Flex flexDirection='column' alignItems='center' width='100%'>
-            <Text bold fontSize='lg'>Active Routes</Text>
+    <Box>
+      <Center p='5'>
+        {/* TODO: add 'are you sure?' popup to buttons */}
+        <HStack p='3' space='lg'>
+          <Button onPress={() => setCreateRoutePopup(true)}>
+            <Text variant='button'>Create route</Text>
+          </Button>
+          <Button onPress={() => setArchiveAllPopup(RouteType.Boulder)}>
+            <ConfirmationPopup
+              open={archiveAllPopup === RouteType.Boulder}
+              onCancel={() => setArchiveAllPopup(undefined)}
+              onConfirm={() => onConfirmOfType(RouteType.Boulder)}
+            />
+            <Text variant='button'>Archive All Boulders</Text>
+          </Button>
+          <Button onPress={() => setArchiveAllPopup(RouteType.Traverse)}>
+            <ConfirmationPopup
+              open={archiveAllPopup === RouteType.Traverse}
+              onCancel={() => setArchiveAllPopup(undefined)}
+              onConfirm={() => onConfirmOfType(RouteType.Traverse)}
+            />
+            <Text variant='button'>Archive All Traverses</Text>
+          </Button>
+          <Button onPress={() => setArchiveAllPopup(RouteType.Toprope)}>
+            <ConfirmationPopup
+              open={archiveAllPopup === RouteType.Toprope}
+              onCancel={() => setArchiveAllPopup(undefined)}
+              onConfirm={() => onConfirmOfType(RouteType.Toprope)}
+            />
+            <Text variant='button'>Archive All Top Ropes</Text>
+          </Button>
+        </HStack>
+      </Center>
+
+      <Center pt='5'>
+        <HStack justifyContent='space-around' w='4/6' space='16'>
+          <Box w='1/2' alignItems='center'>
+            <Text bold fontSize={{
+              base: 'xl',
+              lg: '2xl',
+              xl: '3xl'
+            }}>Active Routes</Text>
             {
               data.activeRoutes.map((currRoute: Route) => (
                 <VStack key={currRoute.docRef?.id} width='100%'>
-                  <Divider orientation='horizontal' height='2px' />
-                  <RouteRow route={currRoute} onPress={navToRoute} />
+                  <Divider thickness='3' />
+                  <RouteRow route={currRoute} onPress={navToRoute}/>
                 </VStack>
               ))
             }
-          </Flex>
-        </Flex>
-        <Divider orientation='vertical' height={'65vh'} position='fixed' />
-        <Flex flexDirection='row' justifyContent='center' width='30%'>
-          <Flex flexDirection='column' alignItems='center' width='100%'>
-            <Text bold fontSize='lg'>Archived Routes</Text>
+          </Box>
+          <Box w='1/2' alignItems='center'>
+            <Text bold  fontSize={{
+              base: 'xl',
+              lg: '2xl',
+              xl: '3xl'
+            }}>Archived Routes</Text>
             {isLoading ? <Text>Loading...</Text> :
               archivedRoutes.map((currRoute: Route) => (
                 <VStack key={currRoute.docRef?.id} width='100%'>
-                  <Divider orientation='horizontal' height='2px' />
+                  <Divider thickness='3' />
                   <RouteRow route={currRoute} onPress={navToRoute} />
                 </VStack>
               ))
             }
             {hasMore ? <Text onPress={fetchMoreArchivedRoutes}>Load More</Text> : null}
-          </Flex>
-        </Flex>
-      </Flex>
-      <Flex flexDir='row' justifyContent='center' width='100%' height='50px' bottom='10px' position='fixed'>
-        <Button onPress={() => setArchiveAllPopup(RouteType.Boulder)}>
-          <ConfirmationPopup
-            open={archiveAllPopup === RouteType.Boulder}
-            onCancel={() => setArchiveAllPopup(undefined)}
-            onConfirm={() => onConfirmOfType(RouteType.Boulder)}
-          />
-          <Text variant='button'>Archive All Boulders</Text>
-        </Button>
-        <Button onPress={() => setArchiveAllPopup(RouteType.Traverse)}>
-          <ConfirmationPopup
-            open={archiveAllPopup === RouteType.Traverse}
-            onCancel={() => setArchiveAllPopup(undefined)}
-            onConfirm={() => onConfirmOfType(RouteType.Traverse)}
-          />
-          <Text variant='button'>Archive All Traverses</Text>
-        </Button>
-        <Button onPress={() => setArchiveAllPopup(RouteType.Toprope)}>
-          <ConfirmationPopup
-            open={archiveAllPopup === RouteType.Toprope}
-            onCancel={() => setArchiveAllPopup(undefined)}
-            onConfirm={() => onConfirmOfType(RouteType.Toprope)}
-          />
-          <Text variant='button'>Archive All Top Ropes</Text>
-        </Button>
-      </Flex>
-
+          </Box>
+        </HStack>
+      </Center>
+      
       <CreateRoute refreshRoutes={() => queryClient.invalidateQueries('routes')}
         isOpen={createRoutePopup} setIsOpen={setCreateRoutePopup} />
-    </VStack >
+
+    </Box >
   );
 };
 

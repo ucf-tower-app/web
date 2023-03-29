@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from 'native-base';
+import { Box, HStack, Text } from 'native-base';
 import { Route } from '../../xplat/types/route';
 import { useQuery } from 'react-query';
 import { Pressable } from 'react-native';
@@ -23,12 +23,22 @@ export const RouteRow = ({ route, onPress }: Props) => {
   }
 
   return (
-    <Box width='100%'>
-      <Pressable onPress={() => onPress(myUID)} >
-        <Flex flexDirection="row" justifyContent="space-between" >
-          <Text>{data.name}</Text>
-          <Text>{data.gradeDisplayString}</Text>
-        </Flex>
+    <Box>
+      <Pressable onPress={() => onPress(myUID)}>
+        <HStack justifyContent='space-between'>
+          <Text p='2' fontSize={{
+            base: 'md',
+            lg: 'lg',
+            xl: 'xl'
+          }}>{data.name}</Text>
+          <Box justifyContent='center'>
+            <Text p='2' fontSize={{
+              base: 'md',
+              lg: 'lg',
+              xl: 'xl'
+            }}>{data.gradeDisplayString}</Text>
+          </Box>
+        </HStack>
       </Pressable>
     </Box>
   );

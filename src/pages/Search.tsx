@@ -27,7 +27,6 @@ const Search = () => {
 
   return (
     <Flex flexDir='column' justifyContent='center' width='100%'>
-      <NavBar />
       <VStack top='50px'>
         <Flex flexDir='row' justifyContent='center' marginTop='2'>
           <Box padding='1'>
