@@ -91,7 +91,7 @@ const Routes = () => {
   }
   return (
     <Box>
-      <Center>
+      <Center p='5'>
         {/* TODO: add 'are you sure?' popup to buttons */}
         <HStack p='3' space='lg'>
           <Button onPress={() => setCreateRoutePopup(true)}>
@@ -109,7 +109,7 @@ const Routes = () => {
         </HStack>
       </Center>
 
-      <Center>
+      <Center pt='5'>
         <HStack justifyContent='space-around' w='4/6' space='16'>
           <Box w='1/2' alignItems='center'>
             <Text bold fontSize={{
