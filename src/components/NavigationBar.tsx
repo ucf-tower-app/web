@@ -1,4 +1,4 @@
-import { HStack, VStack,  Box , Button, Text, Menu, Pressable, HamburgerIcon} from 'native-base';
+import { HStack, Box, Button, Text, Menu, Pressable, HamburgerIcon } from 'native-base';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { auth } from '../xplat/Firebase';
 import { useContext } from 'react';
@@ -34,6 +34,11 @@ export const NavBar = () => {
                 FAQ
               </Text>
             </Button>
+            <Button onPress={() => navigate('/search')}>
+              <Text variant={'button'}>
+                Search
+              </Text>
+            </Button>
           </HStack>
         </Box>
         <Box>
@@ -45,7 +50,7 @@ export const NavBar = () => {
                   return;
 
                 navigate('/profile?uid=' + authContext.user?.docRefId);
-              }}/>}
+              }} />}
             <Menu trigger={triggerProps => {
               return <Pressable accessibilityLabel="Online session options" {...triggerProps} >
                 <HamburgerIcon position='relative' top={'5px'} size='2xl' />

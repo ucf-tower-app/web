@@ -1,17 +1,17 @@
-import { Box, Flex, HStack, Text } from 'native-base';
-import { Route } from '../xplat/types/route';
+import { Box, HStack, Text } from 'native-base';
+import { Route } from '../../xplat/types/route';
 import { useQuery } from 'react-query';
-import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Pressable } from 'react-native';
 
 type Props = {
   route: Route;
+  onPress: (docRefID: string) => void;
 };
-export const RouteRow = ({ route }: Props) => {
-  const navigate = useNavigate();
-
+export const RouteRow = ({ route, onPress }: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { isLoading, isError, error, data } = useQuery(route.docRef!.id, route.buildFetcher());
+  const myUID: string = route.docRef!.id;
+
+  const { isLoading, isError, error, data } = useQuery(myUID, route.buildFetcher());
 
   if (isLoading) {
     return null;
@@ -22,17 +22,9 @@ export const RouteRow = ({ route }: Props) => {
     return null;
   }
 
-  const navToRoute = () => {
-    navigate({
-      pathname: '/routeview',
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      search: `?${createSearchParams({ uid: route.docRef!.id })}`
-    });
-  };
-
   return (
     <Box>
-      <Pressable onPress={navToRoute}>
+      <Pressable onPress={() => onPress(myUID)}>
         <HStack justifyContent='space-between'>
           <Text p='2' fontSize={{
             base: 'md',
