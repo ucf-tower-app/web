@@ -1,5 +1,4 @@
 import { Box, Button, Center, Flex, HStack, Text, VStack } from 'native-base';
-import { NavBar } from '../components/NavigationBar';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { getRouteById } from '../xplat/api';
 import { useQuery } from 'react-query';
@@ -75,7 +74,6 @@ const RouteView = () => {
   return (
     <Box>
       <VStack>
-        <NavBar />
         <Flex flexDir='column' justifyContent='center' top='70px' width='100%' position='fixed'>
           <Center><Text fontSize='2xl' bold>{data.name}</Text></Center>
           <Flex flexDir='row' justifyContent='center' width='100%' marginTop={1}>

@@ -10,12 +10,13 @@ import FirebaseAuthContext from './utils/AuthContext';
 import ProtectedRoute from './utils/ProtectedRoute';
 
 const ComponentTesting = lazy(() => import('./pages/ComponentTesting'));
-const Reports = lazy(() => import('./pages/Reports'));
+// const Signup = lazy(() => import('./pages/Signup')); // we're not doing signup on web anymore, but it's subject to change.
 const RoutesPage = lazy(() => import('./pages/Routes'));
 const RouteView = lazy(() => import('./pages/RouteView'));
 const RouteFeed = lazy(() => import('./pages/RouteFeed'));
-// const Signup = lazy(() => import('./pages/Signup')); // we're not doing signup on web anymore, but it's subject to change.
 const Profile = lazy(() => import('./pages/Profile'));
+const Reports = lazy(() => import('./pages/Reports'));
+const Search = lazy(() => import('./pages/Search'));
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,6 +44,7 @@ const App = () => {
                   <Route path='/routefeed' element={<RouteFeed />} />
                   <Route path='/profile' element={<Profile />} />
                   <Route path='/reports' element={<Reports />} />
+                  <Route path='/search' element={<Search />} />
                 </Route>
                 {window.location.hostname === 'localhost' &&
                   <Route path='/component' element={<ComponentTesting />} />}

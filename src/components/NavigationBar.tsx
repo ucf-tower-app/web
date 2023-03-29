@@ -1,4 +1,4 @@
-import { HStack, VStack,  Box , Button, Text, Menu, Pressable, HamburgerIcon} from 'native-base';
+import { HStack, VStack, Box, Button, Text, Menu, Pressable, HamburgerIcon } from 'native-base';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { auth } from '../xplat/Firebase';
 import { useContext } from 'react';
@@ -12,9 +12,9 @@ export const NavBar = () => {
   return (
     <Box height='1' zIndex={100}>
       <VStack space={2} flex={1} backgroundColor={'#F1F1F1'} zIndex={100}>
-        <HStack space={1} alignItems='left' p={1} marginBottom={'5px'} width = '100%' 
+        <HStack space={1} alignItems='left' p={1} marginBottom={'5px'} width='100%'
           backgroundColor={'#F1F1F1'} paddingTop={'5px'} position={'fixed'} zIndex={100}>
-          <Button onPress={()=>{navigate('/routes');}}>
+          <Button onPress={() => { navigate('/routes'); }}>
             <Text variant={'button'}>
               Routes
             </Text>
@@ -34,6 +34,11 @@ export const NavBar = () => {
               FAQ
             </Text>
           </Button>
+          <Button onPress={() => navigate('/search')}>
+            <Text variant={'button'}>
+              Search
+            </Text>
+          </Button>
           <HStack right='1%' position={'fixed'} alignSelf='center' space={2}>
             {authContext.user && <img src={authContext.user.avatarUrl} alt='profile' className='nav-avatar'
               onClick={() => {
@@ -42,7 +47,7 @@ export const NavBar = () => {
                   return;
 
                 navigate('/profile?uid=' + authContext.user?.docRefId);
-              }}/>}
+              }} />}
             <Menu trigger={triggerProps => {
               return <Pressable accessibilityLabel="Online session options" {...triggerProps} >
                 <HamburgerIcon position='relative' top={'5px'} size='lg' />
@@ -50,13 +55,13 @@ export const NavBar = () => {
             }}>
               <Menu.Item onPress={() => {
                 auth.signOut();
-                
+
               }}>Logout</Menu.Item>
             </Menu>
           </HStack>
         </HStack>
       </VStack>
     </Box>
-        
+
   );
 };
