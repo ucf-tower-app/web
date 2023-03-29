@@ -1,19 +1,21 @@
 import { Box, Divider, Flex, Text, VStack, Button } from 'native-base';
 import { useState, useEffect } from 'react';
 import { Route, RouteType } from '../xplat/types/route';
-import { RouteRow } from '../components/RouteRow';
+import { RouteRow } from '../components/Route/RouteRow';
 import { QueryCursor, invalidateDocRefId } from '../xplat/types';
 import { queryClient } from '../App';
 import { useQuery } from 'react-query';
 import { buildRouteListFetcher } from '../utils/queries';
 import { CURSOR_INCREMENT } from '../utils/constants';
 import CreateRoute from '../components/Route/CreateRoute';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 
 const Routes = () => {
   const [archivedRoutes, setArchivedRoutes] = useState<Route[]>([]);
   const [archivedCursor, setArchivedCursor] = useState<QueryCursor<Route> | undefined>();
   const [hasMore, setHasMore] = useState(false);
   const [createRoutePopup, setCreateRoutePopup] = useState(false);
+  const navigate = useNavigate();
   const { isLoading, isError, data } = useQuery('routes', buildRouteListFetcher());
 
   async function fetchMoreArchivedRoutes() {
@@ -35,7 +37,6 @@ const Routes = () => {
     }
   }
 
-
   useEffect(() => {
     if (data !== undefined) {
       setArchivedCursor(data.archivedCursor);
@@ -43,6 +44,14 @@ const Routes = () => {
       setHasMore(data.hasNext);
     }
   }, [data]);
+
+  const navToRoute = (docRefID: string) => {
+    navigate({
+      pathname: '/routeview',
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      search: `?${createSearchParams({ uid: docRefID })}`
+    });
+  };
 
   const archiveAllOfType = async (type: RouteType) => {
     data?.activeRoutes.forEach(async (route: Route) => {
@@ -112,7 +121,7 @@ const Routes = () => {
               data.activeRoutes.map((currRoute: Route) => (
                 <VStack key={currRoute.docRef?.id} width='100%'>
                   <Divider orientation='horizontal' height='2px' />
-                  <RouteRow route={currRoute} />
+                  <RouteRow route={currRoute} onPress={navToRoute} />
                 </VStack>
               ))
             }
@@ -126,7 +135,7 @@ const Routes = () => {
               archivedRoutes.map((currRoute: Route) => (
                 <VStack key={currRoute.docRef?.id} width='100%'>
                   <Divider orientation='horizontal' height='2px' />
-                  <RouteRow route={currRoute} />
+                  <RouteRow route={currRoute} onPress={navToRoute} />
                 </VStack>
               ))
             }
