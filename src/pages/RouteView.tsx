@@ -9,6 +9,7 @@ import { useContext, useState } from 'react';
 import { AuthContext } from '../utils/AuthContext';
 import { ConfirmationPopup } from '../components/ConfirmationPopup';
 import EditRoute from '../components/Route/EditRoute';
+import AuthorHandle from '../components/User/AuthorHandle';
 
 const RouteView = () => {
   const [params] = useSearchParams();
@@ -116,7 +117,15 @@ const RouteView = () => {
                 data.stringifiedTags === '' ? notAssigned : data.stringifiedTags
               }</Text>
               <Text><Text bold>Rope: </Text>{data.rope ?? notAssigned}</Text>
-              <Text><Text bold>Setter: </Text>{data.setterRawName ?? notAssigned}</Text>
+              {
+                data.setter === undefined ?
+                  <Text><Text bold>Setter: </Text>{data.setterRawName ?? notAssigned}</Text>
+                  :
+                  <HStack alignItems='center'>
+                    <Text bold alignSelf='center'>Setter: </Text> 
+                    <AuthorHandle author={data.setter}/>
+                  </HStack>
+              }
               <Text><Text bold>Date Set: </Text>{data.timestamp?.toLocaleDateString() ?? notAssigned}</Text>
               <Text><Text bold>Sends: </Text>{data.numSends}</Text>
               <Text><Text bold>Likes: </Text>{data.likes.length}</Text>

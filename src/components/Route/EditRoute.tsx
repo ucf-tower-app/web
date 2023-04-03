@@ -2,10 +2,13 @@ import { RouteColor, User, NaturalRules, FetchedRoute, invalidateDocRefId } from
 import { Text, HStack, Input, VStack, Radio, Button, Select } from 'native-base';
 import {compressImage} from '../../utils/CompressImage';
 import Popup from 'reactjs-popup';
+import { SearchBox, SearchView } from '../Search/SearchBox';
 import 'reactjs-popup/dist/index.css';
 import '../css/feed.css';
 import { useState } from 'react';
 import { queryClient } from '../../App';
+import { getUserById } from '../../xplat/api';
+import AuthorHandle from '../User/AuthorHandle';
 
 const Ropes = [
   '1', '2', '3', '4', '5', '6', '7', '8', '9'
@@ -21,7 +24,7 @@ const EditRoute = ({route, open, setOpen}:
   const [thumbnailFile, setThumbnailFile] = useState<File | undefined>(undefined);
   const [color, setColor] = useState<string | undefined>(route.color);
   const [setterRawName, setSetterRawName] = useState<string | undefined>(route.setterRawName);
-  const [setterType, setSetterType] = useState<string>('User');
+  const [setterType, setSetterType] = useState<string>(route.setter === undefined ? 'Custom' : 'User');
   const [naturalRules, setNaturalRules] = useState<NaturalRules | undefined>(route.naturalRules);
   const [imageCompressing, setImageCompressing] = useState<boolean>(false);
 
@@ -34,7 +37,7 @@ const EditRoute = ({route, open, setOpen}:
     setThumbnailFile(undefined);
     setColor(route.color);
     setSetterRawName(route.setterRawName);
-    setSetterType('User');
+    setSetterType(route.setter === undefined ? 'Custom' : 'User');
     setNaturalRules(route.naturalRules);
   }
 
@@ -92,7 +95,7 @@ const EditRoute = ({route, open, setOpen}:
           </Text>
           {' ' + route.gradeDisplayString}
         </Text>
-        <Text>Route Thumbnail</Text>
+        <Text bold>Route Thumbnail</Text>
         { // show thumbnail stored in Firebase
           showStoredThumbnail ?
             <>
@@ -146,7 +149,13 @@ const EditRoute = ({route, open, setOpen}:
         </HStack>
         <HStack alignItems='center'space={1} width='100%'>
           <Text bold >Setter: </Text>
-          <Radio.Group name='Setter' defaultValue='User' onChange={(nextVal) => setSetterType(nextVal)}>
+          <Radio.Group name='Setter' defaultValue={setterType} onChange={
+            (nextVal) => {
+              if (nextVal == 'Custom')
+                setSetter(undefined);
+              setSetterType(nextVal);
+            }
+          }>
             <HStack alignItems='center'space={2}>
               <Radio value='User'>User</Radio>
               <Radio value='Custom'>Custom</Radio>
@@ -155,7 +164,8 @@ const EditRoute = ({route, open, setOpen}:
         </HStack>
         {
           setterType === 'User' ?
-            <Text>This will be a user search component</Text>
+            <SearchBox width='35%' view={SearchView.Users} maxHeight='100px' 
+              onSelect={(docRefID) => setSetter(getUserById(docRefID))}/>
             :
             <Input 
               type='text' 
@@ -164,6 +174,13 @@ const EditRoute = ({route, open, setOpen}:
               onChangeText={setSetterRawName} 
               width='50%' 
             />
+        }
+        {
+          setterType === 'User' && setter !== undefined && 
+          <HStack space={2}>
+            <Text>Selected: </Text>
+            <AuthorHandle author={setter}/>
+          </HStack>
         }
         <HStack alignItems='center'space={1} width='100%'>
           <Text bold >Natural Rules: </Text>
