@@ -1,10 +1,11 @@
-import { Button, FormControl, Input, Text, VStack, Select, HStack } from 'native-base';
+import { Button, FormControl, Input, Text, VStack, Select, HStack, Radio } from 'native-base';
 import { useState } from 'react';
 import {
   convertCompetitionStringToClassifier, convertLeadclimbStringToClassifier,
-  convertTopropeStringToClassifier, convertTraverseStringToClassifier, createRoute
+  convertTopropeStringToClassifier, convertTraverseStringToClassifier, createRoute, getUserById
 } from '../../xplat/api';
 import Popup from 'reactjs-popup';
+import { SearchBox } from '../Search/SearchBox';
 import 'reactjs-popup/dist/index.css';
 import { User } from '../../xplat/types/user';
 import { compressImage } from '../../utils/CompressImage';
@@ -14,6 +15,8 @@ import {
   getAllCompRouteClassifiers, getAllRopeModifiers, convertBoulderStringToClassifier
 } from '../../xplat/api';
 import '../css/feed.css';
+import { SearchView } from '../Search/SearchBox';
+import AuthorHandle from '../User/AuthorHandle';
 
 const RouteTypeToGetAllClassifiers = (type: RouteType) => {
   if (type === RouteType.Boulder)
@@ -66,7 +69,7 @@ const CreateRoute = ({ refreshRoutes, isOpen, setIsOpen }: CreateRouteProps) => 
   const [thumbnailFile, setThumbnailFile] = useState<File>();
   const [imageCompressing, setImageCompressing] = useState<boolean>(false);
   const [setter, setSetter] = useState<User>();
-  const [overrideSetterBool, setOverrideSetterBool] = useState<boolean>(true);
+  const [overrideSetterBool, setOverrideSetterBool] = useState<boolean>(false);
   const [overrideSetterString, setOverrideSetterString] = useState<string>('');
   const [formError, setFormError] = useState(false);
 
@@ -244,12 +247,34 @@ const CreateRoute = ({ refreshRoutes, isOpen, setIsOpen }: CreateRouteProps) => 
               return <Select.Item key={rules} label={rules} value={rules} />;
             })}
           </Select>
+          <FormControl.Label>Setter type</FormControl.Label>
+          <Radio.Group name='Setter type' onChange={(val) => {
+            if (val == 'Text')
+            {
+              setSetter(undefined);
+            }
+            setOverrideSetterBool(val === 'Text');
+          }} defaultValue='User'>
+            <HStack space={2}>
+              <Radio value='User'>
+                User
+              </Radio>
+              <Radio value='Text'>
+                Custom
+              </Radio>
+            </HStack>
+          </Radio.Group>
           <FormControl.Label>Setter</FormControl.Label>
           {overrideSetterBool ?
             <Input isRequired={false} type='text' onChangeText={setOverrideSetterString}
               placeholder='Setter (optional)' />
             :
-            <Text>This will be a user search component</Text>
+            <SearchBox view={SearchView.Users} width='35%' maxHeight='100px' onSelect={
+              (userDocRef) => setSetter(getUserById(userDocRef))}/>
+          }
+          {
+            overrideSetterBool == false && setter !== undefined &&
+            <AuthorHandle author={setter}/>
           }
           <FormControl.Label>Description</FormControl.Label>
           <Input isRequired={false} type='text' onChangeText={setDescription}
