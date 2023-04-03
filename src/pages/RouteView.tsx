@@ -121,10 +121,10 @@ const RouteView = () => {
                 data.setter === undefined ?
                   <Text><Text bold>Setter: </Text>{data.setterRawName ?? notAssigned}</Text>
                   :
-                  <Text alignSelf='center'>
+                  <HStack alignItems='center'>
                     <Text bold alignSelf='center'>Setter: </Text> 
                     <AuthorHandle author={data.setter}/>
-                  </Text>
+                  </HStack>
               }
               <Text><Text bold>Date Set: </Text>{data.timestamp?.toLocaleDateString() ?? notAssigned}</Text>
               <Text><Text bold>Sends: </Text>{data.numSends}</Text>
