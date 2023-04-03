@@ -95,7 +95,7 @@ const EditRoute = ({route, open, setOpen}:
           </Text>
           {' ' + route.gradeDisplayString}
         </Text>
-        <Text>Route Thumbnail</Text>
+        <Text bold>Route Thumbnail</Text>
         { // show thumbnail stored in Firebase
           showStoredThumbnail ?
             <>
@@ -177,7 +177,10 @@ const EditRoute = ({route, open, setOpen}:
         }
         {
           setterType === 'User' && setter !== undefined && 
-          <AuthorHandle author={setter}/>
+          <HStack space={2}>
+            <Text>Selected: </Text>
+            <AuthorHandle author={setter}/>
+          </HStack>
         }
         <HStack alignItems='center'space={1} width='100%'>
           <Text bold >Natural Rules: </Text>

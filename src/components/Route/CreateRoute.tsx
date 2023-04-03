@@ -274,7 +274,10 @@ const CreateRoute = ({ refreshRoutes, isOpen, setIsOpen }: CreateRouteProps) => 
           }
           {
             overrideSetterBool == false && setter !== undefined &&
-            <AuthorHandle author={setter}/>
+            <HStack space={2}>
+              <Text>Selected: </Text>
+              <AuthorHandle author={setter}/>
+            </HStack>
           }
           <FormControl.Label>Description</FormControl.Label>
           <Input isRequired={false} type='text' onChangeText={setDescription}
