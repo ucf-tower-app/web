@@ -56,7 +56,7 @@ export const NavBar = () => {
             </Pressable>;
           }}>
             <Menu.Item>
-              <a href='https://app.termly.io/document/eula/4cbdc6b4-5dda-4e15-b7f1-329263b49ba3'
+              <a href='https://tylerhm.dev/tower-eula'
                 style={{textDecoration: 'none'}}>
                 EULA
               </a>
