@@ -55,6 +55,12 @@ export const NavBar = () => {
               <HamburgerIcon position='relative' top={'5px'} size='2xl' />
             </Pressable>;
           }}>
+            <Menu.Item>
+              <a href='https://app.termly.io/document/eula/4cbdc6b4-5dda-4e15-b7f1-329263b49ba3'
+                style={{textDecoration: 'none'}}>
+                EULA
+              </a>
+            </Menu.Item>
             <Menu.Item onPress={() => {
               auth.signOut();
             }}>Logout</Menu.Item>
