@@ -55,6 +55,12 @@ export const NavBar = () => {
               <HamburgerIcon position='relative' top={'5px'} size='2xl' />
             </Pressable>;
           }}>
+            <Menu.Item>
+              <a href='https://tylerhm.dev/tower-eula'
+                style={{textDecoration: 'none'}}>
+                EULA
+              </a>
+            </Menu.Item>
             <Menu.Item onPress={() => {
               auth.signOut();
             }}>Logout</Menu.Item>
