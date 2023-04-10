@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import PageNotFound from './pages/PageNotFound';
 import FirebaseAuthContext from './utils/AuthContext';
 import ProtectedRoute from './utils/ProtectedRoute';
+import FAQ, { EditFAQ } from './pages/FAQ';
 
 const ComponentTesting = lazy(() => import('./pages/ComponentTesting'));
 // const Signup = lazy(() => import('./pages/Signup')); // we're not doing signup on web anymore, but it's subject to change.
@@ -45,10 +46,12 @@ const App = () => {
                   <Route path='/profile' element={<Profile />} />
                   <Route path='/reports' element={<Reports />} />
                   <Route path='/search' element={<Search />} />
+                  <Route path='/faq/edit' element={<EditFAQ/>}/>
                 </Route>
                 {window.location.hostname === 'localhost' &&
                   <Route path='/component' element={<ComponentTesting />} />}
-                <Route path='*' element={<PageNotFound />} />
+                <Route path='/faq' element={<FAQ/>}/>
+                <Route path='*' element={<PageNotFound />} /> 
               </Routes>
             </BrowserRouter >
           </FirebaseAuthContext >
