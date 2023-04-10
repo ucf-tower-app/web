@@ -19,8 +19,18 @@ export const EditFAQCardBox = ({value, index, onChange, cancel}:
   const [question, setQuestion] = useState(value.question);
   const [answer, setAnswer] = useState(value.answer);
 
+  const handleSaveChanges = () => 
+  {
+    if (question === value.question && answer === value.answer)
+    {
+      cancel();
+      return;
+    }  
+    onChange(question, answer, index);
+  };
+
   return (
-    <Box rounded='md' backgroundColor='primary.400' p='4'>
+    <Box rounded='md' backgroundColor='primary.400' p='4' m='1'>
       <HStack>Q:
         <Input defaultValue={value.question} multiline onChangeText={setQuestion} numberOfLines={4} fontSize='lg'/>
       </HStack>
@@ -33,7 +43,7 @@ export const EditFAQCardBox = ({value, index, onChange, cancel}:
             Cancel
           </Text>
         </Button>
-        <Button onPress={() => onChange(question, answer, index)} alignSelf='center'>
+        <Button onPress={() => handleSaveChanges()} alignSelf='center'>
           <Text variant='button'>
             Save changes
           </Text>
