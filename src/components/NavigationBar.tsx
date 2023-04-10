@@ -28,7 +28,7 @@ export const NavBar = () => {
                 Tutorial
             </Text>
           </Button>
-          <Button onPress={() => navigate('/faq')}>
+          <Button onPress={() => navigate('/faq/edit')}>
             <Text variant={'button'}>
                 FAQ
             </Text>
