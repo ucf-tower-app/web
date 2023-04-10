@@ -16,6 +16,7 @@ const RouteView = lazy(() => import('./pages/RouteView'));
 const RouteFeed = lazy(() => import('./pages/RouteFeed'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Reports = lazy(() => import('./pages/Reports'));
+const Tutorial = lazy(() => import('./pages/Tutorial'));
 const Search = lazy(() => import('./pages/Search'));
 
 export const queryClient = new QueryClient({
@@ -44,6 +45,7 @@ const App = () => {
                   <Route path='/routefeed' element={<RouteFeed />} />
                   <Route path='/profile' element={<Profile />} />
                   <Route path='/reports' element={<Reports />} />
+                  <Route path='/tutorial' element={<Tutorial />} />
                   <Route path='/search' element={<Search />} />
                 </Route>
                 {window.location.hostname === 'localhost' &&
