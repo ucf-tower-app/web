@@ -12,8 +12,9 @@ const FAQCardBox = ({question, answer}: {question: string, answer: string}) => {
   );
 };
 
-export const EditFAQCardBox = ({value, index, onChange}: {value: FAQItem, index: number,
-  onChange: (question: string, answer: string, index: number) => void}) =>
+export const EditFAQCardBox = ({value, index, onChange, cancel}: 
+  {value: FAQItem, index: number,
+  onChange: (question: string, answer: string, index: number) => void, cancel: () => void}) =>
 {
   const [question, setQuestion] = useState(value.question);
   const [answer, setAnswer] = useState(value.answer);
@@ -26,11 +27,18 @@ export const EditFAQCardBox = ({value, index, onChange}: {value: FAQItem, index:
       <HStack>A:
         <Input defaultValue={value.answer} multiline numberOfLines={4} onChangeText={setAnswer} fontSize='md'/>
       </HStack>
-      <Button onPress={() => onChange(question, answer, index)} alignSelf='center'>
-        <Text variant='button'>
-          Save changes
-        </Text>
-      </Button>
+      <HStack justifyContent='center'>
+        <Button onPress={() => cancel()}>
+          <Text variant='button'>
+            Cancel
+          </Text>
+        </Button>
+        <Button onPress={() => onChange(question, answer, index)} alignSelf='center'>
+          <Text variant='button'>
+            Save changes
+          </Text>
+        </Button>
+      </HStack>
     </Box>
   );
 };

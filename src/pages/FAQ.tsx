@@ -127,7 +127,8 @@ export const EditFAQ = () => {
           if (update === index)
           {
             return (
-              <EditFAQCardBox key={index} value={value} index={index} type='Update' onChange={updateCard}/>
+              <EditFAQCardBox key={index} value={value} index={index} onChange={updateCard}
+                cancel={() => setUpdate(-1)}/>
             );
           }
           return (
@@ -141,7 +142,8 @@ export const EditFAQ = () => {
         
       } 
       {addingNewCard ? 
-        <EditFAQCardBox value={{question: '', answer:''}} index={FAQCards.length} type='New' onChange={addCard}/>
+        <EditFAQCardBox value={{question: '', answer:''}} index={FAQCards.length} onChange={addCard}
+          cancel={() => setAddingNewCard(false)}/>
         :<Button onPress={() => setAddingNewCard(true)}>
           <Text variant='button'>
           Add new FAQ
