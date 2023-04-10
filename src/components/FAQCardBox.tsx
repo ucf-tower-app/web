@@ -5,9 +5,9 @@ import {useState} from 'react';
 const FAQCardBox = ({question, answer}: {question: string, answer: string}) => {
 
   return (
-    <Box rounded='md' backgroundColor='primary.400' p='2' maxW='75%'>
-      <Text bold>Q: {question}</Text>
-      <Text>A: {answer}</Text>
+    <Box rounded='md' backgroundColor='primary.400' p='4' maxW='75%'>
+      <Text bold fontSize='lg'>Q: {question}</Text>
+      <Text fontSize='md'>A: {answer}</Text>
     </Box>
   );
 };
@@ -19,9 +19,13 @@ export const EditFAQCardBox = ({value, index, onChange}: {value: FAQItem, index:
   const [answer, setAnswer] = useState(value.answer);
 
   return (
-    <Box rounded='md' backgroundColor='primary.400' p='2'>
-      <HStack>Q:<Input defaultValue={value.question} multiline onChangeText={setQuestion}/></HStack>
-      <HStack>A:<Input defaultValue={value.answer} isFullWidth multiline onChangeText={setAnswer}/></HStack>
+    <Box rounded='md' backgroundColor='primary.400' p='4'>
+      <HStack>Q:
+        <Input defaultValue={value.question} multiline onChangeText={setQuestion} numberOfLines={4} fontSize='lg'/>
+      </HStack>
+      <HStack>A:
+        <Input defaultValue={value.answer} multiline numberOfLines={4} onChangeText={setAnswer} fontSize='md'/>
+      </HStack>
       <Button onPress={() => onChange(question, answer, index)} alignSelf='center'>
         <Text variant='button'>
           Save changes

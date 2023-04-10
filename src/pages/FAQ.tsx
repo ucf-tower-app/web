@@ -11,7 +11,10 @@ const FAQ = () => {
   if (isError)
   {
     return (
-      <>Error</>
+      <VStack alignItems='center' space={2}>
+        <Text variant='header' bold fontSize='3xl'>Frequently Asked Questions</Text>
+        <Text>Error loading data.</Text>
+      </VStack>
     );
   }
 
@@ -19,7 +22,7 @@ const FAQ = () => {
   {
     return (
       <VStack alignItems='center' space={2}>
-        <Text variant='header' bold>Frequently Asked Questions</Text>
+        <Text variant='header' bold fontSize='3xl'>Frequently Asked Questions</Text>
       
         <Text>Loading...</Text>
 
@@ -29,7 +32,7 @@ const FAQ = () => {
 
   return (
     <VStack alignItems='center' space={2}>
-      <Text variant='header' bold>Frequently Asked Questions</Text>
+      <Text variant='header' bold fontSize='3xl'>Frequently Asked Questions</Text>
       
       {
         data.map( (value, index) => 
@@ -99,7 +102,7 @@ export const EditFAQ = () => {
   {
     return (
       <VStack alignItems='center' space={2}>
-        <Text variant='header' bold>Frequently Asked Questions</Text>
+        <Text variant='header' bold fontSize='3xl'>Frequently Asked Questions</Text>
         <Text>Error loading data.</Text>
       </VStack>
     );
@@ -109,7 +112,7 @@ export const EditFAQ = () => {
   {
     return (
       <VStack alignItems='center' space={2}>
-        <Text variant='header' bold>Frequently Asked Questions</Text>
+        <Text variant='header' bold fontSize='3xl'>Frequently Asked Questions</Text>
         <Text>Loading...</Text>
       </VStack>
     );
@@ -117,15 +120,13 @@ export const EditFAQ = () => {
 
   return (
     <VStack alignItems='center' space={2}>
-      <Text variant='header' bold>Frequently Asked Questions</Text>
+      <Text variant='header' bold fontSize='3xl'>Frequently Asked Questions</Text>
       {
         FAQCards.map( (value, index) => {
           if (update === index)
           {
             return (
-              <HStack key={index} space={1}>
-                <EditFAQCardBox value={value} index={index} onChange={updateCard}/>
-              </HStack>
+              <EditFAQCardBox key={index} value={value} index={index} onChange={updateCard}/>
             );
           }
           return (
