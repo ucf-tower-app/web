@@ -1,10 +1,9 @@
 import { useQuery } from 'react-query';
 import { useState, useEffect } from 'react';
-import { Box, Text, VStack, HStack, Button} from 'native-base';
+import { Text, VStack, HStack, Button} from 'native-base';
 import { getFAQs, setFAQs } from '../xplat/queries/faq';
 import { FAQCollection, FAQItem } from '../xplat/types/faq';
 import FAQCardBox, { EditFAQCardBox } from '../components/FAQCardBox';
-import { queryClient } from '../App';
 
 const FAQ = () => {
   const {data, isError, isLoading} = useQuery( 'faq_collection', () => getFAQs());
@@ -32,6 +31,14 @@ const FAQ = () => {
 
   return (
     <VStack alignItems='center' space={2}>
+      <img
+        src={process.env.PUBLIC_URL + '/logo.jpg'}
+        style={{
+          maxWidth: '200px',
+          height: 'auto'
+        }}
+        alt='logo'
+      />
       <Text variant='header' bold fontSize='3xl'>Frequently Asked Questions</Text>
       
       {
