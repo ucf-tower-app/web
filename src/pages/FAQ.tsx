@@ -51,17 +51,15 @@ const FAQ = () => {
 };
 
 export const EditFAQ = () => {
-  const [FAQCards, setFAQCards] = useState<FAQCollection>();
+  const [FAQCards, setFAQCards] = useState<FAQCollection>([]);
   const [update, setUpdate] = useState<number>(-1);
   const [addingNewCard, setAddingNewCard] = useState<boolean>(false);
   const [changesExist, setChangesExist] = useState<boolean>(false);
   const {data, isError, isLoading, refetch} = useQuery( 'faq_collection', () => getFAQs());
 
   const addCard = (question: string, answer: string) => {
-    if (FAQCards === undefined)
-      return;
-    
-    const tempList = FAQCards;
+    const tempList = new Array<FAQItem>();
+    FAQCards.forEach( (val) => tempList.push(val));
     tempList.push( {
       question: question,
       answer: answer
@@ -72,24 +70,20 @@ export const EditFAQ = () => {
   };
 
   const removeCard = (index: number) => {
-    if (FAQCards === undefined)
-      return;
     if (index >= FAQCards.length)
       return;
-    const tempList = FAQCards;
-    tempList.splice(index, 1);
-    const list = new Array<FAQItem>();
-    tempList.forEach( (val) => list.push(val));
+    FAQCards.splice(index, 1);
+    const tempList = new Array<FAQItem>();
+    FAQCards.forEach( (val) => tempList.push(val));
     setChangesExist(true);
-    setFAQCards(list);
+    setFAQCards(tempList);
   };
 
   const updateCard = (question: string, answer: string, index: number) => {
-    if (FAQCards === undefined)
+    if (index >= FAQCards.length)
       return;
-    if (FAQCards.length <= index)
-      return;
-    const tempList = FAQCards;
+    const tempList = new Array<FAQItem>();
+    FAQCards.forEach( (val) => tempList.push(val));
     tempList[index] = {
       question: question,
       answer: answer
@@ -100,7 +94,7 @@ export const EditFAQ = () => {
   };
 
   useEffect( () => {
-    if (data === undefined || FAQCards !== undefined)
+    if (data === undefined)
       return;
     setFAQCards(data);
   }, [data]);
@@ -115,7 +109,7 @@ export const EditFAQ = () => {
     );
   }
 
-  if (isLoading || FAQCards === undefined)
+  if (isLoading)
   {
     return (
       <VStack alignItems='center' space={2}>
@@ -133,7 +127,7 @@ export const EditFAQ = () => {
           if (update === index)
           {
             return (
-              <EditFAQCardBox key={index} value={value} index={index} onChange={updateCard}/>
+              <EditFAQCardBox key={index} value={value} index={index} type='Update' onChange={updateCard}/>
             );
           }
           return (
@@ -147,7 +141,7 @@ export const EditFAQ = () => {
         
       } 
       {addingNewCard ? 
-        <EditFAQCardBox value={{question: '', answer:''}} index={FAQCards.length} onChange={addCard}/>
+        <EditFAQCardBox value={{question: '', answer:''}} index={FAQCards.length} type='New' onChange={addCard}/>
         :<Button onPress={() => setAddingNewCard(true)}>
           <Text variant='button'>
           Add new FAQ
@@ -158,9 +152,9 @@ export const EditFAQ = () => {
         changesExist && 
         <HStack>
           <Button onPress={() => {
-            setFAQCards(undefined);
             refetch();
             setChangesExist(false);
+            setAddingNewCard(false);
           }}>
             <Text variant='button'>
               Discard changes
