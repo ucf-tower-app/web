@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import { Box, Button, FormControl, Input, Text } from 'native-base';
+import { Box, Button, FormControl, Input, Link, Text } from 'native-base';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signIn } from '../xplat/api';
@@ -85,9 +85,23 @@ const Login = () => {
       </FormControl>
       <Text>
         {
-          "Don't have an account? Create one through our mobile app (coming soon)"
+          "Don't have an account? Create one through our mobile app:"
         }
-        {/* <Link href="https://google.com">here</Link> */}
+      </Text>
+      <Text>
+        {
+          <Link href="https://apps.apple.com/us/app/climb-tower/id1670481313" color='blue.500'>
+            Download on the App Store
+          </Link>
+        }
+        {
+          " or "
+        }
+        {
+          <Link href="https://play.google.com/store/apps/details?id=com.tyler.hm.tower&hl=en_US&gl=US" color='blue.500'>
+            Get it on Google Play
+          </Link>
+        }
       </Text>
     </Box>
   );
