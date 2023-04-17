@@ -2,7 +2,6 @@ import { Box, Text, HStack, VStack, Divider, Center } from 'native-base';
 import { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useSearchParams } from 'react-router-dom';
-import { NavBar } from '../components/NavigationBar';
 import RouteFeedDisplay from '../components/Route/RouteFeedDisplay';
 import { Forum } from '../xplat/types/forum';
 import { Route } from '../xplat/types/route';
@@ -38,7 +37,6 @@ const RouteFeed = () => {
     return (
       <Box>
         <VStack>
-          <NavBar />
           <Text top='50px'>Loading...</Text>
         </VStack>
       </Box>
@@ -50,7 +48,6 @@ const RouteFeed = () => {
   return (
     <Box>
       <VStack>
-        <NavBar />
         <HStack top='50px' width={'100%'}>
           {route !== undefined && <RouteDetailsPanel route={route} forumSetter={setRouteForum} />}
           <Divider orientation='vertical' top={'100px'} left={'25%'} height={'75vh'} position='fixed' />

@@ -8,14 +8,17 @@ import Login from './pages/Login';
 import PageNotFound from './pages/PageNotFound';
 import FirebaseAuthContext from './utils/AuthContext';
 import ProtectedRoute from './utils/ProtectedRoute';
+import FAQ, { EditFAQ } from './pages/FAQ';
 
 const ComponentTesting = lazy(() => import('./pages/ComponentTesting'));
-const Reports = lazy(() => import('./pages/Reports'));
+// const Signup = lazy(() => import('./pages/Signup')); // we're not doing signup on web anymore, but it's subject to change.
 const RoutesPage = lazy(() => import('./pages/Routes'));
 const RouteView = lazy(() => import('./pages/RouteView'));
 const RouteFeed = lazy(() => import('./pages/RouteFeed'));
-// const Signup = lazy(() => import('./pages/Signup')); // we're not doing signup on web anymore, but it's subject to change.
 const Profile = lazy(() => import('./pages/Profile'));
+const Reports = lazy(() => import('./pages/Reports'));
+const Tutorial = lazy(() => import('./pages/Tutorial'));
+const Search = lazy(() => import('./pages/Search'));
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,10 +46,14 @@ const App = () => {
                   <Route path='/routefeed' element={<RouteFeed />} />
                   <Route path='/profile' element={<Profile />} />
                   <Route path='/reports' element={<Reports />} />
+                  <Route path='/tutorial' element={<Tutorial />} />
+                  <Route path='/search' element={<Search />} />
+                  <Route path='/faq/edit' element={<EditFAQ/>}/>
                 </Route>
                 {window.location.hostname === 'localhost' &&
                   <Route path='/component' element={<ComponentTesting />} />}
-                <Route path='*' element={<PageNotFound />} />
+                <Route path='/faq' element={<FAQ/>}/>
+                <Route path='*' element={<PageNotFound />} /> 
               </Routes>
             </BrowserRouter >
           </FirebaseAuthContext >

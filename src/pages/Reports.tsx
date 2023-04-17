@@ -11,7 +11,6 @@ import { useEffect, useState } from 'react';
 import { getIQParams_ModHistory } from '../xplat/queries/modHistory';
 import { useInfiniteQuery } from 'react-query';
 import ReportCard from '../components/Reports/ReportCard';
-import { NavBar } from '../components/NavigationBar';
 import {
   User,
   Post,
@@ -116,9 +115,6 @@ const Reports = () => {
 
   return (
     <VStack>
-      <Box height='50px' marginBottom={1} zIndex={100}>
-        <NavBar />
-      </Box>
       <Text fontSize='3xl' bold alignSelf='center' height='50px'>
         Reported Content
       </Text>

@@ -1,5 +1,4 @@
 import { Box, Button, Center, Flex, HStack, Text, VStack } from 'native-base';
-import { NavBar } from '../components/NavigationBar';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { getRouteById } from '../xplat/api';
 import { useQuery } from 'react-query';
@@ -8,14 +7,18 @@ import { queryClient } from '../App';
 import placeholder_image from '../placeholder_image.jpg';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../utils/AuthContext';
+import { ConfirmationPopup } from '../components/ConfirmationPopup';
 import EditRoute from '../components/Route/EditRoute';
+import AuthorHandle from '../components/User/AuthorHandle';
 
 const RouteView = () => {
   const [params] = useSearchParams();
   const [showEditPopup, setShowEditPopup] = useState(false);
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
-  
+
+  const [archivePopupOpen, setArchivePopupOpen] = useState<boolean>(false);
+
   const hasRouteUID: boolean = params.has('uid');
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const routeUID: string = (hasRouteUID ? params.get('uid')! : '');
@@ -72,22 +75,28 @@ const RouteView = () => {
   return (
     <Box>
       <VStack>
-        <NavBar />
         <Flex flexDir='column' justifyContent='center' top='70px' width='100%' position='fixed'>
           <Center><Text fontSize='2xl' bold>{data.name}</Text></Center>
           <Flex flexDir='row' justifyContent='center' width='100%' marginTop={1}>
             <Button onPress={navToRouteFeed}>
               <Text variant='button'>View Route Feed</Text>
             </Button>
-            {/* TODO: make a 'confirm archive?' popup */}
             {data.status === RouteStatus.Active ?
               <>
-                <Button onPress={archiveThisRoute}>
+                <Button onPress={() => setArchivePopupOpen(true)}>
+                  <ConfirmationPopup
+                    open={archivePopupOpen}
+                    onCancel={() => setArchivePopupOpen(false)}
+                    onConfirm={() => {
+                      archiveThisRoute();
+                      setArchivePopupOpen(false);
+                    }}
+                  />
                   <Text variant='button'>Archive This Route</Text>
                 </Button>
                 <Button onPress={() => setShowEditPopup(true)}>
                   <Text variant='button'>Edit Route</Text>
-                  <EditRoute route={data} open={showEditPopup} setOpen={setShowEditPopup}/>
+                  <EditRoute route={data} open={showEditPopup} setOpen={setShowEditPopup} />
                 </Button>
               </>
               :
@@ -108,7 +117,15 @@ const RouteView = () => {
                 data.stringifiedTags === '' ? notAssigned : data.stringifiedTags
               }</Text>
               <Text><Text bold>Rope: </Text>{data.rope ?? notAssigned}</Text>
-              <Text><Text bold>Setter: </Text>{data.setterRawName ?? notAssigned}</Text>
+              {
+                data.setter === undefined ?
+                  <Text><Text bold>Setter: </Text>{data.setterRawName ?? notAssigned}</Text>
+                  :
+                  <HStack alignItems='center'>
+                    <Text bold alignSelf='center'>Setter: </Text> 
+                    <AuthorHandle author={data.setter}/>
+                  </HStack>
+              }
               <Text><Text bold>Date Set: </Text>{data.timestamp?.toLocaleDateString() ?? notAssigned}</Text>
               <Text><Text bold>Sends: </Text>{data.numSends}</Text>
               <Text><Text bold>Likes: </Text>{data.likes.length}</Text>

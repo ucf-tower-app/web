@@ -1,15 +1,16 @@
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
-import { Box, Center, Text } from 'native-base';
+import { Box, Center, Text, HStack } from 'native-base';
 import { Route, Forum } from '../../xplat/types';
-import { buildRouteFetcher } from '../../utils/queries';
+import { getForumById } from '../../xplat/api';
+import AuthorHandle from '../User/AuthorHandle';
 
 const RouteDetailsPanel = ({ route, forumSetter }: { route: Route, forumSetter: (forum: Forum) => void }) => {
-  const { isLoading, isError, data } = useQuery(['route', { id: route.getId() }], buildRouteFetcher(route));
+  const { isLoading, isError, data } = useQuery(['route', { id: route.getId() }], route.buildFetcher());
 
   useEffect(() => {
     if (data !== undefined) {
-      forumSetter(data.forum);
+      forumSetter(getForumById(data.forumDocRefID));
     }
   }, [data]);
 
@@ -37,9 +38,11 @@ const RouteDetailsPanel = ({ route, forumSetter }: { route: Route, forumSetter: 
     <Box flexDir={'column'} width={'25%'} top={'100px'} position='fixed'>
       <Center>
         <Text fontSize={'2xl'} bold>{data.name}</Text>
-        {data.image !== undefined && <img src={data.image} className='route-avatar' alt='route' />}
+        {data.thumbnailUrl !== undefined && <img src={data.thumbnailUrl} className='route-avatar' alt='route' />}
         {data.description !== undefined && <Text>{data.description}</Text>}
-        {data.setter !== undefined && <Text> Set by {data.setter.string}</Text>}
+        {data.setterRawName !== undefined && <Text> Set by {data.setterRawName}</Text>}
+        {data.setter !== undefined && 
+        <HStack alignItems='center' space={1}><Text>Set by:</Text> <AuthorHandle author={data.setter}/></HStack>}
       </Center>
     </Box>
   );

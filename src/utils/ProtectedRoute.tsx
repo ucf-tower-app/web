@@ -3,6 +3,8 @@ import {AuthContext}from './AuthContext';
 import {Navigate, Outlet} from 'react-router-dom';
 import { UserStatus } from '../xplat/types';
 import Loading from './Loading';
+import { NavBar } from '../components/NavigationBar';
+import { Box } from 'native-base';
 
 export default function ProtectedRoute({redirectTo}: 
   {redirectTo: string}){
@@ -14,7 +16,12 @@ export default function ProtectedRoute({redirectTo}:
     }
     else{
       return(
-        <Outlet/>
+        <>
+          <Box height='50px' zIndex={100} marginBottom='4'>
+            <NavBar />
+          </Box>
+          <Outlet/>
+        </>
       );
     }
   }
