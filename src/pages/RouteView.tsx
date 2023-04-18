@@ -83,7 +83,7 @@ const RouteView = () => {
             </Button>
             {data.status === RouteStatus.Active ?
               <>
-                <Button onPress={() => setArchivePopupOpen(true)}>
+                <Button onPress={() => setArchivePopupOpen(true)} background='red.400'>
                   <ConfirmationPopup
                     open={archivePopupOpen}
                     onCancel={() => setArchivePopupOpen(false)}
