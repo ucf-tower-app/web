@@ -5,9 +5,10 @@ import {useState} from 'react';
 const FAQCardBox = ({question, answer}: {question: string, answer: string}) => {
 
   return (
-    <Box rounded='md' backgroundColor='primary.400' p='4' maxW='75%'>
-      <Text bold fontSize='lg'>Q: {question}</Text>
-      <Text fontSize='md'>A: {answer}</Text>
+    <Box rounded='md' backgroundColor='primary.400' p='4' width='75%'
+      alignItems='center'>
+      <Text bold fontSize='lg'>{question}</Text>
+      <Text fontSize='md'>{answer}</Text>
     </Box>
   );
 };
@@ -31,11 +32,13 @@ export const EditFAQCardBox = ({value, index, onChange, cancel}:
 
   return (
     <Box rounded='md' backgroundColor='primary.400' p='4' m='1'>
-      <HStack>Q:
-        <Input defaultValue={value.question} multiline onChangeText={setQuestion} numberOfLines={4} fontSize='lg'/>
+      <HStack justifyContent='center' fontWeight='bold' marginBottom='12px'>Q:
+        <Input defaultValue={value.question} onChangeText={setQuestion} fontSize='md' multiline width='50%'
+          numberOfLines={5} marginLeft='12px' />
       </HStack>
-      <HStack>A:
-        <Input defaultValue={value.answer} multiline numberOfLines={4} onChangeText={setAnswer} fontSize='md'/>
+      <HStack justifyContent='center' fontWeight='bold' marginBottom='12px'>A:
+        <Input defaultValue={value.answer} onChangeText={setAnswer} fontSize='md' multiline width='50%'
+          marginLeft='12px' numberOfLines={5} />
       </HStack>
       <HStack justifyContent='center'>
         <Button onPress={() => cancel()}>
