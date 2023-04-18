@@ -73,14 +73,17 @@ const Routes = () => {
   if (isLoading) {
     return (
       <Center>
+        <VStack alignItems='center' space={2}>
+          <Text variant='header' bold fontSize='3xl' justifyContent='center'>Route Management</Text>
+        </VStack>
         <HStack justifyContent='space-around' w='4/6' space='10'>
           <Box w='1/2' alignItems='center'>
-            <Text bold fontSize='5xl'>Active Routes</Text>
-            <Text fontSize='4xl'>Loading...</Text>
+            <Text bold fontSize='3xl'>Active Routes</Text>
+            <Text fontSize='2xl'>Loading...</Text>
           </Box>
           <Box w='1/2' alignItems='center'>
-            <Text bold fontSize='5xl'>Archived Routes</Text>
-            <Text fontSize='4xl'>Loading...</Text>
+            <Text bold fontSize='3xl'>Archived Routes</Text>
+            <Text fontSize='2xl'>Loading...</Text>
           </Box>
         </HStack>
       </Center>
@@ -90,14 +93,17 @@ const Routes = () => {
   if (isError || data === undefined) {
     return (
       <Center>
+        <VStack alignItems='center' space={2}>
+          <Text variant='header' bold fontSize='3xl' justifyContent='center'>Route Management</Text>
+        </VStack>
         <HStack justifyContent='space-around' w='4/6' space='10'>
           <Box w='1/2' alignItems='center'>
-            <Text bold fontSize='5xl'>Active Routes</Text>
-            <Text fontSize='4xl'>Error loading routes</Text>
+            <Text bold fontSize='3xl'>Active Routes</Text>
+            <Text fontSize='2xl'>Error loading routes</Text>
           </Box>
           <Box w='1/2' alignItems='center'>
-            <Text bold fontSize='5xl'>Archived Routes</Text>
-            <Text fontSize='4xl'>Error loading routes</Text>
+            <Text bold fontSize='3xl'>Archived Routes</Text>
+            <Text fontSize='2xl'>Error loading routes</Text>
           </Box>
         </HStack>
       </Center>
@@ -105,6 +111,9 @@ const Routes = () => {
   }
   return (
     <Box>
+      <VStack alignItems='center' space={2}>
+        <Text variant='header' bold fontSize='3xl' justifyContent='center'>Route Management</Text>
+      </VStack>
       <Center p='5'>
         {/* TODO: add 'are you sure?' popup to buttons */}
         <HStack p='3' space='lg'>

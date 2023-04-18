@@ -6,6 +6,9 @@ const Tutorial = () => {
 
   return (
     <VStack paddingX={paddingXAmount} paddingBottom={paddingTopAmount}>
+      <VStack alignItems='center' space={2}>
+        <Text variant='header' bold fontSize='3xl' justifyContent='center'>Tutorial</Text>
+      </VStack>
       <Text bold fontSize='lg' paddingTop={paddingTopAmount}>Sign Up</Text>
       <Text>
         To onboard a new Tower Staff onto the website, have them sign up on the Mobile App. Then have
