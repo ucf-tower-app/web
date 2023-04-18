@@ -36,13 +36,11 @@ const ModActionCard = ({
 
   return (
     <Box
-      bg='secondary.300'
+      bg='primary.300'
       rounded='md'
       m='1'
       p='1'
       zIndex={0}
-      borderColor='secondary.400'
-      borderWidth={2}
     >
       <Text variant='header' bold>
         {data.timestamp.toLocaleTimeString()}

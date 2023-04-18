@@ -77,8 +77,8 @@ const ReportCard = ({
         />
       )}
       {contentjsx}
-      <ArrowForwardIcon size='lg' alignSelf='center' color='white' />
-      <Text variant='body' alignSelf='center' color='white'>
+      <ArrowForwardIcon size='lg' alignSelf='center' color='black' />
+      <Text variant='body' alignSelf='center' color='black'>
         This was reported by{' '}
         <Popup
           position='bottom center'
