@@ -131,6 +131,7 @@ const Reports = () => {
                   return <ModCollectionCard data={item} />;
                 }}
                 keyExtractor={(item, index) => index.toString()}
+                p='2'
               />
             </div>
           </div>
