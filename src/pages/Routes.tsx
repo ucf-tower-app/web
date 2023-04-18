@@ -108,10 +108,10 @@ const Routes = () => {
       <Center p='5'>
         {/* TODO: add 'are you sure?' popup to buttons */}
         <HStack p='3' space='lg'>
-          <Button onPress={() => setCreateRoutePopup(true)}>
+          <Button onPress={() => setCreateRoutePopup(true)} background='green.500'>
             <Text variant='button'>Create route</Text>
           </Button>
-          <Button onPress={() => setArchiveAllPopup(RouteType.Boulder)}>
+          <Button onPress={() => setArchiveAllPopup(RouteType.Boulder)} background='red.400'>
             <ConfirmationPopup
               open={archiveAllPopup === RouteType.Boulder}
               onCancel={() => setArchiveAllPopup(undefined)}
@@ -119,7 +119,7 @@ const Routes = () => {
             />
             <Text variant='button'>Archive All Boulders</Text>
           </Button>
-          <Button onPress={() => setArchiveAllPopup(RouteType.Traverse)}>
+          <Button onPress={() => setArchiveAllPopup(RouteType.Traverse)} background='red.400'>
             <ConfirmationPopup
               open={archiveAllPopup === RouteType.Traverse}
               onCancel={() => setArchiveAllPopup(undefined)}
@@ -127,7 +127,7 @@ const Routes = () => {
             />
             <Text variant='button'>Archive All Traverses</Text>
           </Button>
-          <Button onPress={() => setArchiveAllPopup(RouteType.Toprope)}>
+          <Button onPress={() => setArchiveAllPopup(RouteType.Toprope)} background='red.400'>
             <ConfirmationPopup
               open={archiveAllPopup === RouteType.Toprope}
               onCancel={() => setArchiveAllPopup(undefined)}
