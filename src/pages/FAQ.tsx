@@ -122,7 +122,8 @@ export const EditFAQ = () => {
   return (
     <VStack alignItems='center' space={2}>
       <Text variant='header' bold fontSize='3xl'>Frequently Asked Questions</Text>
-      <Box rounded='lg' p='5' marginBottom='5' backgroundColor='primary.500'>
+      <Box rounded='lg' p='5' width='75%' marginLeft='auto' marginRight='auto'
+        marginTop='5' marginBottom='5' backgroundColor='primary.200'>
         {
           FAQCards.map( (value, index) => {
             if (update === index)
@@ -133,19 +134,24 @@ export const EditFAQ = () => {
               );
             }
             return (
-              <HStack key={index} space={1} m='1'>
-                <FAQCardBox  question={value.question} answer={value.answer}/>
-                <Button onPress={() => setUpdate(index)}><Text variant='button'>Edit</Text></Button>
-                <Button onPress={() => removeCard(index)}><Text variant='button'>Remove</Text></Button>
+              <HStack key={index} space={1} m='1' marginBottom='5' justifyContent='center'>
+                <FAQCardBox question={value.question} answer={value.answer}/>
+                <VStack space={1} justifyContent='center'>
+                  <Button onPress={() => setUpdate(index)} width='100%'>
+                    <Text variant='button'>Edit</Text>
+                  </Button>
+                  <Button onPress={() => removeCard(index)} backgroundColor='red.400' width='100%'>
+                    <Text variant='button'>Remove</Text>
+                  </Button>
+                </VStack>
               </HStack>
             );
           })
-        
         }
         {addingNewCard ?
           <EditFAQCardBox value={{question: '', answer:''}} index={FAQCards.length} onChange={addCard}
             cancel={() => setAddingNewCard(false)}/>
-          :<Button onPress={() => setAddingNewCard(true)}>
+          :<Button onPress={() => setAddingNewCard(true)} marginLeft='auto' marginRight='auto'>
             <Text variant='button'>
             Add new FAQ
             </Text>
@@ -154,7 +160,7 @@ export const EditFAQ = () => {
       </Box>
       {
         changesExist && 
-        <HStack>
+        <HStack space={1} marginBottom='20'>
           <Button onPress={() => {
             refetch();
             setFAQCards(data);

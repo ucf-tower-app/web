@@ -6,7 +6,7 @@ const paddingXAmount = '20px';
 const Tutorial = () => {
 
   return (
-    <VStack paddingX={paddingXAmount} paddingBottom={paddingTopAmount}>
+    <VStack paddingX={paddingXAmount} paddingBottom={paddingTopAmount} width='75%' marginLeft='auto' marginRight='auto'>
       <VStack alignItems='center' space={2}>
         <Text variant='header' bold fontSize='3xl' justifyContent='center'>Tutorial</Text>
       </VStack>
@@ -26,31 +26,32 @@ const Tutorial = () => {
       <Box background='primary.200' p='2' rounded='md'>
         <Text>
           In the Tower mobile app and website, there are 6 permission levels for Users:
-        </Text><Text>
-          Banned - Unable to log into the app. Also all of their past content is removed.
-        </Text><Text>
-          Unverified - Unable to log into the app. Need to verify email to gain access.
-        </Text><Text>
-          Verified - Able to log into the app and view routes and posts, but cannot upload anything to the
-          app. This includes posts and sends.
-        </Text><Text italic>
-          NOTE: If User did not sign up with a @knights.ucf.edu email, they will only be Verified status upon
-          verifying their email. They will need to get an Employee to promote them on the website to Approved.
-        </Text><Text>
-          Approved - Able to log into the app and view routes and posts. Also able to create posts, send routes,
-          and report content.
-        </Text><Text italic>
+        </Text><Text paddingLeft='3%'>
+          <Text bold>1. Banned - </Text>Unable to log into the app. Also all of their past content is removed.
+        </Text><Text paddingLeft='3%'>
+          <Text bold>2. Unverified - </Text>Unable to log into the app. Need to verify email to gain access.
+        </Text><Text paddingLeft='3%'>
+          <Text bold>3. Verified - </Text>Able to log into the app and view routes and posts, but cannot upload anything
+          to the app. This includes posts and sends.
+        </Text>
+        <Text italic paddingLeft='5%'>
+          NOTE: If User did not sign up with a @knights.ucf.edu email, they will need to get an Employee 
+          to promote them on the website to Approved.
+        </Text><Text paddingLeft='3%'>
+          <Text bold>4. Approved - </Text>Able to log into the app and view routes and posts. Also able to create posts,
+          send routes, and report content.
+        </Text><Text italic paddingLeft='5%'>
           NOTE: If User signed up with a @knights.ucf.edu email, they will be automatically Approved status upon
           verifying their email.
-        </Text><Text>
-          Employee - Has all permissions of an Approved User. Also able to delete inappropriate content directly
-          from the app. Additionally, able to log into the website and create/edit/archive routes, handle reports,
-          and promote Users up to Approved status, or demote Users from Approved status or below.
-        </Text><Text>
-          Manager - Has all permissions of an Employee User. Additionally, able to promote Users up to Manager
-          status, or demote Users from Employee status or below. Additionally, able to see a star rating of routes
-          based on feedback of Users who have sent the route in the app.
-        </Text><Text italic>
+        </Text><Text paddingLeft='3%'>
+          <Text bold>5. Employee - </Text>Has all permissions of an Approved User. Also able to delete inappropriate
+          content directly from the app. Additionally, able to log into the website and create/edit/archive routes,
+          handle reports, and promote Users up to Approved status, or demote Users from Approved status or below.
+        </Text><Text paddingLeft='3%'>
+          <Text bold>6. Manager - </Text>Has all permissions of an Employee User. Additionally, able to promote Users
+          up to Manager status, or demote Users from Employee status or below. Additionally, able to see a star rating
+          of routes based on feedback of Users who have sent the route in the app.
+        </Text><Text italic paddingLeft='5%'>
           NOTE: Having multiple Managers is okay.
         </Text>
       </Box>
