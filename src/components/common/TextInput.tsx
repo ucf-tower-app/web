@@ -18,8 +18,8 @@ const TextInput =
     if (multiline)
     {
       return (
-        <textarea style={{width: width || 'auto', margin: margin || 'auto'}}
-          className='native-base-clone-input' defaultValue={defaultValue} value={value} onChange={handleChange}/>
+        <textarea style={{width: width || 'auto', margin: margin || 'auto'}} className='native-base-clone-input' 
+          defaultValue={defaultValue} placeholder={placeholder} value={value} onChange={handleChange}/>
       );
     }
 
