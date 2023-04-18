@@ -143,7 +143,7 @@ const Reports = () => {
               <Text alignSelf='center' variant='header'>
                 No reported content.
               </Text>
-              <Button onPress={() => reports.refetch()}>
+              <Button alignSelf='center' onPress={() => reports.refetch()}>
                 <Text variant='button'>Refresh</Text>
               </Button>
             </Box>
@@ -153,7 +153,7 @@ const Reports = () => {
               data={Array.from(reportedContent)}
               renderItem={({ item, index }) => (
                 <Box
-                  bg={index % 2 == 0 ? 'red.500' : 'red.400'}
+                  bg='red.300'
                   rounded='md'
                   marginY={1}
                   p={1}

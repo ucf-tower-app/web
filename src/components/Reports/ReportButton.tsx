@@ -1,7 +1,9 @@
-import { Pressable, WarningOutlineIcon, WarningIcon } from 'native-base';
+import { Pressable, Tooltip } from 'native-base';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../utils/AuthContext';
 import { Comment, Post, User } from '../../xplat/types';
+import Icon from '@mdi/react';
+import { mdiFlag, mdiFlagOutline } from '@mdi/js';
 
 const ReportButton = ({content}: {content: Post | Comment | User}) => {
   const authContext = useContext(AuthContext);
@@ -26,15 +28,17 @@ const ReportButton = ({content}: {content: Post | Comment | User}) => {
   }, [authContext.user]);
 
   return (
-    <Pressable disabled={reported === undefined} onPress={() => handlePressReport()}>
-      {reported !== undefined && 
-        (reported ? 
-          <WarningIcon color='red.400' alignSelf='center'/> 
-          :
-          <WarningOutlineIcon alignSelf='center'/>
-        )
-      }
-    </Pressable>
+    <Tooltip label={(reported !== undefined && reported) ? 'Unreport' : 'Report'} placement='top'>
+      <Pressable disabled={reported === undefined} onPress={() => handlePressReport()}>
+        {reported !== undefined && 
+          (reported ?
+            <Icon path={mdiFlag} size={1} color='red'/>
+            :
+            <Icon path={mdiFlagOutline} size={1} color='black'/>
+          )
+        }
+      </Pressable>
+    </Tooltip>
   );
 };
 

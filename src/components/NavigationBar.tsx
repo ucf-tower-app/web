@@ -1,39 +1,75 @@
 import { HStack, Box, Button, Text, Menu, Pressable, HamburgerIcon } from 'native-base';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { auth } from '../xplat/Firebase';
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../utils/AuthContext';
 import './css/feed.css';
 
 export const NavBar = () => {
   const [searchParams] = useSearchParams();
+  const [currentRoute, setCurrentRoute] = useState<string>('none');
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect( () => {
+    if (window.location.href.indexOf('/routes') !== -1)
+    {
+      setCurrentRoute('routes');
+      return;
+    }
+    if (window.location.href.indexOf('/reports') !== -1)
+    {
+      setCurrentRoute('reports');
+      return;
+    }
+    if (window.location.href.indexOf('/tutorial') !== -1)
+    {
+      setCurrentRoute('tutorial');
+      return;
+    }
+    if (window.location.href.indexOf('/faq') !== -1)
+    {
+      setCurrentRoute('faq');
+      return;
+    }
+    if (window.location.href.indexOf('/search') !== -1)
+    {
+      setCurrentRoute('search');
+      return;
+    }
+    setCurrentRoute('none');
+  }, [window.location.href]);
+
   return (
     <Box bg='#F1F1F1' p='3' justifyContent='center' position='fixed' width='100%'>
       <HStack justifyContent='space-between'>
         <HStack space='md' height='fit-content'>
-          <Button onPress={()=>{navigate('/routes');}}>
+          <Button onPress={()=>{navigate('/routes');}} 
+            background={currentRoute === 'routes' ? 'primary.500' : '#0891B2'}>
             <Text variant={'button'}>
                 Routes
             </Text>
           </Button>
-          <Button onPress={() => navigate('/reports')}>
+          <Button onPress={() => navigate('/reports')} 
+            background={currentRoute === 'reports' ? 'primary.500' : '#0891B2'}>
             <Text variant={'button'}>
                 Reports
             </Text>
           </Button>
-          <Button onPress={() => navigate('/tutorial')}>
+          <Button onPress={() => navigate('/tutorial')} 
+            background={currentRoute === 'tutorial' ? 'primary.500' : '#0891B2'}>
             <Text variant={'button'}>
                 Tutorial
             </Text>
           </Button>
-          <Button onPress={() => navigate('/faq/edit')}>
+          <Button onPress={() => navigate('/faq/edit')} 
+            background={currentRoute === 'faq' ? 'primary.500' : '#0891B2'}>
             <Text variant={'button'}>
                 FAQ
             </Text>
           </Button>
-          <Button onPress={() => navigate('/search')}>
+          <Button onPress={() => navigate('/search')} 
+            background={currentRoute === 'search' ? 'primary.500' : '#0891B2'}>
             <Text variant={'button'}>
                 Search
             </Text>

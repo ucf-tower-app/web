@@ -77,8 +77,8 @@ const ReportCard = ({
         />
       )}
       {contentjsx}
-      <ArrowForwardIcon size='lg' alignSelf='center' color='white' />
-      <Text variant='body' alignSelf='center' color='white'>
+      <ArrowForwardIcon size='lg' alignSelf='center' color='black' />
+      <Text variant='body' alignSelf='center' color='black'>
         This was reported by{' '}
         <Popup
           position='bottom center'
@@ -108,6 +108,7 @@ const ReportCard = ({
             setModerationAction(ModerationAction.Delete);
             setConfirmationOpen(true);
           }}
+          background='red.500'
         >
           <Text variant='button'>Delete</Text>
         </Button>
@@ -116,6 +117,7 @@ const ReportCard = ({
             setModerationAction(ModerationAction.Ban);
             setConfirmationOpen(true);
           }}
+          background='red.500'
         >
           <Text variant='button'>Ban</Text>
         </Button>
