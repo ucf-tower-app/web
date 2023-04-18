@@ -19,7 +19,7 @@ const TextInput =
     {
       return (
         <textarea style={{width: width || 'auto', margin: margin || 'auto'}}
-          className='native-base-clone-input' value={value} onChange={handleChange}/>
+          className='native-base-clone-input' defaultValue={defaultValue} value={value} onChange={handleChange}/>
       );
     }
 
