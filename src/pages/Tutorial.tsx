@@ -7,6 +7,9 @@ const Tutorial = () => {
 
   return (
     <VStack paddingX={paddingXAmount} paddingBottom={paddingTopAmount}>
+      <VStack alignItems='center' space={2}>
+        <Text variant='header' bold fontSize='3xl' justifyContent='center'>Tutorial</Text>
+      </VStack>
       <Text bold fontSize='lg' paddingTop={paddingTopAmount}>Sign Up</Text>
       <Box background='primary.200' p='2' rounded='md'>
         <Text>
