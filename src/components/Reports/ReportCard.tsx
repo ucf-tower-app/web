@@ -108,7 +108,7 @@ const ReportCard = ({
             setModerationAction(ModerationAction.Delete);
             setConfirmationOpen(true);
           }}
-          background='red.400'
+          background='red.500'
         >
           <Text variant='button'>Delete</Text>
         </Button>
@@ -117,7 +117,7 @@ const ReportCard = ({
             setModerationAction(ModerationAction.Ban);
             setConfirmationOpen(true);
           }}
-          background='red.400'
+          background='red.500'
         >
           <Text variant='button'>Ban</Text>
         </Button>
