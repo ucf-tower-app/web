@@ -9,12 +9,12 @@ const ModCollectionCard = ({data}: {data: ModActionCollection}) => {
   return (
     <>
       <Pressable
-        bg='secondary.300'
+        bg='primary.300'
         rounded='md'
         m='1'
         p='1'
         zIndex={0}
-        borderColor='secondary.400'
+        borderColor='primary.400'
         borderWidth={2}
         onPress={() => setExpanded(!expanded)}
       >
@@ -26,8 +26,8 @@ const ModCollectionCard = ({data}: {data: ModActionCollection}) => {
         </HStack>
       </Pressable>
       {expanded ? (
-        <Box bg='secondary.200' 
-          rounded='md' m='1' marginLeft='3' p='1' zIndex={0} borderColor='secondary.400' borderWidth={2}>
+        <Box bg='primary.200' 
+          rounded='md' m='1' marginLeft='8' p='2' zIndex={0} borderColor='primary.400' borderWidth={2}>
           {data.modActions.map((action, index) => {
             return <ModActionCard action={action} index={index} key={index.toString()}/>;
           }
