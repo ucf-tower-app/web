@@ -1,5 +1,5 @@
 import { RouteColor, User, NaturalRules, FetchedRoute, invalidateDocRefId } from '../../xplat/types';
-import { Text, HStack, Input, VStack, Radio, Button, Select } from 'native-base';
+import { Text, HStack,  VStack, Radio, Button, Select } from 'native-base';
 import {compressImage} from '../../utils/CompressImage';
 import Popup from 'reactjs-popup';
 import { SearchBox, SearchView } from '../Search/SearchBox';
@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { queryClient } from '../../App';
 import { getUserById } from '../../xplat/api';
 import AuthorHandle from '../User/AuthorHandle';
+import TextInput from '../common/TextInput';
 
 const Ropes = [
   '1', '2', '3', '4', '5', '6', '7', '8', '9'
@@ -144,8 +145,8 @@ const EditRoute = ({route, open, setOpen}:
         }
         <HStack alignItems='center'space={1} width='100%'>
           <Text bold >Description: </Text>
-          <Input type='text' value={description} onChangeText={setDescription} width='75%' 
-            multiline numberOfLines={2} />
+          <TextInput value={description} onChangeText={setDescription} width='75%' 
+            multiline={true}/>
         </HStack>
         <HStack alignItems='center'space={1} width='100%'>
           <Text bold >Setter: </Text>
@@ -167,8 +168,7 @@ const EditRoute = ({route, open, setOpen}:
             <SearchBox width='35%' view={SearchView.Users} maxHeight='100px' 
               onSelect={(docRefID) => setSetter(getUserById(docRefID))}/>
             :
-            <Input 
-              type='text' 
+            <TextInput 
               value={setterRawName} 
               placeholder='Non-user setter' 
               onChangeText={setSetterRawName} 
