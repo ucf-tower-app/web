@@ -1,4 +1,4 @@
-import { Button, FormControl, Input, Text, VStack, Select, HStack, Radio } from 'native-base';
+import { Button, FormControl, Text, VStack, Select, HStack, Radio } from 'native-base';
 import { useState } from 'react';
 import {
   convertCompetitionStringToClassifier, convertLeadclimbStringToClassifier,
@@ -17,6 +17,7 @@ import {
 import '../css/feed.css';
 import { SearchView } from '../Search/SearchBox';
 import AuthorHandle from '../User/AuthorHandle';
+import TextInput from '../common/TextInput';
 
 const RouteTypeToGetAllClassifiers = (type: RouteType) => {
   if (type === RouteType.Boulder)
@@ -150,7 +151,7 @@ const CreateRoute = ({ refreshRoutes, isOpen, setIsOpen }: CreateRouteProps) => 
         <VStack space={1} overflowY='scroll' maxH='90vh'>
           <Text fontSize='lg' alignSelf='center'>Create a new Route</Text>
           <FormControl.Label isRequired>Route Name</FormControl.Label>
-          <Input isRequired type='text' onChangeText={setName} placeholder='Name' />
+          <TextInput defaultValue='' onChangeText={setName} placeholder='Name'/>
           <FormControl.Label>Route Thumbnail</FormControl.Label>
           { // if thumbnailFile is undefined, show select file input
             thumbnailFile === undefined ?
@@ -266,7 +267,7 @@ const CreateRoute = ({ refreshRoutes, isOpen, setIsOpen }: CreateRouteProps) => 
           </Radio.Group>
           <FormControl.Label>Setter</FormControl.Label>
           {overrideSetterBool ?
-            <Input isRequired={false} type='text' onChangeText={setOverrideSetterString}
+            <TextInput defaultValue='' onChangeText={setOverrideSetterString}
               placeholder='Setter (optional)' />
             :
             <SearchBox view={SearchView.Users} width='35%' maxHeight='100px' onSelect={
@@ -280,7 +281,7 @@ const CreateRoute = ({ refreshRoutes, isOpen, setIsOpen }: CreateRouteProps) => 
             </HStack>
           }
           <FormControl.Label>Description</FormControl.Label>
-          <Input isRequired={false} type='text' onChangeText={setDescription}
+          <TextInput defaultValue=''  onChangeText={setDescription}
             placeholder='Description (optional)' />
           {formError &&
             <FormControl.ErrorMessage alignSelf='center'>
