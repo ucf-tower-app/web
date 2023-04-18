@@ -7,7 +7,7 @@ import './css/feed.css';
 
 export const NavBar = () => {
   const [searchParams] = useSearchParams();
-  const [currentRoute, setCurrentRoute] = useState<string>();
+  const [currentRoute, setCurrentRoute] = useState<string>('none');
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -37,6 +37,7 @@ export const NavBar = () => {
       setCurrentRoute('search');
       return;
     }
+    setCurrentRoute('none');
   }, [window.location.href]);
 
   return (
