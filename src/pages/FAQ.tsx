@@ -39,8 +39,7 @@ const FAQ = () => {
         }}
         alt='logo'
       />
-      <Text variant='header' bold fontSize='3xl'>Frequently Asked Questions</Text>
-      
+      <Text variant='header' bold fontSize='2xl' textAlign='center' maxW='100%'>Frequently Asked Questions</Text>
       {
         data.map( (value, index) => 
           <FAQCardBox key={index} question={value.question} answer={value.answer}/>)
