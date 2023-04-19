@@ -8,7 +8,7 @@ const FAQCardBox = ({question, answer}: {question: string, answer: string}) => {
     <Box rounded='md' backgroundColor='primary.400' p='4' width='75%'
       alignItems='center'>
       <Text bold fontSize='lg'>{question}</Text>
-      <Text fontSize='md'>{answer}</Text>
+      <Text fontSize='md' overflow='clip' noOfLines={8}>{answer}</Text>
     </Box>
   );
 };

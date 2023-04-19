@@ -39,8 +39,7 @@ const FAQ = () => {
         }}
         alt='logo'
       />
-      <Text variant='header' bold fontSize='3xl'>Frequently Asked Questions</Text>
-      
+      <Text variant='header' bold fontSize='2xl' textAlign='center' maxW='100%'>Frequently Asked Questions</Text>
       {
         data.map( (value, index) => 
           <FAQCardBox key={index} question={value.question} answer={value.answer}/>)
@@ -121,7 +120,7 @@ export const EditFAQ = () => {
 
   return (
     <VStack alignItems='center' space={2}>
-      <Text variant='header' bold fontSize='3xl'>Frequently Asked Questions</Text>
+      <Text variant='header' bold fontSize='3xl' width='100%'>Frequently Asked Questions</Text>
       <Box rounded='lg' p='5' width='75%' marginLeft='auto' marginRight='auto'
         marginTop='5' marginBottom='5' backgroundColor='primary.200'>
         {
